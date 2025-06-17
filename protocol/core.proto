@@ -1,10 +1,11 @@
 syntax = "proto3";
-package mmc;
+package mmc.core;
 
 enum RequestKind{
-  API_VERSION = 0;
-  SERVER_VERSION = 1;
-  LINE_CONFIG = 2;
+  REQUEST_KIND_UNSPECIFIED = 0;
+  REQUEST_KIND_API_VERSION = 1;
+  REQUEST_KIND_SERVER_VERSION = 2;
+  REQUEST_KIND_LINE_CONFIG = 3;
 }
 
 message Request{

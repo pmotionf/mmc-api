@@ -1,9 +1,10 @@
 syntax = "proto3";
-package mmc;
+package mmc.command;
 
 enum Direction{
-  BACKWARD = 0;
-  FORWARD = 1;
+  DIRECTION_UNSPECIFIED = 0;
+  DIRECTION_BACKWARD = 1;
+  DIRECTION_FORWARD = 2;
 }
 
 message CommandRequest{
@@ -56,8 +57,9 @@ message CommandRequest{
 
   message MoveCarrier{
     enum Control{
-      POSITION = 0;
-      SPEED = 1;
+      CONTROL_UNSPECIFIED = 0;
+      CONTROL_POSITION = 1;
+      CONTROL_SPEED = 2;
     }
     uint32 line_id = 1;
     uint32 carrier_id = 2;
