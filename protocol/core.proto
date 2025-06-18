@@ -27,9 +27,16 @@ message Response{
     uint32 patch = 3;
   }
 
+  enum ErrorResponse{
+    ERROR_RESPONSE_UNSPECIFIED = 0;
+    ERROR_RESPONSE_CC_LINK_DISCONNECTED = 1;
+    ERROR_RESPONSE_UNEXPECTED = 2;
+  }
+
   oneof body{
     SemanticVersion server_version = 1;
     SemanticVersion api_version = 2;
     LineConfig line_config = 3;
+    ErrorResponse error_response = 4;
   }
 }

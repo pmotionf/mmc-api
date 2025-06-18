@@ -128,5 +128,19 @@ message CommandRequest{
 }
 
 message CommandResponse{
-  uint32 command_id = 1;
+  enum ErrorResponse{
+    ERROR_RESPONSE_UNSPECIFIED = 0;
+    ERROR_RESPONSE_INVALID_LINE = 1;
+    ERROR_RESPONSE_INVALID_AXIS = 2;
+    ERROR_RESPONSE_CARRIER_NOT_FOUND = 3;
+    ERROR_RESPONSE_CC_LINK_DISCONNECTED = 4;
+    ERROR_RESPONSE_INVALID_ACCELERATION = 5;
+    ERROR_RESPONSE_INVALID_SPEED = 6;
+    ERROR_RESPONSE_UNEXPECTED = 7;
+  }
+
+  oneof body{
+    uint32 command_id = 1;
+    ErrorResponse error_response = 2;
+  }
 }

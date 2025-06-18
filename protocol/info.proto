@@ -303,23 +303,14 @@ message InfoResponse{
     Status status = 1;
     enum ErrorKind{
       ERROR_KIND_UNSPECIFIED = 0;
-      ERROR_KIND_CC_LINK_DISCONNECTED = 1;
-      ERROR_KIND_VDC_UNDERVOLTAGE_DETECTED = 2;
-      ERROR_KIND_VDC_OVERVOLTAGE_DETECTED = 3;
-      ERROR_KIND_COMMUNICATION_ERROR_DETECTED = 4;
-      ERROR_KIND_INVERTER_OVERHEAT_DETECTED = 5;
-      ERROR_KIND_OVERCURRENT_DETECTED = 6;
-      ERROR_KIND_CONTROL_LOOP_MAX_TIME_EXCEEDED = 7;
-      ERROR_KIND_INVALID_COMMAND = 8;
-      ERROR_KIND_CARRIER_NOT_FOUND = 9;
-      ERROR_KIND_HOMING_FAILED = 10;
-      ERROR_KIND_INVALID_PARAMETER = 11;
-      ERROR_KIND_INVALID_SYSTEM_STATE = 12;
-      ERROR_KIND_CARRIER_ALREADY_EXISTS = 13;
-      ERROR_KIND_INVALID_AXIS = 14;
-      ERROR_KIND_UNEXPECTED = 15;
-      ERROR_KIND_INVALID_LINE = 16;
-      ERROR_KIND_INVALID_STATION = 17;
+      ERROR_KIND_INVALID_COMMAND = 1;
+      ERROR_KIND_CARRIER_NOT_FOUND = 2;
+      ERROR_KIND_HOMING_FAILED = 3;
+      ERROR_KIND_INVALID_PARAMETER = 4;
+      ERROR_KIND_INVALID_SYSTEM_STATE = 5;
+      ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
+      ERROR_KIND_INVALID_AXIS = 7;
+      ERROR_KIND_UNEXPECTED = 8;
     }
     optional ErrorKind error_response = 2;
   }
@@ -381,16 +372,26 @@ message InfoResponse{
     bool is_cas_triggered = 8;
   }
 
+  enum ErrorResponse{
+    ERROR_RESPONSE_UNSPECIFIED = 0;
+    ERROR_RESPONSE_INVALID_LINE = 1;
+    ERROR_RESPONSE_INVALID_AXIS = 2;
+    ERROR_RESPONSE_INVALID_STATION = 3;
+    ERROR_RESPONSE_CARRIER_NOT_FOUND = 4;
+    ERROR_RESPONSE_CC_LINK_DISCONNECTED = 5;
+    ERROR_RESPONSE_UNEXPECTED = 6;
+  }
 
   oneof body{
-    RegisterX register_x = 3;
-    RegisterY register_y = 4;
-    RegisterWr register_wr = 5;
-    RegisterWw register_ww = 6;
-    CommandStatus command_status = 20;
-    HallAlarm hall_alarm = 21;
-    Carrier carrier = 22;
-    Axes axis = 26;
-    Stations station = 27;
+    RegisterX register_x = 1;
+    RegisterY register_y = 2;
+    RegisterWr register_wr = 3;
+    RegisterWw register_ww = 4;
+    CommandStatus command_status = 5;
+    HallAlarm hall_alarm = 6;
+    Carrier carrier = 7;
+    Axes axis = 8;
+    Stations station = 9;
+    ErrorResponse error_response = 10; 
   }
 }

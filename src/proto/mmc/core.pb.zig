@@ -34,15 +34,18 @@ pub const Response = struct {
         server_version,
         api_version,
         line_config,
+        error_response,
     };
     pub const body_union = union(_body_case) {
-        server_version: SemanticVersion,
-        api_version: SemanticVersion,
-        line_config: LineConfig,
+        server_version: Response.SemanticVersion,
+        api_version: Response.SemanticVersion,
+        line_config: Response.LineConfig,
+        error_response: Response.ErrorResponse,
         pub const _union_desc = .{
             .server_version = fd(1, .{ .SubMessage = {} }),
             .api_version = fd(2, .{ .SubMessage = {} }),
             .line_config = fd(3, .{ .SubMessage = {} }),
+            .error_response = fd(4, .{ .Varint = .Simple }),
         };
     };
 
@@ -50,8 +53,15 @@ pub const Response = struct {
         .body = fd(null, .{ .OneOf = body_union }),
     };
 
+    pub const ErrorResponse = enum(i32) {
+        ERROR_RESPONSE_UNSPECIFIED = 0,
+        ERROR_RESPONSE_CC_LINK_DISCONNECTED = 1,
+        ERROR_RESPONSE_UNEXPECTED = 2,
+        _,
+    };
+
     pub const LineConfig = struct {
-        lines: ArrayList(Line),
+        lines: ArrayList(Response.LineConfig.Line),
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .List = .{ .SubMessage = {} } }),

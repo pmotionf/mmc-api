@@ -5,8 +5,8 @@
     .minimum_zig_version = "0.15.0-dev.369+1a2ceb36c",
     .dependencies = .{
         .protobuf = .{
-            .url = "https://github.com/aaumar25/zig-protobuf/archive/a7fad34.tar.gz",
-            .hash = "protobuf-2.0.0-0e82arubGwB0fEbE9_Pe_bVfBcd04H0BZO1B7oB09dqK",
+            .url = "https://github.com/aaumar25/zig-protobuf/archive/dfff073.tar.gz",
+            .hash = "protobuf-2.0.0-0e82asubGwBS6OnkIzYh6-uiIV35Lbt4OHvmGTvcJNo_",
         },
     },
     .paths = .{""},

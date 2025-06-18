@@ -3,7 +3,10 @@ const build = @import("build.zig.zon");
 
 pub const protobuf = @import("protobuf");
 
-pub const protobuf_msg = @import("proto/mmc.pb.zig");
+// pub const protobuf_msg = @import("proto/mmc.pb.zig");
+pub const command_msg = @import("proto/mmc/command.pb.zig");
+pub const core_msg = @import("proto/mmc/core.pb.zig");
+pub const info_msg = @import("proto/mmc/info.pb.zig");
 
 pub const version =
     std.SemanticVersion.parse(build.version) catch unreachable;
@@ -21,15 +24,15 @@ pub fn getAxisInfo(comptime Output: type, src: anytype, local_axis_idx: u2) Outp
 }
 
 test getAxisInfo {
-    const axis2: protobuf_msg.Response.RegisterX.HallAlarm.Side = .{
+    const axis2: info_msg.InfoResponse.RegisterX.HallAlarm.Side = .{
         .back = false,
         .front = false,
     };
-    const example_x: protobuf_msg.Response.RegisterX = .{
+    const example_x: info_msg.InfoResponse.RegisterX = .{
         .hall_alarm = .{ .axis2 = axis2 },
     };
     try std.testing.expectEqual(axis2, getAxisInfo(
-        protobuf_msg.Response.RegisterX.HallAlarm.Side,
+        info_msg.InfoResponse.RegisterX.HallAlarm.Side,
         example_x.hall_alarm.?,
         1,
     ));
@@ -118,7 +121,7 @@ pub fn nestedWrite(
 }
 
 test nestedWrite {
-    const example_x: protobuf_msg.Response.RegisterX = .{
+    const example_x: info_msg.InfoResponse.RegisterX = .{
         .hall_alarm = .{
             .axis1 = .{
                 .back = false,
@@ -164,7 +167,7 @@ test nestedWrite {
 }
 
 test "union nestedWrite" {
-    const example_ww: protobuf_msg.Response.RegisterWw = .{
+    const example_ww: info_msg.InfoResponse.RegisterWw = .{
         .carrier = .{
             .target = .{
                 .f32 = 3.14,

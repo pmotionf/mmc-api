@@ -35,19 +35,19 @@ pub const CommandRequest = struct {
         set_line_zero,
     };
     pub const body_union = union(_body_case) {
-        clear_errors: ClearErrors,
-        clear_carrier_info: ClearCarrierInfo,
-        reset_mcl: NoParam,
-        release_axis_servo: ReleaseAxisServo,
-        stop_pull_carrier: StopPullCarrier,
-        auto_initialize: AutoInitialize,
-        stop_push_carrier: StopPushCarrier,
-        move_carrier: MoveCarrier,
-        push_carrier: PushCarrier,
-        pull_carrier: PullCarrier,
-        isolate_carrier: IsolateCarrier,
-        calibrate: Calibrate,
-        set_line_zero: SetLineZero,
+        clear_errors: CommandRequest.ClearErrors,
+        clear_carrier_info: CommandRequest.ClearCarrierInfo,
+        reset_mcl: CommandRequest.NoParam,
+        release_axis_servo: CommandRequest.ReleaseAxisServo,
+        stop_pull_carrier: CommandRequest.StopPullCarrier,
+        auto_initialize: CommandRequest.AutoInitialize,
+        stop_push_carrier: CommandRequest.StopPushCarrier,
+        move_carrier: CommandRequest.MoveCarrier,
+        push_carrier: CommandRequest.PushCarrier,
+        pull_carrier: CommandRequest.PullCarrier,
+        isolate_carrier: CommandRequest.IsolateCarrier,
+        calibrate: CommandRequest.Calibrate,
+        set_line_zero: CommandRequest.SetLineZero,
         pub const _union_desc = .{
             .clear_errors = fd(1, .{ .SubMessage = {} }),
             .clear_carrier_info = fd(2, .{ .SubMessage = {} }),
@@ -156,7 +156,7 @@ pub const CommandRequest = struct {
     };
 
     pub const AutoInitialize = struct {
-        lines: ArrayList(Lines),
+        lines: ArrayList(CommandRequest.AutoInitialize.Lines),
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .List = .{ .SubMessage = {} } }),
@@ -184,7 +184,7 @@ pub const CommandRequest = struct {
         carrier_id: u32 = 0,
         speed: u32 = 0,
         acceleration: u32 = 0,
-        control_kind: Control = @enumFromInt(0),
+        control_kind: CommandRequest.MoveCarrier.Control = @enumFromInt(0),
         target: ?target_union,
 
         pub const _target_case = enum {
@@ -299,10 +299,35 @@ pub const CommandRequest = struct {
 };
 
 pub const CommandResponse = struct {
-    command_id: u32 = 0,
+    body: ?body_union,
+
+    pub const _body_case = enum {
+        command_id,
+        error_response,
+    };
+    pub const body_union = union(_body_case) {
+        command_id: u32,
+        error_response: CommandResponse.ErrorResponse,
+        pub const _union_desc = .{
+            .command_id = fd(1, .{ .Varint = .Simple }),
+            .error_response = fd(2, .{ .Varint = .Simple }),
+        };
+    };
 
     pub const _desc_table = .{
-        .command_id = fd(1, .{ .Varint = .Simple }),
+        .body = fd(null, .{ .OneOf = body_union }),
+    };
+
+    pub const ErrorResponse = enum(i32) {
+        ERROR_RESPONSE_UNSPECIFIED = 0,
+        ERROR_RESPONSE_INVALID_LINE = 1,
+        ERROR_RESPONSE_INVALID_AXIS = 2,
+        ERROR_RESPONSE_CARRIER_NOT_FOUND = 3,
+        ERROR_RESPONSE_CC_LINK_DISCONNECTED = 4,
+        ERROR_RESPONSE_INVALID_ACCELERATION = 5,
+        ERROR_RESPONSE_INVALID_SPEED = 6,
+        ERROR_RESPONSE_UNEXPECTED = 7,
+        _,
     };
 
     pub usingnamespace protobuf.MessageMixins(@This());
