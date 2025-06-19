@@ -17,7 +17,7 @@ pub const RequestKind = enum(i32) {
     _,
 };
 
-pub const Request = struct {
+pub const CoreRequest = struct {
     kind: RequestKind = @enumFromInt(0),
 
     pub const _desc_table = .{
@@ -27,7 +27,7 @@ pub const Request = struct {
     pub usingnamespace protobuf.MessageMixins(@This());
 };
 
-pub const Response = struct {
+pub const CoreResponse = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
@@ -37,10 +37,10 @@ pub const Response = struct {
         error_response,
     };
     pub const body_union = union(_body_case) {
-        server_version: Response.SemanticVersion,
-        api_version: Response.SemanticVersion,
-        line_config: Response.LineConfig,
-        error_response: Response.ErrorResponse,
+        server_version: CoreResponse.SemanticVersion,
+        api_version: CoreResponse.SemanticVersion,
+        line_config: CoreResponse.LineConfig,
+        error_response: CoreResponse.ErrorResponse,
         pub const _union_desc = .{
             .server_version = fd(1, .{ .SubMessage = {} }),
             .api_version = fd(2, .{ .SubMessage = {} }),
@@ -61,7 +61,7 @@ pub const Response = struct {
     };
 
     pub const LineConfig = struct {
-        lines: ArrayList(Response.LineConfig.Line),
+        lines: ArrayList(CoreResponse.LineConfig.Line),
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .List = .{ .SubMessage = {} } }),

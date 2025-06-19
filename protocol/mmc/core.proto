@@ -8,11 +8,11 @@ enum RequestKind{
   REQUEST_KIND_LINE_CONFIG = 3;
 }
 
-message Request{
+message CoreRequest{
   RequestKind kind = 1;
 }
 
-message Response{
+message CoreResponse{
   message LineConfig{
     message Line{
       uint32 axes = 1;
