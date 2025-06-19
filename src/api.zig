@@ -24,15 +24,15 @@ pub fn getAxisInfo(comptime Output: type, src: anytype, local_axis_idx: u2) Outp
 }
 
 test getAxisInfo {
-    const axis2: info_msg.InfoResponse.RegisterX.HallAlarm.Side = .{
+    const axis2: info_msg.Response.RegisterX.HallAlarm.Side = .{
         .back = false,
         .front = false,
     };
-    const example_x: info_msg.InfoResponse.RegisterX = .{
+    const example_x: info_msg.Response.RegisterX = .{
         .hall_alarm = .{ .axis2 = axis2 },
     };
     try std.testing.expectEqual(axis2, getAxisInfo(
-        info_msg.InfoResponse.RegisterX.HallAlarm.Side,
+        info_msg.Response.RegisterX.HallAlarm.Side,
         example_x.hall_alarm.?,
         1,
     ));
@@ -121,7 +121,7 @@ pub fn nestedWrite(
 }
 
 test nestedWrite {
-    const example_x: info_msg.InfoResponse.RegisterX = .{
+    const example_x: info_msg.Response.RegisterX = .{
         .hall_alarm = .{
             .axis1 = .{
                 .back = false,
@@ -167,7 +167,7 @@ test nestedWrite {
 }
 
 test "union nestedWrite" {
-    const example_ww: info_msg.InfoResponse.RegisterWw = .{
+    const example_ww: info_msg.Response.RegisterWw = .{
         .carrier = .{
             .target = .{
                 .f32 = 3.14,

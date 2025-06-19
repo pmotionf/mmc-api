@@ -7,7 +7,7 @@ enum Direction{
   DIRECTION_FORWARD = 2;
 }
 
-message CommandRequest{
+message Request{
   message ReleaseAxisServo{
     uint32 line_id = 1;
     uint32 axis_id = 2;
@@ -127,20 +127,21 @@ message CommandRequest{
   }
 }
 
-message CommandResponse{
-  enum ErrorResponse{
-    ERROR_RESPONSE_UNSPECIFIED = 0;
-    ERROR_RESPONSE_INVALID_LINE = 1;
-    ERROR_RESPONSE_INVALID_AXIS = 2;
-    ERROR_RESPONSE_CARRIER_NOT_FOUND = 3;
-    ERROR_RESPONSE_CC_LINK_DISCONNECTED = 4;
-    ERROR_RESPONSE_INVALID_ACCELERATION = 5;
-    ERROR_RESPONSE_INVALID_SPEED = 6;
-    ERROR_RESPONSE_UNEXPECTED = 7;
+message Response{
+  enum RequestErrorKind {
+    COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
+    COMMAND_REQUEST_ERROR_INVALID_LINE = 1;
+    COMMAND_REQUEST_ERROR_INVALID_AXIS = 2;
+    COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND = 3;
+    COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 4;
+    COMMAND_REQUEST_ERROR_INVALID_ACCELERATION = 5;
+    COMMAND_REQUEST_ERROR_INVALID_SPEED = 6;
+    COMMAND_REQUEST_ERROR_UNEXPECTED = 7;
   }
 
   oneof body{
     uint32 command_id = 1;
-    ErrorResponse error_response = 2;
+    // Error kind if this response's request was invalid.
+    RequestErrorKind request_error = 2;
   }
 }

@@ -16,7 +16,7 @@ pub const Direction = enum(i32) {
     _,
 };
 
-pub const CommandRequest = struct {
+pub const Request = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
@@ -35,19 +35,19 @@ pub const CommandRequest = struct {
         set_line_zero,
     };
     pub const body_union = union(_body_case) {
-        clear_errors: CommandRequest.ClearErrors,
-        clear_carrier_info: CommandRequest.ClearCarrierInfo,
-        reset_mcl: CommandRequest.NoParam,
-        release_axis_servo: CommandRequest.ReleaseAxisServo,
-        stop_pull_carrier: CommandRequest.StopPullCarrier,
-        auto_initialize: CommandRequest.AutoInitialize,
-        stop_push_carrier: CommandRequest.StopPushCarrier,
-        move_carrier: CommandRequest.MoveCarrier,
-        push_carrier: CommandRequest.PushCarrier,
-        pull_carrier: CommandRequest.PullCarrier,
-        isolate_carrier: CommandRequest.IsolateCarrier,
-        calibrate: CommandRequest.Calibrate,
-        set_line_zero: CommandRequest.SetLineZero,
+        clear_errors: Request.ClearErrors,
+        clear_carrier_info: Request.ClearCarrierInfo,
+        reset_mcl: Request.NoParam,
+        release_axis_servo: Request.ReleaseAxisServo,
+        stop_pull_carrier: Request.StopPullCarrier,
+        auto_initialize: Request.AutoInitialize,
+        stop_push_carrier: Request.StopPushCarrier,
+        move_carrier: Request.MoveCarrier,
+        push_carrier: Request.PushCarrier,
+        pull_carrier: Request.PullCarrier,
+        isolate_carrier: Request.IsolateCarrier,
+        calibrate: Request.Calibrate,
+        set_line_zero: Request.SetLineZero,
         pub const _union_desc = .{
             .clear_errors = fd(1, .{ .SubMessage = {} }),
             .clear_carrier_info = fd(2, .{ .SubMessage = {} }),
@@ -156,7 +156,7 @@ pub const CommandRequest = struct {
     };
 
     pub const AutoInitialize = struct {
-        lines: ArrayList(CommandRequest.AutoInitialize.Lines),
+        lines: ArrayList(Request.AutoInitialize.Lines),
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .List = .{ .SubMessage = {} } }),
@@ -184,7 +184,7 @@ pub const CommandRequest = struct {
         carrier_id: u32 = 0,
         speed: u32 = 0,
         acceleration: u32 = 0,
-        control_kind: CommandRequest.MoveCarrier.Control = @enumFromInt(0),
+        control_kind: Request.MoveCarrier.Control = @enumFromInt(0),
         target: ?target_union,
 
         pub const _target_case = enum {
@@ -298,19 +298,19 @@ pub const CommandRequest = struct {
     pub usingnamespace protobuf.MessageMixins(@This());
 };
 
-pub const CommandResponse = struct {
+pub const Response = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
         command_id,
-        error_response,
+        request_error,
     };
     pub const body_union = union(_body_case) {
         command_id: u32,
-        error_response: CommandResponse.ErrorResponse,
+        request_error: Response.RequestErrorKind,
         pub const _union_desc = .{
             .command_id = fd(1, .{ .Varint = .Simple }),
-            .error_response = fd(2, .{ .Varint = .Simple }),
+            .request_error = fd(2, .{ .Varint = .Simple }),
         };
     };
 
@@ -318,15 +318,15 @@ pub const CommandResponse = struct {
         .body = fd(null, .{ .OneOf = body_union }),
     };
 
-    pub const ErrorResponse = enum(i32) {
-        ERROR_RESPONSE_UNSPECIFIED = 0,
-        ERROR_RESPONSE_INVALID_LINE = 1,
-        ERROR_RESPONSE_INVALID_AXIS = 2,
-        ERROR_RESPONSE_CARRIER_NOT_FOUND = 3,
-        ERROR_RESPONSE_CC_LINK_DISCONNECTED = 4,
-        ERROR_RESPONSE_INVALID_ACCELERATION = 5,
-        ERROR_RESPONSE_INVALID_SPEED = 6,
-        ERROR_RESPONSE_UNEXPECTED = 7,
+    pub const RequestErrorKind = enum(i32) {
+        COMMAND_REQUEST_ERROR_UNSPECIFIED = 0,
+        COMMAND_REQUEST_ERROR_INVALID_LINE = 1,
+        COMMAND_REQUEST_ERROR_INVALID_AXIS = 2,
+        COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND = 3,
+        COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 4,
+        COMMAND_REQUEST_ERROR_INVALID_ACCELERATION = 5,
+        COMMAND_REQUEST_ERROR_INVALID_SPEED = 6,
+        COMMAND_REQUEST_ERROR_UNEXPECTED = 7,
         _,
     };
 

@@ -19,17 +19,17 @@ pub const Request = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
-        command,
         core,
+        command,
         info,
     };
     pub const body_union = union(_body_case) {
-        command: mmc_command.CommandRequest,
-        core: mmc_core.CoreRequest,
-        info: mmc_info.InfoRequest,
+        core: mmc_core.Request,
+        command: mmc_command.Request,
+        info: mmc_info.Request,
         pub const _union_desc = .{
-            .command = fd(1, .{ .SubMessage = {} }),
-            .core = fd(2, .{ .SubMessage = {} }),
+            .core = fd(1, .{ .SubMessage = {} }),
+            .command = fd(2, .{ .SubMessage = {} }),
             .info = fd(3, .{ .SubMessage = {} }),
         };
     };
@@ -45,17 +45,17 @@ pub const Response = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
-        command,
         core,
+        command,
         info,
     };
     pub const body_union = union(_body_case) {
-        command: mmc_command.CommandResponse,
-        core: mmc_core.CoreResponse,
-        info: mmc_info.InfoRequest,
+        core: mmc_core.Response,
+        command: mmc_command.Response,
+        info: mmc_info.Request,
         pub const _union_desc = .{
-            .command = fd(1, .{ .SubMessage = {} }),
-            .core = fd(2, .{ .SubMessage = {} }),
+            .core = fd(1, .{ .SubMessage = {} }),
+            .command = fd(2, .{ .SubMessage = {} }),
             .info = fd(3, .{ .SubMessage = {} }),
         };
     };

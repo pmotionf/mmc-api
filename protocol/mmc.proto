@@ -8,17 +8,17 @@ import "mmc/info.proto";
 // This file serves as the wrapper for all proto definition
 
 message Request{
-    oneof body{
-        mmc.command.CommandRequest command = 1;
-        mmc.core.CoreRequest core = 2;
-        mmc.info.InfoRequest info = 3;
-    }
+  oneof body{
+    mmc.core.Request core = 1;
+    mmc.command.Request command = 2;
+    mmc.info.Request info = 3;
+  }
 }
 
 message Response{
-    oneof body{
-        mmc.command.CommandResponse command = 1;
-        mmc.core.CoreResponse core = 2;
-        mmc.info.InfoRequest info = 3;
-    }
+  oneof body{
+    mmc.core.Response core = 1;
+    mmc.command.Response command = 2;
+    mmc.info.Request info = 3;
+  }
 }

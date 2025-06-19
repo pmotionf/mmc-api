@@ -9,7 +9,7 @@ const ManagedString = protobuf.ManagedString;
 const fd = protobuf.fd;
 const ManagedStruct = protobuf.ManagedStruct;
 
-pub const InfoRequest = struct {
+pub const Request = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
@@ -24,15 +24,15 @@ pub const InfoRequest = struct {
         station,
     };
     pub const body_union = union(_body_case) {
-        register_x: InfoRequest.RegisterX,
-        register_y: InfoRequest.RegisterY,
-        register_wr: InfoRequest.RegisterWr,
-        register_ww: InfoRequest.RegisterWw,
-        command_status: InfoRequest.CommandStatus,
-        hall_alarm: InfoRequest.HallAlarm,
-        carrier: InfoRequest.Carrier,
-        axis: InfoRequest.Axis,
-        station: InfoRequest.Station,
+        register_x: Request.RegisterX,
+        register_y: Request.RegisterY,
+        register_wr: Request.RegisterWr,
+        register_ww: Request.RegisterWw,
+        command_status: Request.CommandStatus,
+        hall_alarm: Request.HallAlarm,
+        carrier: Request.Carrier,
+        axis: Request.Axis,
+        station: Request.Station,
         pub const _union_desc = .{
             .register_x = fd(3, .{ .SubMessage = {} }),
             .register_y = fd(4, .{ .SubMessage = {} }),
@@ -172,7 +172,7 @@ pub const InfoRequest = struct {
     pub usingnamespace protobuf.MessageMixins(@This());
 };
 
-pub const InfoResponse = struct {
+pub const Response = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
@@ -185,19 +185,19 @@ pub const InfoResponse = struct {
         carrier,
         axis,
         station,
-        error_response,
+        request_error,
     };
     pub const body_union = union(_body_case) {
-        register_x: InfoResponse.RegisterX,
-        register_y: InfoResponse.RegisterY,
-        register_wr: InfoResponse.RegisterWr,
-        register_ww: InfoResponse.RegisterWw,
-        command_status: InfoResponse.CommandStatus,
-        hall_alarm: InfoResponse.HallAlarm,
-        carrier: InfoResponse.Carrier,
-        axis: InfoResponse.Axes,
-        station: InfoResponse.Stations,
-        error_response: InfoResponse.ErrorResponse,
+        register_x: Response.RegisterX,
+        register_y: Response.RegisterY,
+        register_wr: Response.RegisterWr,
+        register_ww: Response.RegisterWw,
+        command_status: Response.CommandStatus,
+        hall_alarm: Response.HallAlarm,
+        carrier: Response.Carrier,
+        axis: Response.Axes,
+        station: Response.Stations,
+        request_error: Response.RequestErrorKind,
         pub const _union_desc = .{
             .register_x = fd(1, .{ .SubMessage = {} }),
             .register_y = fd(2, .{ .SubMessage = {} }),
@@ -208,7 +208,7 @@ pub const InfoResponse = struct {
             .carrier = fd(7, .{ .SubMessage = {} }),
             .axis = fd(8, .{ .SubMessage = {} }),
             .station = fd(9, .{ .SubMessage = {} }),
-            .error_response = fd(10, .{ .Varint = .Simple }),
+            .request_error = fd(10, .{ .Varint = .Simple }),
         };
     };
 
@@ -216,14 +216,14 @@ pub const InfoResponse = struct {
         .body = fd(null, .{ .OneOf = body_union }),
     };
 
-    pub const ErrorResponse = enum(i32) {
-        ERROR_RESPONSE_UNSPECIFIED = 0,
-        ERROR_RESPONSE_INVALID_LINE = 1,
-        ERROR_RESPONSE_INVALID_AXIS = 2,
-        ERROR_RESPONSE_INVALID_STATION = 3,
-        ERROR_RESPONSE_CARRIER_NOT_FOUND = 4,
-        ERROR_RESPONSE_CC_LINK_DISCONNECTED = 5,
-        ERROR_RESPONSE_UNEXPECTED = 6,
+    pub const RequestErrorKind = enum(i32) {
+        INFO_REQUEST_ERROR_UNSPECIFIED = 0,
+        INFO_REQUEST_ERROR_INVALID_LINE = 1,
+        INFO_REQUEST_ERROR_INVALID_AXIS = 2,
+        INFO_REQUEST_ERROR_INVALID_STATION = 3,
+        INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4,
+        INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5,
+        INFO_REQUEST_ERROR_UNEXPECTED = 6,
         _,
     };
 
@@ -236,16 +236,16 @@ pub const InfoResponse = struct {
         servo_enabled: bool = false,
         emergency_stop_enabled: bool = false,
         paused: bool = false,
-        motor_enabled: ?InfoResponse.RegisterX.MotorEnabled = null,
+        motor_enabled: ?Response.RegisterX.MotorEnabled = null,
         vdc_undervoltage_detected: bool = false,
         vdc_overvoltage_detected: bool = false,
         errors_cleared: bool = false,
-        communication_error: ?InfoResponse.RegisterX.CommunicationError = null,
+        communication_error: ?Response.RegisterX.CommunicationError = null,
         inverter_overheat_detected: bool = false,
-        overcurrent_detected: ?InfoResponse.RegisterX.OvercurrentDetected = null,
-        hall_alarm: ?InfoResponse.RegisterX.HallAlarm = null,
-        wait_pull_carrier: ?InfoResponse.RegisterX.WaitPullCarrier = null,
-        wait_push_carrier: ?InfoResponse.RegisterX.WaitPushCarrier = null,
+        overcurrent_detected: ?Response.RegisterX.OvercurrentDetected = null,
+        hall_alarm: ?Response.RegisterX.HallAlarm = null,
+        wait_pull_carrier: ?Response.RegisterX.WaitPullCarrier = null,
+        wait_push_carrier: ?Response.RegisterX.WaitPushCarrier = null,
         control_loop_max_time_exceeded: bool = false,
         initial_data_processing_request: bool = false,
         initial_data_setting_complete: bool = false,
@@ -319,9 +319,9 @@ pub const InfoResponse = struct {
         };
 
         pub const HallAlarm = struct {
-            axis1: ?InfoResponse.RegisterX.HallAlarm.Side = null,
-            axis2: ?InfoResponse.RegisterX.HallAlarm.Side = null,
-            axis3: ?InfoResponse.RegisterX.HallAlarm.Side = null,
+            axis1: ?Response.RegisterX.HallAlarm.Side = null,
+            axis2: ?Response.RegisterX.HallAlarm.Side = null,
+            axis3: ?Response.RegisterX.HallAlarm.Side = null,
 
             pub const _desc_table = .{
                 .axis1 = fd(1, .{ .SubMessage = {} }),
@@ -386,8 +386,8 @@ pub const InfoResponse = struct {
         emergency_stop: bool = false,
         temporary_pause: bool = false,
         clear_errors: bool = false,
-        reset_pull_carrier: ?InfoResponse.RegisterY.ResetPullCarrier = null,
-        reset_push_carrier: ?InfoResponse.RegisterY.ResetPushCarrier = null,
+        reset_pull_carrier: ?Response.RegisterY.ResetPullCarrier = null,
+        reset_push_carrier: ?Response.RegisterY.ResetPushCarrier = null,
 
         pub const _desc_table = .{
             .cc_link_enable = fd(1, .{ .Varint = .Simple }),
@@ -436,9 +436,9 @@ pub const InfoResponse = struct {
     };
 
     pub const RegisterWw = struct {
-        command: InfoResponse.RegisterWw.CommandCode = @enumFromInt(0),
+        command: Response.RegisterWw.CommandCode = @enumFromInt(0),
         axis: i32 = 0,
-        carrier: ?InfoResponse.RegisterWw.Carrier = null,
+        carrier: ?Response.RegisterWw.Carrier = null,
 
         pub const _desc_table = .{
             .command = fd(1, .{ .Varint = .Simple }),
@@ -515,10 +515,10 @@ pub const InfoResponse = struct {
     };
 
     pub const RegisterWr = struct {
-        command_response: InfoResponse.RegisterWr.CommandResponse = @enumFromInt(0),
-        received_backward: ?InfoResponse.RegisterWr.CommunicationReceived = null,
-        received_forward: ?InfoResponse.RegisterWr.CommunicationReceived = null,
-        carrier: ?InfoResponse.RegisterWr.Carrier = null,
+        command_response: Response.RegisterWr.CommandResponse = @enumFromInt(0),
+        received_backward: ?Response.RegisterWr.CommunicationReceived = null,
+        received_forward: ?Response.RegisterWr.CommunicationReceived = null,
+        carrier: ?Response.RegisterWr.Carrier = null,
 
         pub const _desc_table = .{
             .command_response = fd(1, .{ .Varint = .Simple }),
@@ -542,7 +542,7 @@ pub const InfoResponse = struct {
 
         pub const CommunicationReceived = struct {
             id: i32 = 0,
-            kind: InfoResponse.RegisterWr.CommunicationReceived.DriverMessageKind = @enumFromInt(0),
+            kind: Response.RegisterWr.CommunicationReceived.DriverMessageKind = @enumFromInt(0),
             failed_bcc: bool = false,
 
             pub const _desc_table = .{
@@ -571,9 +571,9 @@ pub const InfoResponse = struct {
         };
 
         pub const Carrier = struct {
-            axis1: ?InfoResponse.RegisterWr.Carrier.Description = null,
-            axis2: ?InfoResponse.RegisterWr.Carrier.Description = null,
-            axis3: ?InfoResponse.RegisterWr.Carrier.Description = null,
+            axis1: ?Response.RegisterWr.Carrier.Description = null,
+            axis2: ?Response.RegisterWr.Carrier.Description = null,
+            axis3: ?Response.RegisterWr.Carrier.Description = null,
 
             pub const _desc_table = .{
                 .axis1 = fd(1, .{ .SubMessage = {} }),
@@ -588,8 +588,8 @@ pub const InfoResponse = struct {
                 auxiliary: bool = false,
                 enabled: bool = false,
                 quasi: bool = false,
-                cas: ?InfoResponse.RegisterWr.Carrier.Description.CAS = null,
-                state: InfoResponse.RegisterWr.Carrier.Description.State = @enumFromInt(0),
+                cas: ?Response.RegisterWr.Carrier.Description.CAS = null,
+                state: Response.RegisterWr.Carrier.Description.State = @enumFromInt(0),
 
                 pub const _desc_table = .{
                     .location = fd(1, .{ .FixedInt = .I32 }),
@@ -657,8 +657,8 @@ pub const InfoResponse = struct {
     };
 
     pub const CommandStatus = struct {
-        status: InfoResponse.CommandStatus.Status = @enumFromInt(0),
-        error_response: ?InfoResponse.CommandStatus.ErrorKind = null,
+        status: Response.CommandStatus.Status = @enumFromInt(0),
+        error_response: ?Response.CommandStatus.ErrorKind = null,
 
         pub const _desc_table = .{
             .status = fd(1, .{ .Varint = .Simple }),
@@ -691,14 +691,14 @@ pub const InfoResponse = struct {
     };
 
     pub const Axes = struct {
-        axes: ArrayList(InfoResponse.Axes.Axis),
+        axes: ArrayList(Response.Axes.Axis),
 
         pub const _desc_table = .{
             .axes = fd(1, .{ .List = .{ .SubMessage = {} } }),
         };
 
         pub const Axis = struct {
-            hall_alarm: ?InfoResponse.Axes.Axis.HallAlarm = null,
+            hall_alarm: ?Response.Axes.Axis.HallAlarm = null,
             motor_enabled: bool = false,
             waiting_pull: bool = false,
             waiting_push: bool = false,
@@ -733,7 +733,7 @@ pub const InfoResponse = struct {
     };
 
     pub const Stations = struct {
-        stations: ArrayList(InfoResponse.Stations.Station),
+        stations: ArrayList(Response.Stations.Station),
 
         pub const _desc_table = .{
             .stations = fd(1, .{ .List = .{ .SubMessage = {} } }),
@@ -745,7 +745,7 @@ pub const InfoResponse = struct {
             servo_enabled: bool = false,
             stopped: bool = false,
             paused: bool = false,
-            errors: ?InfoResponse.Stations.Station.StationError = null,
+            errors: ?Response.Stations.Station.StationError = null,
 
             pub const _desc_table = .{
                 .connected = fd(1, .{ .Varint = .Simple }),
@@ -758,9 +758,9 @@ pub const InfoResponse = struct {
 
             pub const StationError = struct {
                 control_loop_time_exceeded: bool = false,
-                power_error: ?InfoResponse.Stations.Station.StationError.PowerError = null,
+                power_error: ?Response.Stations.Station.StationError.PowerError = null,
                 inverter_overheat: bool = false,
-                communication_error: ?InfoResponse.Stations.Station.StationError.CommError = null,
+                communication_error: ?Response.Stations.Station.StationError.CommError = null,
 
                 pub const _desc_table = .{
                     .control_loop_time_exceeded = fd(1, .{ .Varint = .Simple }),
@@ -820,7 +820,7 @@ pub const InfoResponse = struct {
         line_id: u32 = 0,
         location: f32 = 0,
         id: u32 = 0,
-        state: InfoResponse.RegisterWr.Carrier.Description.State = @enumFromInt(0),
+        state: Response.RegisterWr.Carrier.Description.State = @enumFromInt(0),
         is_cas_triggered: bool = false,
 
         pub const _desc_table = .{

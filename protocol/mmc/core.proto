@@ -1,18 +1,18 @@
 syntax = "proto3";
 package mmc.core;
 
-enum RequestKind{
-  REQUEST_KIND_UNSPECIFIED = 0;
-  REQUEST_KIND_API_VERSION = 1;
-  REQUEST_KIND_SERVER_VERSION = 2;
-  REQUEST_KIND_LINE_CONFIG = 3;
+
+message Request{
+  enum Kind{
+    CORE_REQUEST_KIND_UNSPECIFIED = 0;
+    CORE_REQUEST_KIND_API_VERSION = 1;
+    CORE_REQUEST_KIND_SERVER_VERSION = 2;
+    CORE_REQUEST_KIND_LINE_CONFIG = 3;
+  }
+  Kind kind = 1;
 }
 
-message CoreRequest{
-  RequestKind kind = 1;
-}
-
-message CoreResponse{
+message Response{
   message LineConfig{
     message Line{
       uint32 axes = 1;
@@ -27,16 +27,16 @@ message CoreResponse{
     uint32 patch = 3;
   }
 
-  enum ErrorResponse{
-    ERROR_RESPONSE_UNSPECIFIED = 0;
-    ERROR_RESPONSE_CC_LINK_DISCONNECTED = 1;
-    ERROR_RESPONSE_UNEXPECTED = 2;
+  enum RequestErrorKind {
+    CORE_REQUEST_ERROR_UNSPECIFIED = 0;
+    CORE_REQUEST_ERROR_UNKNOWN_REQUEST = 1;
   }
 
   oneof body{
     SemanticVersion server_version = 1;
     SemanticVersion api_version = 2;
     LineConfig line_config = 3;
-    ErrorResponse error_response = 4;
+    // Error kind if this response's request was invalid.
+    RequestErrorKind request_error = 4;
   }
 }

@@ -1,7 +1,7 @@
 syntax = "proto3";
 package mmc.info;
 
-message InfoRequest{
+message Request{
     // TODO: Squeeze RegisterX, RegisterY, RegisterWw, RegisterWr to GetRegister
     message RegisterX{
         uint32 line_id = 1;
@@ -63,7 +63,7 @@ message InfoRequest{
     }
 }
 
-message InfoResponse{
+message Response{
   message RegisterX{
     bool cc_link_enabled = 1;
     bool command_ready = 2;
@@ -372,14 +372,14 @@ message InfoResponse{
     bool is_cas_triggered = 8;
   }
 
-  enum ErrorResponse{
-    ERROR_RESPONSE_UNSPECIFIED = 0;
-    ERROR_RESPONSE_INVALID_LINE = 1;
-    ERROR_RESPONSE_INVALID_AXIS = 2;
-    ERROR_RESPONSE_INVALID_STATION = 3;
-    ERROR_RESPONSE_CARRIER_NOT_FOUND = 4;
-    ERROR_RESPONSE_CC_LINK_DISCONNECTED = 5;
-    ERROR_RESPONSE_UNEXPECTED = 6;
+  enum RequestErrorKind {
+    INFO_REQUEST_ERROR_UNSPECIFIED = 0;
+    INFO_REQUEST_ERROR_INVALID_LINE = 1;
+    INFO_REQUEST_ERROR_INVALID_AXIS = 2;
+    INFO_REQUEST_ERROR_INVALID_STATION = 3;
+    INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4;
+    INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5;
+    INFO_REQUEST_ERROR_UNEXPECTED = 6;
   }
 
   oneof body{
@@ -392,6 +392,6 @@ message InfoResponse{
     Carrier carrier = 7;
     Axes axis = 8;
     Stations station = 9;
-    ErrorResponse error_response = 10; 
+    RequestErrorKind request_error = 10;
   }
 }

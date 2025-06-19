@@ -9,43 +9,43 @@ const ManagedString = protobuf.ManagedString;
 const fd = protobuf.fd;
 const ManagedStruct = protobuf.ManagedStruct;
 
-pub const RequestKind = enum(i32) {
-    REQUEST_KIND_UNSPECIFIED = 0,
-    REQUEST_KIND_API_VERSION = 1,
-    REQUEST_KIND_SERVER_VERSION = 2,
-    REQUEST_KIND_LINE_CONFIG = 3,
-    _,
-};
-
-pub const CoreRequest = struct {
-    kind: RequestKind = @enumFromInt(0),
+pub const Request = struct {
+    kind: Request.Kind = @enumFromInt(0),
 
     pub const _desc_table = .{
         .kind = fd(1, .{ .Varint = .Simple }),
     };
 
+    pub const Kind = enum(i32) {
+        CORE_REQUEST_KIND_UNSPECIFIED = 0,
+        CORE_REQUEST_KIND_API_VERSION = 1,
+        CORE_REQUEST_KIND_SERVER_VERSION = 2,
+        CORE_REQUEST_KIND_LINE_CONFIG = 3,
+        _,
+    };
+
     pub usingnamespace protobuf.MessageMixins(@This());
 };
 
-pub const CoreResponse = struct {
+pub const Response = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
         server_version,
         api_version,
         line_config,
-        error_response,
+        request_error,
     };
     pub const body_union = union(_body_case) {
-        server_version: CoreResponse.SemanticVersion,
-        api_version: CoreResponse.SemanticVersion,
-        line_config: CoreResponse.LineConfig,
-        error_response: CoreResponse.ErrorResponse,
+        server_version: Response.SemanticVersion,
+        api_version: Response.SemanticVersion,
+        line_config: Response.LineConfig,
+        request_error: Response.RequestErrorKind,
         pub const _union_desc = .{
             .server_version = fd(1, .{ .SubMessage = {} }),
             .api_version = fd(2, .{ .SubMessage = {} }),
             .line_config = fd(3, .{ .SubMessage = {} }),
-            .error_response = fd(4, .{ .Varint = .Simple }),
+            .request_error = fd(4, .{ .Varint = .Simple }),
         };
     };
 
@@ -53,15 +53,14 @@ pub const CoreResponse = struct {
         .body = fd(null, .{ .OneOf = body_union }),
     };
 
-    pub const ErrorResponse = enum(i32) {
-        ERROR_RESPONSE_UNSPECIFIED = 0,
-        ERROR_RESPONSE_CC_LINK_DISCONNECTED = 1,
-        ERROR_RESPONSE_UNEXPECTED = 2,
+    pub const RequestErrorKind = enum(i32) {
+        CORE_REQUEST_ERROR_UNSPECIFIED = 0,
+        CORE_REQUEST_ERROR_UNKNOWN_REQUEST = 1,
         _,
     };
 
     pub const LineConfig = struct {
-        lines: ArrayList(CoreResponse.LineConfig.Line),
+        lines: ArrayList(Response.LineConfig.Line),
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .List = .{ .SubMessage = {} } }),
