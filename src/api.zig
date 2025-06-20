@@ -11,31 +11,39 @@ pub const info_msg = @import("proto/mmc/info.pb.zig");
 pub const version =
     std.SemanticVersion.parse(build.version) catch unreachable;
 
-// TODO: Find a way to modify generated zig protobuf file to get axis directly
-/// Get axis specific information from a register's field.
-pub fn getAxisInfo(comptime Output: type, src: anytype, local_axis_idx: u2) Output {
-    const ti = @typeInfo(@TypeOf(src)).@"struct";
-    inline for (ti.fields, 0..) |field, axis| {
-        const res = @field(src, field.name);
-        const res_ti = @typeInfo(@TypeOf(res));
-        if (local_axis_idx == axis) return if (res_ti == .optional) res.? else res;
+pub fn convertEnum(
+    source: anytype,
+    comptime Target: type,
+    comptime style: enum {
+        UpperSnakeToTitle,
+        TitleToUpperSnake,
+        LowerSnakeToUpperSnake,
+        UpperSnakeToLowerSnake,
+    },
+) Target {
+    if (@typeInfo(@TypeOf(source)) != .@"enum" and @typeInfo(Target) != .@"enum")
+        @compileError("InvalidType");
+    const target_style = blk: {
+        const ti = @typeInfo(@TypeOf(source)).@"enum";
+        inline for (ti.fields) |field| {
+            if (field.value == @intFromEnum(source)) {
+                break :blk switch (style) {
+                    .UpperSnakeToTitle => upperSnakeToTitle(field.name),
+                    .TitleToUpperSnake => titleToUpperSnake(field.name),
+                    .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(field.name),
+                    .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(field.name),
+                };
+            }
+        }
+        unreachable;
+    };
+    const ti = @typeInfo(Target).@"enum";
+    inline for (ti.fields) |field| {
+        if (std.mem.eql(u8, field.name, target_style)) {
+            return @enumFromInt(field.value);
+        }
     }
-    unreachable;
-}
-
-test getAxisInfo {
-    const axis2: info_msg.Response.RegisterX.HallAlarm.Side = .{
-        .back = false,
-        .front = false,
-    };
-    const example_x: info_msg.Response.RegisterX = .{
-        .hall_alarm = .{ .axis2 = axis2 },
-    };
-    try std.testing.expectEqual(axis2, getAxisInfo(
-        info_msg.Response.RegisterX.HallAlarm.Side,
-        example_x.hall_alarm.?,
-        1,
-    ));
+    @compileError("NoMatchingField");
 }
 
 pub fn nestedWrite(
@@ -291,43 +299,4 @@ test upperSnakeToLowerSnake {
         lower_snake,
         upperSnakeToLowerSnake(upper_snake),
     );
-}
-
-pub fn convertEnum(
-    source: anytype,
-    comptime target: type,
-    style: enum {
-        UpperSnakeToTitle,
-        TitleToUpperSnake,
-        LowerSnakeToUpperSnake,
-        UpperSnakeToLowerSnake,
-    },
-) !target {
-    if (@typeInfo(@TypeOf(source)) != .@"enum" and @typeInfo(target) != .@"enum")
-        return error.InvalidType;
-    const target_style = blk: {
-        const ti = @typeInfo(@TypeOf(source)).@"enum";
-        inline for (ti.fields) |field| {
-            if (field.value == @intFromEnum(source)) {
-                break :blk switch (style) {
-                    .UpperSnakeToTitle => upperSnakeToTitle(field.name),
-                    .TitleToUpperSnake => titleToUpperSnake(field.name),
-                    .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(field.name),
-                    .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(field.name),
-                };
-            }
-        }
-        unreachable;
-    };
-    std.log.debug(
-        "target style: {s}, source: {s}",
-        .{ target_style, @tagName(source) },
-    );
-    const ti = @typeInfo(target).@"enum";
-    inline for (ti.fields) |field| {
-        if (std.mem.eql(u8, field.name, target_style)) {
-            return @enumFromInt(field.value);
-        }
-    }
-    return error.UnmatchedEnumField;
 }
