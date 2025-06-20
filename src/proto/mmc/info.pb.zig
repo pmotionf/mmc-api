@@ -17,7 +17,7 @@ pub const Request = struct {
         register_y,
         register_wr,
         register_ww,
-        command_status,
+        command,
         hall_alarm,
         carrier,
         axis,
@@ -28,7 +28,7 @@ pub const Request = struct {
         register_y: Request.RegisterY,
         register_wr: Request.RegisterWr,
         register_ww: Request.RegisterWw,
-        command_status: Request.CommandStatus,
+        command: Request.Command,
         hall_alarm: Request.HallAlarm,
         carrier: Request.Carrier,
         axis: Request.Axis,
@@ -38,7 +38,7 @@ pub const Request = struct {
             .register_y = fd(4, .{ .SubMessage = {} }),
             .register_wr = fd(5, .{ .SubMessage = {} }),
             .register_ww = fd(6, .{ .SubMessage = {} }),
-            .command_status = fd(20, .{ .SubMessage = {} }),
+            .command = fd(20, .{ .SubMessage = {} }),
             .hall_alarm = fd(21, .{ .SubMessage = {} }),
             .carrier = fd(22, .{ .SubMessage = {} }),
             .axis = fd(26, .{ .SubMessage = {} }),
@@ -98,7 +98,7 @@ pub const Request = struct {
         pub usingnamespace protobuf.MessageMixins(@This());
     };
 
-    pub const CommandStatus = struct {
+    pub const Command = struct {
         command_id: u32 = 0,
 
         pub const _desc_table = .{
@@ -180,7 +180,7 @@ pub const Response = struct {
         register_y,
         register_wr,
         register_ww,
-        command_status,
+        command,
         hall_alarm,
         carrier,
         axis,
@@ -192,7 +192,7 @@ pub const Response = struct {
         register_y: Response.RegisterY,
         register_wr: Response.RegisterWr,
         register_ww: Response.RegisterWw,
-        command_status: Response.CommandStatus,
+        command: Response.Command,
         hall_alarm: Response.HallAlarm,
         carrier: Response.Carrier,
         axis: Response.Axes,
@@ -203,7 +203,7 @@ pub const Response = struct {
             .register_y = fd(2, .{ .SubMessage = {} }),
             .register_wr = fd(3, .{ .SubMessage = {} }),
             .register_ww = fd(4, .{ .SubMessage = {} }),
-            .command_status = fd(5, .{ .SubMessage = {} }),
+            .command = fd(5, .{ .SubMessage = {} }),
             .hall_alarm = fd(6, .{ .SubMessage = {} }),
             .carrier = fd(7, .{ .SubMessage = {} }),
             .axis = fd(8, .{ .SubMessage = {} }),
@@ -224,6 +224,7 @@ pub const Response = struct {
         INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4,
         INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5,
         INFO_REQUEST_ERROR_MISSING_PARAMETER = 6,
+        INFO_REQUEST_ERROR_SERVER_RUNNING_OUT_OF_MEMORY = 7,
         _,
     };
 
@@ -656,9 +657,9 @@ pub const Response = struct {
         pub usingnamespace protobuf.MessageMixins(@This());
     };
 
-    pub const CommandStatus = struct {
-        status: Response.CommandStatus.Status = @enumFromInt(0),
-        error_response: ?Response.CommandStatus.ErrorKind = null,
+    pub const Command = struct {
+        status: Response.Command.Status = @enumFromInt(0),
+        error_response: ?Response.Command.ErrorKind = null,
 
         pub const _desc_table = .{
             .status = fd(1, .{ .Varint = .Simple }),

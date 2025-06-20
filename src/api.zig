@@ -12,6 +12,7 @@ pub const version =
     std.SemanticVersion.parse(build.version) catch unreachable;
 
 pub fn convertEnum(
+    allocator: std.mem.Allocator,
     source: anytype,
     comptime Target: type,
     comptime style: enum {
@@ -20,9 +21,21 @@ pub fn convertEnum(
         LowerSnakeToUpperSnake,
         UpperSnakeToLowerSnake,
     },
-) Target {
-    if (@typeInfo(@TypeOf(source)) != .@"enum" and @typeInfo(Target) != .@"enum")
+) !Target {
+    if ((@typeInfo(@TypeOf(source)) != .@"enum" or
+        @typeInfo(@TypeOf(source)) != .error_set) and
+        @typeInfo(Target) != .@"enum")
         @compileError("InvalidType");
+    const prefix = comptime blk: {
+        const ti = @typeInfo(Target).@"enum";
+        // Compare the first two enum field to get the correct prefix
+        const diff_idx = std.mem.indexOfDiff(
+            u8,
+            ti.fields[0].name,
+            ti.fields[1].name,
+        ).?;
+        break :blk ti.fields[0].name[0..diff_idx];
+    };
     const target_style = blk: {
         const ti = @typeInfo(@TypeOf(source)).@"enum";
         inline for (ti.fields) |field| {
@@ -37,13 +50,34 @@ pub fn convertEnum(
         }
         unreachable;
     };
+    const target_name = try std.fmt.allocPrint(
+        allocator,
+        "{s}{s}",
+        .{ prefix, target_style },
+    );
+    defer allocator.free(target_name);
     const ti = @typeInfo(Target).@"enum";
     inline for (ti.fields) |field| {
-        if (std.mem.eql(u8, field.name, target_style)) {
+        if (std.mem.eql(u8, field.name, target_name)) {
             return @enumFromInt(field.value);
         }
     }
-    @compileError("NoMatchingField");
+    unreachable;
+}
+
+test convertEnum {
+    const CommandStatus = enum { Completed };
+    const command_status: CommandStatus = .Completed;
+    const res: info_msg.Response.Command.Status = try convertEnum(
+        std.testing.allocator,
+        command_status,
+        info_msg.Response.Command.Status,
+        .TitleToUpperSnake,
+    );
+    try std.testing.expectEqual(
+        res,
+        info_msg.Response.Command.Status.STATUS_COMPLETED,
+    );
 }
 
 pub fn nestedWrite(
