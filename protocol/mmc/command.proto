@@ -68,7 +68,7 @@ message Request{
     // Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 4;
     oneof target{
-      uint32 axis_id = 5;
+      uint32 axis = 5;
       float location = 6;
       float distance = 7;
     }

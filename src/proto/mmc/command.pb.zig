@@ -188,16 +188,16 @@ pub const Request = struct {
         target: ?target_union,
 
         pub const _target_case = enum {
-            axis_id,
+            axis,
             location,
             distance,
         };
         pub const target_union = union(_target_case) {
-            axis_id: u32,
+            axis: u32,
             location: f32,
             distance: f32,
             pub const _union_desc = .{
-                .axis_id = fd(5, .{ .Varint = .Simple }),
+                .axis = fd(5, .{ .Varint = .Simple }),
                 .location = fd(6, .{ .FixedInt = .I32 }),
                 .distance = fd(7, .{ .FixedInt = .I32 }),
             };
