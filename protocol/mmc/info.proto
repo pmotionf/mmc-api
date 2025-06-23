@@ -42,12 +42,20 @@ message Request{
 
     message Axis{
         uint32 line_id = 1;
-        repeated uint32 axis_id = 2;
+        message Range {
+          uint32 start_id = 1;
+          uint32 end_id = 2;
+        }
+        Range range = 2;
     }
 
     message Station{
         uint32 line_id = 1;
-        repeated uint32 station_id = 2;
+        message Range {
+          uint32 start_id = 1;
+          uint32 end_id = 2;
+        }
+        Range range = 2;
     }
 
     oneof body{
@@ -310,7 +318,7 @@ message Response{
       ERROR_KIND_INVALID_SYSTEM_STATE = 5;
       ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
       ERROR_KIND_INVALID_AXIS = 7;
-      ERROR_KIND_UNEXPECTED = 8;
+      ERROR_KIND_SERVER_RUNNING_OUT_OF_MEMORY = 8;
     }
     optional ErrorKind error_response = 2;
   }

@@ -147,11 +147,23 @@ pub const Request = struct {
 
     pub const Axis = struct {
         line_id: u32 = 0,
-        axis_id: ArrayList(u32),
+        range: ?Request.Axis.Range = null,
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
-            .axis_id = fd(2, .{ .PackedList = .{ .Varint = .Simple } }),
+            .range = fd(2, .{ .SubMessage = {} }),
+        };
+
+        pub const Range = struct {
+            start_id: u32 = 0,
+            end_id: u32 = 0,
+
+            pub const _desc_table = .{
+                .start_id = fd(1, .{ .Varint = .Simple }),
+                .end_id = fd(2, .{ .Varint = .Simple }),
+            };
+
+            pub usingnamespace protobuf.MessageMixins(@This());
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
@@ -159,11 +171,23 @@ pub const Request = struct {
 
     pub const Station = struct {
         line_id: u32 = 0,
-        station_id: ArrayList(u32),
+        range: ?Request.Station.Range = null,
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
-            .station_id = fd(2, .{ .PackedList = .{ .Varint = .Simple } }),
+            .range = fd(2, .{ .SubMessage = {} }),
+        };
+
+        pub const Range = struct {
+            start_id: u32 = 0,
+            end_id: u32 = 0,
+
+            pub const _desc_table = .{
+                .start_id = fd(1, .{ .Varint = .Simple }),
+                .end_id = fd(2, .{ .Varint = .Simple }),
+            };
+
+            pub usingnamespace protobuf.MessageMixins(@This());
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
@@ -684,7 +708,7 @@ pub const Response = struct {
             ERROR_KIND_INVALID_SYSTEM_STATE = 5,
             ERROR_KIND_CARRIER_ALREADY_EXISTS = 6,
             ERROR_KIND_INVALID_AXIS = 7,
-            ERROR_KIND_UNEXPECTED = 8,
+            ERROR_KIND_SERVER_RUNNING_OUT_OF_MEMORY = 8,
             _,
         };
 
