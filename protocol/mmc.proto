@@ -19,6 +19,6 @@ message Response{
   oneof body{
     mmc.core.Response core = 1;
     mmc.command.Response command = 2;
-    mmc.info.Request info = 3;
+    mmc.info.Response info = 3;
   }
 }

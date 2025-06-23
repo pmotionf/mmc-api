@@ -52,7 +52,7 @@ pub const Response = struct {
     pub const body_union = union(_body_case) {
         core: mmc_core.Response,
         command: mmc_command.Response,
-        info: mmc_info.Request,
+        info: mmc_info.Response,
         pub const _union_desc = .{
             .core = fd(1, .{ .SubMessage = {} }),
             .command = fd(2, .{ .SubMessage = {} }),
