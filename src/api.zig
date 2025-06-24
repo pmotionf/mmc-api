@@ -64,7 +64,6 @@ pub fn convertEnum(
             },
             else => unreachable,
         }
-        // const ti = @typeInfo(@TypeOf(source)).@"enum";
     };
     const target_name = try std.fmt.allocPrint(
         allocator,
@@ -241,7 +240,7 @@ test "union nestedWrite" {
         \\    enable_cas: false,
         \\    isolate_link_prev_axis: false,
         \\    isolate_link_next_axis: false,
-        \\    speed: 0,
+        \\    velocity: 0,
         \\    acceleration: 0,
         \\    target: 3.14,
         \\},

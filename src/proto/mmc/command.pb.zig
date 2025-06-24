@@ -164,12 +164,12 @@ pub const Request = struct {
 
         pub const Lines = struct {
             line_id: u32 = 0,
-            speed: u32 = 0,
+            velocity: u32 = 0,
             acceleration: u32 = 0,
 
             pub const _desc_table = .{
                 .line_id = fd(1, .{ .Varint = .Simple }),
-                .speed = fd(2, .{ .Varint = .Simple }),
+                .velocity = fd(2, .{ .Varint = .Simple }),
                 .acceleration = fd(3, .{ .Varint = .Simple }),
             };
 
@@ -182,7 +182,7 @@ pub const Request = struct {
     pub const MoveCarrier = struct {
         line_id: u32 = 0,
         carrier_id: u32 = 0,
-        speed: u32 = 0,
+        velocity: u32 = 0,
         acceleration: u32 = 0,
         control_kind: Request.MoveCarrier.Control = @enumFromInt(0),
         target: ?target_union,
@@ -206,7 +206,7 @@ pub const Request = struct {
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
             .carrier_id = fd(2, .{ .Varint = .Simple }),
-            .speed = fd(3, .{ .Varint = .Simple }),
+            .velocity = fd(3, .{ .Varint = .Simple }),
             .acceleration = fd(4, .{ .Varint = .Simple }),
             .control_kind = fd(8, .{ .Varint = .Simple }),
             .target = fd(null, .{ .OneOf = target_union }),
@@ -215,7 +215,7 @@ pub const Request = struct {
         pub const Control = enum(i32) {
             CONTROL_UNSPECIFIED = 0,
             CONTROL_POSITION = 1,
-            CONTROL_SPEED = 2,
+            CONTROL_VELOCITY = 2,
             _,
         };
 
@@ -226,7 +226,7 @@ pub const Request = struct {
         line_id: u32 = 0,
         carrier_id: u32 = 0,
         direction: Direction = @enumFromInt(0),
-        speed: u32 = 0,
+        velocity: u32 = 0,
         acceleration: u32 = 0,
         axis_id: ?u32 = null,
 
@@ -234,7 +234,7 @@ pub const Request = struct {
             .line_id = fd(1, .{ .Varint = .Simple }),
             .carrier_id = fd(2, .{ .Varint = .Simple }),
             .direction = fd(3, .{ .Varint = .Simple }),
-            .speed = fd(4, .{ .Varint = .Simple }),
+            .velocity = fd(4, .{ .Varint = .Simple }),
             .acceleration = fd(5, .{ .Varint = .Simple }),
             .axis_id = fd(6, .{ .Varint = .Simple }),
         };
@@ -247,7 +247,7 @@ pub const Request = struct {
         axis_id: u32 = 0,
         carrier_id: u32 = 0,
         direction: Direction = @enumFromInt(0),
-        speed: u32 = 0,
+        velocity: u32 = 0,
         acceleration: u32 = 0,
         target: ?target_union,
 
@@ -269,7 +269,7 @@ pub const Request = struct {
             .axis_id = fd(2, .{ .Varint = .Simple }),
             .carrier_id = fd(3, .{ .Varint = .Simple }),
             .direction = fd(4, .{ .Varint = .Simple }),
-            .speed = fd(5, .{ .Varint = .Simple }),
+            .velocity = fd(5, .{ .Varint = .Simple }),
             .acceleration = fd(6, .{ .Varint = .Simple }),
             .target = fd(null, .{ .OneOf = target_union }),
         };
@@ -325,8 +325,8 @@ pub const Response = struct {
         COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND = 3,
         COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 4,
         COMMAND_REQUEST_ERROR_INVALID_ACCELERATION = 5,
-        COMMAND_REQUEST_ERROR_INVALID_SPEED = 6,
-        COMMAND_REQUEST_ERROR_SERVER_RUNNING_OUT_OF_MEMORY = 7,
+        COMMAND_REQUEST_ERROR_INVALID_VELOCITY = 6,
+        COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 7,
         COMMAND_REQUEST_ERROR_MISSING_PARAMETER = 8,
         _,
     };

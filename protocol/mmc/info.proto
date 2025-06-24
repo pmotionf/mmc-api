@@ -166,10 +166,10 @@ message Response{
       COMMAND_CODE_POSITION_MOVE_CARRIER_AXIS = 3;
       COMMAND_CODE_POSITION_MOVE_CARRIER_LOCATION = 4;
       COMMAND_CODE_POSITION_MOVE_CARRIER_DISTANCE = 5;
-      // "By Speed" commands calculate carrier movement by constant hall
-      // sensor speed feedback. It should mostly not be used, as the
+      // "By Velocity" commands calculate carrier movement by constant hall
+      // sensor velocity feedback. It should mostly not be used, as the
       // destination position becomes far too imprecise. However, it is
-      // meant to maintain a certain speed while the carrier is traveling,
+      // meant to maintain a certain velocity while the carrier is traveling,
       // and to avoid the requirement of having a known system position.
       COMMAND_CODE_SPEED_MOVE_CARRIER_AXIS = 6;
       COMMAND_CODE_SPEED_MOVE_CARRIER_LOCATION = 7;
@@ -201,7 +201,7 @@ message Response{
       bool enable_cas = 5;
       bool isolate_link_prev_axis = 6;
       bool isolate_link_next_axis = 7;
-      int32 speed = 8;
+      int32 velocity = 8;
       int32 acceleration = 9;
     }
     Carrier carrier = 3;
@@ -318,7 +318,6 @@ message Response{
       ERROR_KIND_INVALID_SYSTEM_STATE = 5;
       ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
       ERROR_KIND_INVALID_AXIS = 7;
-      ERROR_KIND_SERVER_RUNNING_OUT_OF_MEMORY = 8;
     }
     optional ErrorKind error_response = 2;
   }
@@ -388,7 +387,6 @@ message Response{
     INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4;
     INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5;
     INFO_REQUEST_ERROR_MISSING_PARAMETER = 6;
-    INFO_REQUEST_ERROR_SERVER_RUNNING_OUT_OF_MEMORY = 7;
   }
 
   oneof body{

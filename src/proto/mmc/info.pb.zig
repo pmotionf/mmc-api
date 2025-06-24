@@ -248,7 +248,6 @@ pub const Response = struct {
         INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4,
         INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5,
         INFO_REQUEST_ERROR_MISSING_PARAMETER = 6,
-        INFO_REQUEST_ERROR_SERVER_RUNNING_OUT_OF_MEMORY = 7,
         _,
     };
 
@@ -503,7 +502,7 @@ pub const Response = struct {
             enable_cas: bool = false,
             isolate_link_prev_axis: bool = false,
             isolate_link_next_axis: bool = false,
-            speed: i32 = 0,
+            velocity: i32 = 0,
             acceleration: i32 = 0,
             target: ?target_union,
 
@@ -528,7 +527,7 @@ pub const Response = struct {
                 .enable_cas = fd(5, .{ .Varint = .Simple }),
                 .isolate_link_prev_axis = fd(6, .{ .Varint = .Simple }),
                 .isolate_link_next_axis = fd(7, .{ .Varint = .Simple }),
-                .speed = fd(8, .{ .Varint = .Simple }),
+                .velocity = fd(8, .{ .Varint = .Simple }),
                 .acceleration = fd(9, .{ .Varint = .Simple }),
                 .target = fd(null, .{ .OneOf = target_union }),
             };
@@ -708,7 +707,6 @@ pub const Response = struct {
             ERROR_KIND_INVALID_SYSTEM_STATE = 5,
             ERROR_KIND_CARRIER_ALREADY_EXISTS = 6,
             ERROR_KIND_INVALID_AXIS = 7,
-            ERROR_KIND_SERVER_RUNNING_OUT_OF_MEMORY = 8,
             _,
         };
 
