@@ -19,7 +19,7 @@ pub const Request = struct {
     pub const Kind = enum(i32) {
         CORE_REQUEST_KIND_UNSPECIFIED = 0,
         CORE_REQUEST_KIND_API_VERSION = 1,
-        CORE_REQUEST_KIND_SERVER_VERSION = 2,
+        CORE_REQUEST_KIND_SERVER_INFO = 2,
         CORE_REQUEST_KIND_LINE_CONFIG = 3,
         _,
     };
@@ -31,18 +31,18 @@ pub const Response = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
-        server_version,
+        server,
         api_version,
         line_config,
         request_error,
     };
     pub const body_union = union(_body_case) {
-        server_version: Response.SemanticVersion,
+        server: Response.Server,
         api_version: Response.SemanticVersion,
         line_config: Response.LineConfig,
         request_error: Response.RequestErrorKind,
         pub const _union_desc = .{
-            .server_version = fd(1, .{ .SubMessage = {} }),
+            .server = fd(1, .{ .SubMessage = {} }),
             .api_version = fd(2, .{ .SubMessage = {} }),
             .line_config = fd(3, .{ .SubMessage = {} }),
             .request_error = fd(4, .{ .Varint = .Simple }),
@@ -90,6 +90,18 @@ pub const Response = struct {
             .major = fd(1, .{ .Varint = .Simple }),
             .minor = fd(2, .{ .Varint = .Simple }),
             .patch = fd(3, .{ .Varint = .Simple }),
+        };
+
+        pub usingnamespace protobuf.MessageMixins(@This());
+    };
+
+    pub const Server = struct {
+        version: ?Response.SemanticVersion = null,
+        name: ManagedString = .Empty,
+
+        pub const _desc_table = .{
+            .version = fd(1, .{ .SubMessage = {} }),
+            .name = fd(2, .String),
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
