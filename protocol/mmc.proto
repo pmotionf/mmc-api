@@ -1,0 +1,24 @@
+syntax = "proto3";
+package mmc;
+
+import "mmc/command.proto";
+import "mmc/core.proto";
+import "mmc/info.proto";
+
+// This file serves as the wrapper for all proto definition
+
+message Request{
+  oneof body{
+    mmc.core.Request core = 1;
+    mmc.command.Request command = 2;
+    mmc.info.Request info = 3;
+  }
+}
+
+message Response{
+  oneof body{
+    mmc.core.Response core = 1;
+    mmc.command.Response command = 2;
+    mmc.info.Response info = 3;
+  }
+}

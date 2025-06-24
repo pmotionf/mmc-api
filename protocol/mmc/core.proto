@@ -1,0 +1,47 @@
+syntax = "proto3";
+package mmc.core;
+
+
+message Request{
+  enum Kind{
+    CORE_REQUEST_KIND_UNSPECIFIED = 0;
+    CORE_REQUEST_KIND_API_VERSION = 1;
+    CORE_REQUEST_KIND_SERVER_INFO = 2;
+    CORE_REQUEST_KIND_LINE_CONFIG = 3;
+  }
+  Kind kind = 1;
+}
+
+message Response{
+  message LineConfig{
+    message Line{
+      uint32 axes = 1;
+      string name = 2;
+    }
+    repeated Line lines = 1;
+  }
+
+  message SemanticVersion{
+    uint32 major = 1;
+    uint32 minor = 2;
+    uint32 patch = 3;
+  }
+
+  message Server{
+    SemanticVersion version = 1;
+    string name = 2;
+  }
+
+  enum RequestErrorKind {
+    CORE_REQUEST_ERROR_UNSPECIFIED = 0;
+    CORE_REQUEST_ERROR_UNKNOWN_REQUEST = 1;
+  }
+
+  oneof body{
+    Server server = 1;
+    SemanticVersion api_version = 2;
+    LineConfig line_config = 3;
+    // Error kind if this response's request was invalid.
+    RequestErrorKind request_error = 4;
+  }
+}
