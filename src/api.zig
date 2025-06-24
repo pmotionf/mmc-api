@@ -37,18 +37,34 @@ pub fn convertEnum(
         break :blk ti.fields[0].name[0..diff_idx];
     };
     const target_style = blk: {
-        const ti = @typeInfo(@TypeOf(source)).@"enum";
-        inline for (ti.fields) |field| {
-            if (field.value == @intFromEnum(source)) {
-                break :blk switch (style) {
-                    .UpperSnakeToTitle => upperSnakeToTitle(field.name),
-                    .TitleToUpperSnake => titleToUpperSnake(field.name),
-                    .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(field.name),
-                    .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(field.name),
-                };
-            }
+        switch (@typeInfo(@TypeOf(source))) {
+            .@"enum" => |ti| {
+                inline for (ti.fields) |field| {
+                    if (field.value == @intFromEnum(source)) {
+                        break :blk switch (style) {
+                            .UpperSnakeToTitle => upperSnakeToTitle(field.name),
+                            .TitleToUpperSnake => titleToUpperSnake(field.name),
+                            .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(field.name),
+                            .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(field.name),
+                        };
+                    }
+                }
+                unreachable;
+            },
+            .error_set => |ti| {
+                inline for (ti.?) |err| {
+                    if (std.mem.eql(u8, err.name, @errorName(source))) break :blk switch (style) {
+                        .UpperSnakeToTitle => upperSnakeToTitle(err.name),
+                        .TitleToUpperSnake => titleToUpperSnake(err.name),
+                        .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(err.name),
+                        .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(err.name),
+                    };
+                }
+                unreachable;
+            },
+            else => unreachable,
         }
-        unreachable;
+        // const ti = @typeInfo(@TypeOf(source)).@"enum";
     };
     const target_name = try std.fmt.allocPrint(
         allocator,
