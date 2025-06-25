@@ -55,7 +55,7 @@ pub const Response = struct {
 
     pub const RequestErrorKind = enum(i32) {
         CORE_REQUEST_ERROR_UNSPECIFIED = 0,
-        CORE_REQUEST_ERROR_UNKNOWN_REQUEST = 1,
+        CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1,
         _,
     };
 
