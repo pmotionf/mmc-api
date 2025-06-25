@@ -34,7 +34,7 @@ message Response{
 
   enum RequestErrorKind {
     CORE_REQUEST_ERROR_UNSPECIFIED = 0;
-    CORE_REQUEST_ERROR_UNKNOWN_REQUEST = 1;
+    CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1;
   }
 
   oneof body{
