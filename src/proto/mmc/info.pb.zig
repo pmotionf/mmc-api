@@ -714,10 +714,12 @@ pub const Response = struct {
     };
 
     pub const Axes = struct {
+        line_id: u32 = 0,
         axes: ArrayList(Response.Axes.Axis),
 
         pub const _desc_table = .{
-            .axes = fd(1, .{ .List = .{ .SubMessage = {} } }),
+            .line_id = fd(1, .{ .Varint = .Simple }),
+            .axes = fd(2, .{ .List = .{ .SubMessage = {} } }),
         };
 
         pub const Axis = struct {
@@ -756,10 +758,12 @@ pub const Response = struct {
     };
 
     pub const Stations = struct {
+        line_id: u32 = 0,
         stations: ArrayList(Response.Stations.Station),
 
         pub const _desc_table = .{
-            .stations = fd(1, .{ .List = .{ .SubMessage = {} } }),
+            .line_id = fd(1, .{ .Varint = .Simple }),
+            .stations = fd(2, .{ .List = .{ .SubMessage = {} } }),
         };
 
         pub const Station = struct {
