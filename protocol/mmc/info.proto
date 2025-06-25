@@ -335,7 +335,8 @@ message Response{
       bool overcurrent = 5;
       uint32 carrier_id = 6;
     }
-    repeated Axis axes = 1;
+    uint32 line_id = 1;
+    repeated Axis axes = 2;
   }
 
   message Stations{
@@ -361,7 +362,8 @@ message Response{
       }
       StationError errors = 6;
     }
-    repeated Station stations = 1;
+    uint32 line_id = 1;
+    repeated Station stations = 2;
   }
 
   message HallAlarm{
