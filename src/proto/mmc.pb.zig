@@ -48,20 +48,29 @@ pub const Response = struct {
         core,
         command,
         info,
+        request_error,
     };
     pub const body_union = union(_body_case) {
         core: mmc_core.Response,
         command: mmc_command.Response,
         info: mmc_info.Response,
+        request_error: Response.RequestError,
         pub const _union_desc = .{
             .core = fd(1, .{ .SubMessage = {} }),
             .command = fd(2, .{ .SubMessage = {} }),
             .info = fd(3, .{ .SubMessage = {} }),
+            .request_error = fd(4, .{ .Varint = .Simple }),
         };
     };
 
     pub const _desc_table = .{
         .body = fd(null, .{ .OneOf = body_union }),
+    };
+
+    pub const RequestError = enum(i32) {
+        MMC_REQUEST_ERROR_UNSPECIFIED = 0,
+        MMC_REQUEST_ERROR_INVALID_MESSAGE = 1,
+        _,
     };
 
     pub usingnamespace protobuf.MessageMixins(@This());
