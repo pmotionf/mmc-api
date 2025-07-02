@@ -13,10 +13,6 @@ pub const Request = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
-        register_x,
-        register_y,
-        register_wr,
-        register_ww,
         command,
         hall_alarm,
         carrier,
@@ -24,20 +20,12 @@ pub const Request = struct {
         station,
     };
     pub const body_union = union(_body_case) {
-        register_x: Request.RegisterX,
-        register_y: Request.RegisterY,
-        register_wr: Request.RegisterWr,
-        register_ww: Request.RegisterWw,
         command: Request.Command,
         hall_alarm: Request.HallAlarm,
         carrier: Request.Carrier,
         axis: Request.Axis,
         station: Request.Station,
         pub const _union_desc = .{
-            .register_x = fd(3, .{ .SubMessage = {} }),
-            .register_y = fd(4, .{ .SubMessage = {} }),
-            .register_wr = fd(5, .{ .SubMessage = {} }),
-            .register_ww = fd(6, .{ .SubMessage = {} }),
             .command = fd(20, .{ .SubMessage = {} }),
             .hall_alarm = fd(21, .{ .SubMessage = {} }),
             .carrier = fd(22, .{ .SubMessage = {} }),
@@ -48,54 +36,6 @@ pub const Request = struct {
 
     pub const _desc_table = .{
         .body = fd(null, .{ .OneOf = body_union }),
-    };
-
-    pub const RegisterX = struct {
-        line_id: u32 = 0,
-        station_id: u32 = 0,
-
-        pub const _desc_table = .{
-            .line_id = fd(1, .{ .Varint = .Simple }),
-            .station_id = fd(2, .{ .Varint = .Simple }),
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
-    };
-
-    pub const RegisterY = struct {
-        line_id: u32 = 0,
-        station_id: u32 = 0,
-
-        pub const _desc_table = .{
-            .line_id = fd(1, .{ .Varint = .Simple }),
-            .station_id = fd(2, .{ .Varint = .Simple }),
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
-    };
-
-    pub const RegisterWr = struct {
-        line_id: u32 = 0,
-        station_id: u32 = 0,
-
-        pub const _desc_table = .{
-            .line_id = fd(1, .{ .Varint = .Simple }),
-            .station_id = fd(2, .{ .Varint = .Simple }),
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
-    };
-
-    pub const RegisterWw = struct {
-        line_id: u32 = 0,
-        station_id: u32 = 0,
-
-        pub const _desc_table = .{
-            .line_id = fd(1, .{ .Varint = .Simple }),
-            .station_id = fd(2, .{ .Varint = .Simple }),
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
     };
 
     pub const Command = struct {
@@ -200,10 +140,6 @@ pub const Response = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
-        register_x,
-        register_y,
-        register_wr,
-        register_ww,
         command,
         hall_alarm,
         carrier,
@@ -212,10 +148,6 @@ pub const Response = struct {
         request_error,
     };
     pub const body_union = union(_body_case) {
-        register_x: Response.RegisterX,
-        register_y: Response.RegisterY,
-        register_wr: Response.RegisterWr,
-        register_ww: Response.RegisterWw,
         command: Response.Command,
         hall_alarm: Response.HallAlarm,
         carrier: Response.Carrier,
@@ -223,16 +155,12 @@ pub const Response = struct {
         station: Response.Stations,
         request_error: Response.RequestErrorKind,
         pub const _union_desc = .{
-            .register_x = fd(1, .{ .SubMessage = {} }),
-            .register_y = fd(2, .{ .SubMessage = {} }),
-            .register_wr = fd(3, .{ .SubMessage = {} }),
-            .register_ww = fd(4, .{ .SubMessage = {} }),
-            .command = fd(5, .{ .SubMessage = {} }),
-            .hall_alarm = fd(6, .{ .SubMessage = {} }),
-            .carrier = fd(7, .{ .SubMessage = {} }),
-            .axis = fd(8, .{ .SubMessage = {} }),
-            .station = fd(9, .{ .SubMessage = {} }),
-            .request_error = fd(10, .{ .Varint = .Simple }),
+            .command = fd(1, .{ .SubMessage = {} }),
+            .hall_alarm = fd(2, .{ .SubMessage = {} }),
+            .carrier = fd(3, .{ .SubMessage = {} }),
+            .axis = fd(4, .{ .SubMessage = {} }),
+            .station = fd(5, .{ .SubMessage = {} }),
+            .request_error = fd(6, .{ .Varint = .Simple }),
         };
     };
 
@@ -249,435 +177,6 @@ pub const Response = struct {
         INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5,
         INFO_REQUEST_ERROR_MISSING_PARAMETER = 6,
         _,
-    };
-
-    pub const RegisterX = struct {
-        cc_link_enabled: bool = false,
-        command_ready: bool = false,
-        command_received: bool = false,
-        axis_cleared_carrier: bool = false,
-        cleared_carrier: bool = false,
-        servo_enabled: bool = false,
-        emergency_stop_enabled: bool = false,
-        paused: bool = false,
-        motor_enabled: ?Response.RegisterX.MotorEnabled = null,
-        vdc_undervoltage_detected: bool = false,
-        vdc_overvoltage_detected: bool = false,
-        errors_cleared: bool = false,
-        communication_error: ?Response.RegisterX.CommunicationError = null,
-        inverter_overheat_detected: bool = false,
-        overcurrent_detected: ?Response.RegisterX.OvercurrentDetected = null,
-        hall_alarm: ?Response.RegisterX.HallAlarm = null,
-        wait_pull_carrier: ?Response.RegisterX.WaitPullCarrier = null,
-        wait_push_carrier: ?Response.RegisterX.WaitPushCarrier = null,
-        control_loop_max_time_exceeded: bool = false,
-        initial_data_processing_request: bool = false,
-        initial_data_setting_complete: bool = false,
-        error_status: bool = false,
-        remote_ready: bool = false,
-
-        pub const _desc_table = .{
-            .cc_link_enabled = fd(1, .{ .Varint = .Simple }),
-            .command_ready = fd(2, .{ .Varint = .Simple }),
-            .command_received = fd(3, .{ .Varint = .Simple }),
-            .axis_cleared_carrier = fd(4, .{ .Varint = .Simple }),
-            .cleared_carrier = fd(5, .{ .Varint = .Simple }),
-            .servo_enabled = fd(6, .{ .Varint = .Simple }),
-            .emergency_stop_enabled = fd(7, .{ .Varint = .Simple }),
-            .paused = fd(8, .{ .Varint = .Simple }),
-            .motor_enabled = fd(9, .{ .SubMessage = {} }),
-            .vdc_undervoltage_detected = fd(10, .{ .Varint = .Simple }),
-            .vdc_overvoltage_detected = fd(11, .{ .Varint = .Simple }),
-            .errors_cleared = fd(12, .{ .Varint = .Simple }),
-            .communication_error = fd(13, .{ .SubMessage = {} }),
-            .inverter_overheat_detected = fd(14, .{ .Varint = .Simple }),
-            .overcurrent_detected = fd(15, .{ .SubMessage = {} }),
-            .hall_alarm = fd(16, .{ .SubMessage = {} }),
-            .wait_pull_carrier = fd(17, .{ .SubMessage = {} }),
-            .wait_push_carrier = fd(18, .{ .SubMessage = {} }),
-            .control_loop_max_time_exceeded = fd(19, .{ .Varint = .Simple }),
-            .initial_data_processing_request = fd(20, .{ .Varint = .Simple }),
-            .initial_data_setting_complete = fd(21, .{ .Varint = .Simple }),
-            .error_status = fd(22, .{ .Varint = .Simple }),
-            .remote_ready = fd(23, .{ .Varint = .Simple }),
-        };
-
-        pub const MotorEnabled = struct {
-            axis1: bool = false,
-            axis2: bool = false,
-            axis3: bool = false,
-
-            pub const _desc_table = .{
-                .axis1 = fd(1, .{ .Varint = .Simple }),
-                .axis2 = fd(2, .{ .Varint = .Simple }),
-                .axis3 = fd(3, .{ .Varint = .Simple }),
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub const CommunicationError = struct {
-            from_prev: bool = false,
-            from_next: bool = false,
-
-            pub const _desc_table = .{
-                .from_prev = fd(1, .{ .Varint = .Simple }),
-                .from_next = fd(2, .{ .Varint = .Simple }),
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub const OvercurrentDetected = struct {
-            axis1: bool = false,
-            axis2: bool = false,
-            axis3: bool = false,
-
-            pub const _desc_table = .{
-                .axis1 = fd(1, .{ .Varint = .Simple }),
-                .axis2 = fd(2, .{ .Varint = .Simple }),
-                .axis3 = fd(3, .{ .Varint = .Simple }),
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub const HallAlarm = struct {
-            axis1: ?Response.RegisterX.HallAlarm.Side = null,
-            axis2: ?Response.RegisterX.HallAlarm.Side = null,
-            axis3: ?Response.RegisterX.HallAlarm.Side = null,
-
-            pub const _desc_table = .{
-                .axis1 = fd(1, .{ .SubMessage = {} }),
-                .axis2 = fd(2, .{ .SubMessage = {} }),
-                .axis3 = fd(3, .{ .SubMessage = {} }),
-            };
-
-            pub const Side = struct {
-                back: bool = false,
-                front: bool = false,
-
-                pub const _desc_table = .{
-                    .back = fd(1, .{ .Varint = .Simple }),
-                    .front = fd(2, .{ .Varint = .Simple }),
-                };
-
-                pub usingnamespace protobuf.MessageMixins(@This());
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub const WaitPullCarrier = struct {
-            axis1: bool = false,
-            axis2: bool = false,
-            axis3: bool = false,
-
-            pub const _desc_table = .{
-                .axis1 = fd(1, .{ .Varint = .Simple }),
-                .axis2 = fd(2, .{ .Varint = .Simple }),
-                .axis3 = fd(3, .{ .Varint = .Simple }),
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub const WaitPushCarrier = struct {
-            axis1: bool = false,
-            axis2: bool = false,
-            axis3: bool = false,
-
-            pub const _desc_table = .{
-                .axis1 = fd(1, .{ .Varint = .Simple }),
-                .axis2 = fd(2, .{ .Varint = .Simple }),
-                .axis3 = fd(3, .{ .Varint = .Simple }),
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
-    };
-
-    pub const RegisterY = struct {
-        cc_link_enable: bool = false,
-        start_command: bool = false,
-        reset_command_received: bool = false,
-        axis_clear_carrier: bool = false,
-        clear_carrier: bool = false,
-        axis_servo_release: bool = false,
-        servo_release: bool = false,
-        emergency_stop: bool = false,
-        temporary_pause: bool = false,
-        clear_errors: bool = false,
-        reset_pull_carrier: ?Response.RegisterY.ResetPullCarrier = null,
-        reset_push_carrier: ?Response.RegisterY.ResetPushCarrier = null,
-
-        pub const _desc_table = .{
-            .cc_link_enable = fd(1, .{ .Varint = .Simple }),
-            .start_command = fd(2, .{ .Varint = .Simple }),
-            .reset_command_received = fd(3, .{ .Varint = .Simple }),
-            .axis_clear_carrier = fd(4, .{ .Varint = .Simple }),
-            .clear_carrier = fd(5, .{ .Varint = .Simple }),
-            .axis_servo_release = fd(6, .{ .Varint = .Simple }),
-            .servo_release = fd(7, .{ .Varint = .Simple }),
-            .emergency_stop = fd(8, .{ .Varint = .Simple }),
-            .temporary_pause = fd(9, .{ .Varint = .Simple }),
-            .clear_errors = fd(10, .{ .Varint = .Simple }),
-            .reset_pull_carrier = fd(11, .{ .SubMessage = {} }),
-            .reset_push_carrier = fd(12, .{ .SubMessage = {} }),
-        };
-
-        pub const ResetPullCarrier = struct {
-            axis1: bool = false,
-            axis2: bool = false,
-            axis3: bool = false,
-
-            pub const _desc_table = .{
-                .axis1 = fd(1, .{ .Varint = .Simple }),
-                .axis2 = fd(2, .{ .Varint = .Simple }),
-                .axis3 = fd(3, .{ .Varint = .Simple }),
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub const ResetPushCarrier = struct {
-            axis1: bool = false,
-            axis2: bool = false,
-            axis3: bool = false,
-
-            pub const _desc_table = .{
-                .axis1 = fd(1, .{ .Varint = .Simple }),
-                .axis2 = fd(2, .{ .Varint = .Simple }),
-                .axis3 = fd(3, .{ .Varint = .Simple }),
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
-    };
-
-    pub const RegisterWw = struct {
-        command: Response.RegisterWw.CommandCode = @enumFromInt(0),
-        axis: i32 = 0,
-        carrier: ?Response.RegisterWw.Carrier = null,
-
-        pub const _desc_table = .{
-            .command = fd(1, .{ .Varint = .Simple }),
-            .axis = fd(2, .{ .Varint = .Simple }),
-            .carrier = fd(3, .{ .SubMessage = {} }),
-        };
-
-        pub const CommandCode = enum(i32) {
-            COMMAND_CODE_UNSPECIFIED = 0,
-            COMMAND_CODE_NONE = 1,
-            COMMAND_CODE_SET_LINE_ZERO = 2,
-            COMMAND_CODE_POSITION_MOVE_CARRIER_AXIS = 3,
-            COMMAND_CODE_POSITION_MOVE_CARRIER_LOCATION = 4,
-            COMMAND_CODE_POSITION_MOVE_CARRIER_DISTANCE = 5,
-            COMMAND_CODE_SPEED_MOVE_CARRIER_AXIS = 6,
-            COMMAND_CODE_SPEED_MOVE_CARRIER_LOCATION = 7,
-            COMMAND_CODE_SPEED_MOVE_CARRIER_DISTANCE = 8,
-            COMMAND_CODE_ISOLATE_FORWARD = 9,
-            COMMAND_CODE_ISOLATE_BACKWARD = 10,
-            COMMAND_CODE_CALIBRATION = 11,
-            COMMAND_CODE_SET_CARRIER_ID_AT_AXIS = 12,
-            COMMAND_CODE_PUSH_FORWARD = 13,
-            COMMAND_CODE_PUSH_BACKWARD = 14,
-            COMMAND_CODE_PULL_FORWARD = 15,
-            COMMAND_CODE_PULL_BACKWARD = 16,
-            COMMAND_CODE_PUSH_TRANSITION_FORWARD = 17,
-            COMMAND_CODE_PUSH_TRANSITION_BACKWARD = 18,
-            COMMAND_CODE_PULL_TRANSITION_AXIS_FORWARD = 19,
-            COMMAND_CODE_PULL_TRANSITION_AXIS_BACKWARD = 20,
-            COMMAND_CODE_PULL_TRANSITION_LOCATION_FORWARD = 21,
-            COMMAND_CODE_PULL_TRANSITION_LOCATION_BACKWARD = 22,
-            _,
-        };
-
-        pub const Carrier = struct {
-            id: i32 = 0,
-            enable_cas: bool = false,
-            isolate_link_prev_axis: bool = false,
-            isolate_link_next_axis: bool = false,
-            velocity: i32 = 0,
-            acceleration: i32 = 0,
-            target: ?target_union,
-
-            pub const _target_case = enum {
-                f32,
-                u32,
-                i32,
-            };
-            pub const target_union = union(_target_case) {
-                f32: f32,
-                u32: i32,
-                i32: i32,
-                pub const _union_desc = .{
-                    .f32 = fd(1, .{ .FixedInt = .I32 }),
-                    .u32 = fd(2, .{ .Varint = .Simple }),
-                    .i32 = fd(3, .{ .Varint = .ZigZagOptimized }),
-                };
-            };
-
-            pub const _desc_table = .{
-                .id = fd(4, .{ .Varint = .Simple }),
-                .enable_cas = fd(5, .{ .Varint = .Simple }),
-                .isolate_link_prev_axis = fd(6, .{ .Varint = .Simple }),
-                .isolate_link_next_axis = fd(7, .{ .Varint = .Simple }),
-                .velocity = fd(8, .{ .Varint = .Simple }),
-                .acceleration = fd(9, .{ .Varint = .Simple }),
-                .target = fd(null, .{ .OneOf = target_union }),
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
-    };
-
-    pub const RegisterWr = struct {
-        command_response: Response.RegisterWr.CommandResponse = @enumFromInt(0),
-        received_backward: ?Response.RegisterWr.CommunicationReceived = null,
-        received_forward: ?Response.RegisterWr.CommunicationReceived = null,
-        carrier: ?Response.RegisterWr.Carrier = null,
-
-        pub const _desc_table = .{
-            .command_response = fd(1, .{ .Varint = .Simple }),
-            .received_backward = fd(2, .{ .SubMessage = {} }),
-            .received_forward = fd(3, .{ .SubMessage = {} }),
-            .carrier = fd(4, .{ .SubMessage = {} }),
-        };
-
-        pub const CommandResponse = enum(i32) {
-            COMMAND_RESPONSE_UNSPECIFIED = 0,
-            COMMAND_RESPONSE_NO_ERROR = 1,
-            COMMAND_RESPONSE_INVALID_COMMAND = 2,
-            COMMAND_RESPONSE_CARRIER_NOT_FOUND = 3,
-            COMMAND_RESPONSE_HOMING_FAILED = 4,
-            COMMAND_RESPONSE_INVALID_PARAMETER = 5,
-            COMMAND_RESPONSE_INVALID_SYSTEM_STATE = 6,
-            COMMAND_RESPONSE_CARRIER_ALREADY_EXISTS = 7,
-            COMMAND_RESPONSE_INVALID_AXIS = 8,
-            _,
-        };
-
-        pub const CommunicationReceived = struct {
-            id: i32 = 0,
-            kind: Response.RegisterWr.CommunicationReceived.DriverMessageKind = @enumFromInt(0),
-            failed_bcc: bool = false,
-
-            pub const _desc_table = .{
-                .id = fd(1, .{ .Varint = .Simple }),
-                .kind = fd(2, .{ .Varint = .Simple }),
-                .failed_bcc = fd(3, .{ .Varint = .Simple }),
-            };
-
-            pub const DriverMessageKind = enum(i32) {
-                DRIVER_MESSAGE_KIND_UNSPECIFIED = 0,
-                DRIVER_MESSAGE_KIND_NONE = 1,
-                DRIVER_MESSAGE_KIND_UPDATE = 2,
-                DRIVER_MESSAGE_KIND_PROF_REQ = 3,
-                DRIVER_MESSAGE_KIND_PROF_NOTI = 4,
-                DRIVER_MESSAGE_KIND_UPDATE_CALI_HOME = 5,
-                DRIVER_MESSAGE_KIND_UPDATE_MECH_ANGLE_OFFSET = 6,
-                DRIVER_MESSAGE_KIND_ON_POS_REQ = 7,
-                DRIVER_MESSAGE_KIND_ON_POS_RSP = 8,
-                DRIVER_MESSAGE_KIND_OFF_POS_REQ = 9,
-                DRIVER_MESSAGE_KIND_OFF_POS_RSP = 10,
-                DRIVER_MESSAGE_KIND_CLEAR_CARRIER_INFO = 11,
-                _,
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub const Carrier = struct {
-            axis1: ?Response.RegisterWr.Carrier.Description = null,
-            axis2: ?Response.RegisterWr.Carrier.Description = null,
-            axis3: ?Response.RegisterWr.Carrier.Description = null,
-
-            pub const _desc_table = .{
-                .axis1 = fd(1, .{ .SubMessage = {} }),
-                .axis2 = fd(2, .{ .SubMessage = {} }),
-                .axis3 = fd(3, .{ .SubMessage = {} }),
-            };
-
-            pub const Description = struct {
-                location: f32 = 0,
-                id: i32 = 0,
-                arrived: bool = false,
-                auxiliary: bool = false,
-                enabled: bool = false,
-                quasi: bool = false,
-                cas: ?Response.RegisterWr.Carrier.Description.CAS = null,
-                state: Response.RegisterWr.Carrier.Description.State = @enumFromInt(0),
-
-                pub const _desc_table = .{
-                    .location = fd(1, .{ .FixedInt = .I32 }),
-                    .id = fd(2, .{ .Varint = .Simple }),
-                    .arrived = fd(3, .{ .Varint = .Simple }),
-                    .auxiliary = fd(4, .{ .Varint = .Simple }),
-                    .enabled = fd(5, .{ .Varint = .Simple }),
-                    .quasi = fd(6, .{ .Varint = .Simple }),
-                    .cas = fd(7, .{ .SubMessage = {} }),
-                    .state = fd(8, .{ .Varint = .Simple }),
-                };
-
-                pub const State = enum(i32) {
-                    STATE_UNSPECIFIED = 0,
-                    STATE_NONE = 1,
-                    STATE_WARMUP_PROGRESSING = 2,
-                    STATE_WARMUP_COMPLETED = 3,
-                    STATE_POS_MOVE_PROGRESSING = 4,
-                    STATE_POS_MOVE_COMPLETED = 5,
-                    STATE_SPD_MOVE_PROGRESSING = 6,
-                    STATE_SPD_MOVE_COMPLETED = 7,
-                    STATE_AUXILIARY = 8,
-                    STATE_AUXILIARY_COMPLETED = 9,
-                    STATE_FORWARD_CALIBRATION_PROGRESSING = 10,
-                    STATE_FORWARD_CALIBRATION_COMPLETED = 11,
-                    STATE_BACKWARD_CALIBRATION_PROGRESSING = 12,
-                    STATE_BACKWARD_CALIBRATION_COMPLETED = 13,
-                    STATE_FORWARD_ISOLATION_PROGRESSING = 14,
-                    STATE_FORWARD_ISOLATION_COMPLETED = 15,
-                    STATE_BACKWARD_ISOLATION_PROGRESSING = 16,
-                    STATE_BACKWARD_ISOLATION_COMPLETED = 17,
-                    STATE_FORWARD_RESTART_PROGRESSING = 18,
-                    STATE_FORWARD_RESTART_COMPLETED = 19,
-                    STATE_BACKWARD_RESTART_PROGRESSING = 20,
-                    STATE_BACKWARD_RESTART_COMPLETED = 21,
-                    STATE_PULL_FORWARD = 22,
-                    STATE_PULL_FORWARD_COMPLETED = 23,
-                    STATE_PULL_BACKWARD = 24,
-                    STATE_PULL_BACKWARD_COMPLETED = 25,
-                    STATE_PUSH = 26,
-                    STATE_PUSH_COMPLETED = 27,
-                    STATE_OVERCURRENT = 28,
-                    _,
-                };
-
-                pub const CAS = struct {
-                    enabled: bool = false,
-                    triggered: bool = false,
-
-                    pub const _desc_table = .{
-                        .enabled = fd(1, .{ .Varint = .Simple }),
-                        .triggered = fd(2, .{ .Varint = .Simple }),
-                    };
-
-                    pub usingnamespace protobuf.MessageMixins(@This());
-                };
-
-                pub usingnamespace protobuf.MessageMixins(@This());
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
     };
 
     pub const Command = struct {
@@ -847,7 +346,7 @@ pub const Response = struct {
         line_id: u32 = 0,
         location: f32 = 0,
         id: u32 = 0,
-        state: Response.RegisterWr.Carrier.Description.State = @enumFromInt(0),
+        state: Response.Carrier.State = @enumFromInt(0),
         is_cas_triggered: bool = false,
 
         pub const _desc_table = .{
@@ -858,6 +357,38 @@ pub const Response = struct {
             .id = fd(6, .{ .Varint = .Simple }),
             .state = fd(7, .{ .Varint = .Simple }),
             .is_cas_triggered = fd(8, .{ .Varint = .Simple }),
+        };
+
+        pub const State = enum(i32) {
+            CARRIER_STATE_NONE = 0,
+            CARRIER_STATE_WARMUP_PROGRESSING = 1,
+            CARRIER_STATE_WARMUP_COMPLETED = 2,
+            CARRIER_STATE_POS_MOVE_PROGRESSING = 3,
+            CARRIER_STATE_POS_MOVE_COMPLETED = 4,
+            CARRIER_STATE_SPD_MOVE_PROGRESSING = 5,
+            CARRIER_STATE_SPD_MOVE_COMPLETED = 6,
+            CARRIER_STATE_AUXILIARY = 7,
+            CARRIER_STATE_AUXILIARY_COMPLETED = 8,
+            CARRIER_STATE_FORWARD_CALIBRATION_PROGRESSING = 9,
+            CARRIER_STATE_FORWARD_CALIBRATION_COMPLETED = 10,
+            CARRIER_STATE_BACKWARD_CALIBRATION_PROGRESSING = 11,
+            CARRIER_STATE_BACKWARD_CALIBRATION_COMPLETED = 12,
+            CARRIER_STATE_FORWARD_ISOLATION_PROGRESSING = 13,
+            CARRIER_STATE_FORWARD_ISOLATION_COMPLETED = 14,
+            CARRIER_STATE_BACKWARD_ISOLATION_PROGRESSING = 15,
+            CARRIER_STATE_BACKWARD_ISOLATION_COMPLETED = 16,
+            CARRIER_STATE_FORWARD_RESTART_PROGRESSING = 17,
+            CARRIER_STATE_FORWARD_RESTART_COMPLETED = 18,
+            CARRIER_STATE_BACKWARD_RESTART_PROGRESSING = 19,
+            CARRIER_STATE_BACKWARD_RESTART_COMPLETED = 20,
+            CARRIER_STATE_PULL_FORWARD = 21,
+            CARRIER_STATE_PULL_FORWARD_COMPLETED = 22,
+            CARRIER_STATE_PULL_BACKWARD = 23,
+            CARRIER_STATE_PULL_BACKWARD_COMPLETED = 24,
+            CARRIER_STATE_PUSH = 25,
+            CARRIER_STATE_PUSH_COMPLETED = 26,
+            CARRIER_STATE_OVERCURRENT = 27,
+            _,
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());

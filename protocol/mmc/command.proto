@@ -47,9 +47,9 @@ message Request{
   message AutoInitialize{
     message Lines{
       uint32 line_id = 1;
-      // Fixed point integer from 0-30, representing 0.0-3.0 m/s.
+      /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
       uint32 velocity = 2;
-      // Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
+      /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
       uint32 acceleration = 3;
     }
     repeated Lines lines = 1;
@@ -63,9 +63,9 @@ message Request{
     }
     uint32 line_id = 1;
     uint32 carrier_id = 2;
-    // Fixed point integer from 0-30, representing 0.0-3.0 m/s.
+    /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 3;
-    // Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
+    /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 4;
     oneof target{
       uint32 axis = 5;
@@ -79,9 +79,9 @@ message Request{
     uint32 line_id = 1;
     uint32 carrier_id = 2;
     Direction direction = 3;
-    // Fixed point integer from 0-30, representing 0.0-3.0 m/s.
+    /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 4;
-    // Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
+    /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 5;
     optional uint32 axis_id = 6;
   }
@@ -91,11 +91,11 @@ message Request{
     uint32 axis_id = 2;
     uint32 carrier_id = 3;
     Direction direction = 4;
-    // Fixed point integer from 0-30, representing 0.0-3.0 m/s.
+    /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 5;
-    // Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
+    /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 6;
-    // Optional carrier target after pull completion.
+    /// Optional carrier target after pull completion.
     oneof target {
         uint32 axis = 7;
         float location = 8;
@@ -143,7 +143,7 @@ message Response{
 
   oneof body{
     uint32 command_id = 1;
-    // Error kind if this response's request was invalid.
+    /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 2;
   }
 }
