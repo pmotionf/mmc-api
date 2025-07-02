@@ -16,8 +16,8 @@ pub fn convertEnum(
     source: anytype,
     comptime Target: type,
     comptime style: enum {
-        UpperSnakeToTitle,
-        TitleToUpperSnake,
+        UpperSnakeToCamel,
+        CamelToUpperSnake,
         LowerSnakeToUpperSnake,
         UpperSnakeToLowerSnake,
     },
@@ -42,8 +42,8 @@ pub fn convertEnum(
                 inline for (ti.fields) |field| {
                     if (field.value == @intFromEnum(source)) {
                         break :blk switch (style) {
-                            .UpperSnakeToTitle => upperSnakeToTitle(field.name),
-                            .TitleToUpperSnake => titleToUpperSnake(field.name),
+                            .UpperSnakeToCamel => upperSnakeToCamel(field.name),
+                            .CamelToUpperSnake => camelToUpperSnake(field.name),
                             .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(field.name),
                             .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(field.name),
                         };
@@ -54,8 +54,8 @@ pub fn convertEnum(
             .error_set => |ti| {
                 inline for (ti.?) |err| {
                     if (std.mem.eql(u8, err.name, @errorName(source))) break :blk switch (style) {
-                        .UpperSnakeToTitle => upperSnakeToTitle(err.name),
-                        .TitleToUpperSnake => titleToUpperSnake(err.name),
+                        .UpperSnakeToCamel => upperSnakeToCamel(err.name),
+                        .CamelToUpperSnake => camelToUpperSnake(err.name),
                         .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(err.name),
                         .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(err.name),
                     };
@@ -87,7 +87,7 @@ test convertEnum {
         std.testing.allocator,
         command_status,
         info_msg.Response.Command.Status,
-        .TitleToUpperSnake,
+        .CamelToUpperSnake,
     );
     try std.testing.expectEqual(
         res,
@@ -177,7 +177,7 @@ pub fn nestedWrite(
     return written_bytes;
 }
 
-pub fn upperSnakeToTitle(comptime input: []const u8) []const u8 {
+pub fn upperSnakeToCamel(comptime input: []const u8) []const u8 {
     comptime var result: []const u8 = "";
     comptime var prev_underscore: bool = false;
     inline for (input, 0..) |c, i| {
@@ -196,16 +196,13 @@ pub fn upperSnakeToTitle(comptime input: []const u8) []const u8 {
     return result;
 }
 
-test upperSnakeToTitle {
+test upperSnakeToCamel {
     const upper_snake = "CLEAR_CARRIER_INFO8";
-    const title = "ClearCarrierInfo8";
-    try std.testing.expectEqualStrings(
-        title,
-        upperSnakeToTitle(upper_snake),
-    );
+    const camel = "ClearCarrierInfo8";
+    try std.testing.expectEqualStrings(camel, upperSnakeToCamel(upper_snake));
 }
 
-pub fn titleToUpperSnake(comptime input: []const u8) []const u8 {
+pub fn camelToUpperSnake(comptime input: []const u8) []const u8 {
     comptime var result: []const u8 = "";
     inline for (input, 0..) |c, i| {
         if (i == 0) {
@@ -223,12 +220,12 @@ pub fn titleToUpperSnake(comptime input: []const u8) []const u8 {
     return result;
 }
 
-test titleToUpperSnake {
+test camelToUpperSnake {
     const upper_snake = "CLEAR_CARRIER_INFO8";
-    const title = "ClearCarrierInfo8";
+    const camel = "ClearCarrierInfo8";
     try std.testing.expectEqualStrings(
         upper_snake,
-        titleToUpperSnake(title),
+        camelToUpperSnake(camel),
     );
 }
 

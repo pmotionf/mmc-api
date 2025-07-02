@@ -190,7 +190,7 @@ pub const Response = struct {
 
         pub const Status = enum(i32) {
             STATUS_UNSPECIFIED = 0,
-            STATUS_PROCESSING = 1,
+            STATUS_PROGRESSING = 1,
             STATUS_COMPLETED = 2,
             STATUS_FAILED = 3,
             STATUS_QUEUED = 4,
