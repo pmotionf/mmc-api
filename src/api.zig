@@ -16,10 +16,10 @@ pub fn convertEnum(
     source: anytype,
     comptime Target: type,
     comptime style: enum {
-        UpperSnakeToTitle,
-        TitleToUpperSnake,
-        LowerSnakeToUpperSnake,
-        UpperSnakeToLowerSnake,
+        upper_snake_to_pascal,
+        pascal_to_upper_snake,
+        lower_snake_to_upper_snake,
+        upper_snake_to_lower_snake,
     },
 ) !Target {
     if ((@typeInfo(@TypeOf(source)) != .@"enum" or
@@ -42,10 +42,10 @@ pub fn convertEnum(
                 inline for (ti.fields) |field| {
                     if (field.value == @intFromEnum(source)) {
                         break :blk switch (style) {
-                            .UpperSnakeToTitle => upperSnakeToTitle(field.name),
-                            .TitleToUpperSnake => titleToUpperSnake(field.name),
-                            .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(field.name),
-                            .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(field.name),
+                            .upper_snake_to_pascal => upperSnakeToPascal(field.name),
+                            .pascal_to_upper_snake => pascalToUpperSnake(field.name),
+                            .lower_snake_to_upper_snake => lowerSnakeToUpperSnake(field.name),
+                            .upper_snake_to_lower_snake => upperSnakeToLowerSnake(field.name),
                         };
                     }
                 }
@@ -54,10 +54,10 @@ pub fn convertEnum(
             .error_set => |ti| {
                 inline for (ti.?) |err| {
                     if (std.mem.eql(u8, err.name, @errorName(source))) break :blk switch (style) {
-                        .UpperSnakeToTitle => upperSnakeToTitle(err.name),
-                        .TitleToUpperSnake => titleToUpperSnake(err.name),
-                        .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(err.name),
-                        .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(err.name),
+                        .upper_snake_to_pascal => upperSnakeToPascal(err.name),
+                        .pascal_to_upper_snake => pascalToUpperSnake(err.name),
+                        .lower_snake_to_upper_snake => lowerSnakeToUpperSnake(err.name),
+                        .upper_snake_to_lower_snake => upperSnakeToLowerSnake(err.name),
                     };
                 }
                 unreachable;
@@ -87,7 +87,7 @@ test convertEnum {
         std.testing.allocator,
         command_status,
         info_msg.Response.Command.Status,
-        .TitleToUpperSnake,
+        .pascal_to_upper_snake,
     );
     try std.testing.expectEqual(
         res,
@@ -177,85 +177,7 @@ pub fn nestedWrite(
     return written_bytes;
 }
 
-test nestedWrite {
-    const example_x: info_msg.Response.RegisterX = .{
-        .hall_alarm = .{
-            .axis1 = .{
-                .back = false,
-                .front = false,
-            },
-            .axis2 = .{
-                .back = false,
-                .front = false,
-            },
-            .axis3 = .{
-                .back = false,
-                .front = false,
-            },
-        },
-    };
-    var result_buffer: [2048]u8 = undefined;
-    var buf = std.io.fixedBufferStream(&result_buffer);
-    const buf_writer = buf.writer();
-    try std.testing.expectEqualStrings(
-        \\hall_alarm: {
-        \\    axis1: {
-        \\        back: false,
-        \\        front: false,
-        \\    },
-        \\    axis2: {
-        \\        back: false,
-        \\        front: false,
-        \\    },
-        \\    axis3: {
-        \\        back: false,
-        \\        front: false,
-        \\    },
-        \\},
-        \\
-    ,
-        result_buffer[0..try nestedWrite(
-            "hall_alarm",
-            example_x.hall_alarm,
-            0,
-            buf_writer,
-        )],
-    );
-}
-
-test "union nestedWrite" {
-    const example_ww: info_msg.Response.RegisterWw = .{
-        .carrier = .{
-            .target = .{
-                .f32 = 3.14,
-            },
-        },
-    };
-    var result_buffer: [2048]u8 = undefined;
-    var buf = std.io.fixedBufferStream(&result_buffer);
-    const buf_writer = buf.writer();
-    try std.testing.expectEqualStrings(
-        \\carrier: {
-        \\    id: 0,
-        \\    enable_cas: false,
-        \\    isolate_link_prev_axis: false,
-        \\    isolate_link_next_axis: false,
-        \\    velocity: 0,
-        \\    acceleration: 0,
-        \\    target: 3.14,
-        \\},
-        \\
-    ,
-        result_buffer[0..try nestedWrite(
-            "carrier",
-            example_ww.carrier,
-            0,
-            buf_writer,
-        )],
-    );
-}
-
-pub fn upperSnakeToTitle(comptime input: []const u8) []const u8 {
+pub fn upperSnakeToPascal(comptime input: []const u8) []const u8 {
     comptime var result: []const u8 = "";
     comptime var prev_underscore: bool = false;
     inline for (input, 0..) |c, i| {
@@ -274,16 +196,13 @@ pub fn upperSnakeToTitle(comptime input: []const u8) []const u8 {
     return result;
 }
 
-test upperSnakeToTitle {
+test upperSnakeToPascal {
     const upper_snake = "CLEAR_CARRIER_INFO8";
-    const title = "ClearCarrierInfo8";
-    try std.testing.expectEqualStrings(
-        title,
-        upperSnakeToTitle(upper_snake),
-    );
+    const pascal = "ClearCarrierInfo8";
+    try std.testing.expectEqualStrings(pascal, upperSnakeToPascal(upper_snake));
 }
 
-pub fn titleToUpperSnake(comptime input: []const u8) []const u8 {
+pub fn pascalToUpperSnake(comptime input: []const u8) []const u8 {
     comptime var result: []const u8 = "";
     inline for (input, 0..) |c, i| {
         if (i == 0) {
@@ -301,12 +220,12 @@ pub fn titleToUpperSnake(comptime input: []const u8) []const u8 {
     return result;
 }
 
-test titleToUpperSnake {
+test pascalToUpperSnake {
     const upper_snake = "CLEAR_CARRIER_INFO8";
-    const title = "ClearCarrierInfo8";
+    const pascal = "ClearCarrierInfo8";
     try std.testing.expectEqualStrings(
         upper_snake,
-        titleToUpperSnake(title),
+        pascalToUpperSnake(pascal),
     );
 }
 

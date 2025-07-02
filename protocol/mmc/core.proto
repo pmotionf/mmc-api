@@ -41,7 +41,7 @@ message Response{
     Server server = 1;
     SemanticVersion api_version = 2;
     LineConfig line_config = 3;
-    // Error kind if this response's request was invalid.
+    /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 4;
   }
 }
