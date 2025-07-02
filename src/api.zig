@@ -16,10 +16,10 @@ pub fn convertEnum(
     source: anytype,
     comptime Target: type,
     comptime style: enum {
-        UpperSnakeToCamel,
-        CamelToUpperSnake,
-        LowerSnakeToUpperSnake,
-        UpperSnakeToLowerSnake,
+        upper_snake_to_pascal,
+        pascal_to_upper_snake,
+        lower_snake_to_upper_snake,
+        upper_snake_to_lower_snake,
     },
 ) !Target {
     if ((@typeInfo(@TypeOf(source)) != .@"enum" or
@@ -42,10 +42,10 @@ pub fn convertEnum(
                 inline for (ti.fields) |field| {
                     if (field.value == @intFromEnum(source)) {
                         break :blk switch (style) {
-                            .UpperSnakeToCamel => upperSnakeToCamel(field.name),
-                            .CamelToUpperSnake => camelToUpperSnake(field.name),
-                            .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(field.name),
-                            .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(field.name),
+                            .upper_snake_to_pascal => upperSnakeToPascal(field.name),
+                            .pascal_to_upper_snake => pascalToUpperSnake(field.name),
+                            .lower_snake_to_upper_snake => lowerSnakeToUpperSnake(field.name),
+                            .upper_snake_to_lower_snake => upperSnakeToLowerSnake(field.name),
                         };
                     }
                 }
@@ -54,10 +54,10 @@ pub fn convertEnum(
             .error_set => |ti| {
                 inline for (ti.?) |err| {
                     if (std.mem.eql(u8, err.name, @errorName(source))) break :blk switch (style) {
-                        .UpperSnakeToCamel => upperSnakeToCamel(err.name),
-                        .CamelToUpperSnake => camelToUpperSnake(err.name),
-                        .LowerSnakeToUpperSnake => lowerSnakeToUpperSnake(err.name),
-                        .UpperSnakeToLowerSnake => upperSnakeToLowerSnake(err.name),
+                        .upper_snake_to_pascal => upperSnakeToPascal(err.name),
+                        .pascal_to_upper_snake => pascalToUpperSnake(err.name),
+                        .lower_snake_to_upper_snake => lowerSnakeToUpperSnake(err.name),
+                        .upper_snake_to_lower_snake => upperSnakeToLowerSnake(err.name),
                     };
                 }
                 unreachable;
@@ -87,7 +87,7 @@ test convertEnum {
         std.testing.allocator,
         command_status,
         info_msg.Response.Command.Status,
-        .CamelToUpperSnake,
+        .pascal_to_upper_snake,
     );
     try std.testing.expectEqual(
         res,
@@ -177,7 +177,7 @@ pub fn nestedWrite(
     return written_bytes;
 }
 
-pub fn upperSnakeToCamel(comptime input: []const u8) []const u8 {
+pub fn upperSnakeToPascal(comptime input: []const u8) []const u8 {
     comptime var result: []const u8 = "";
     comptime var prev_underscore: bool = false;
     inline for (input, 0..) |c, i| {
@@ -196,13 +196,13 @@ pub fn upperSnakeToCamel(comptime input: []const u8) []const u8 {
     return result;
 }
 
-test upperSnakeToCamel {
+test upperSnakeToPascal {
     const upper_snake = "CLEAR_CARRIER_INFO8";
-    const camel = "ClearCarrierInfo8";
-    try std.testing.expectEqualStrings(camel, upperSnakeToCamel(upper_snake));
+    const pascal = "ClearCarrierInfo8";
+    try std.testing.expectEqualStrings(pascal, upperSnakeToPascal(upper_snake));
 }
 
-pub fn camelToUpperSnake(comptime input: []const u8) []const u8 {
+pub fn pascalToUpperSnake(comptime input: []const u8) []const u8 {
     comptime var result: []const u8 = "";
     inline for (input, 0..) |c, i| {
         if (i == 0) {
@@ -220,12 +220,12 @@ pub fn camelToUpperSnake(comptime input: []const u8) []const u8 {
     return result;
 }
 
-test camelToUpperSnake {
+test pascalToUpperSnake {
     const upper_snake = "CLEAR_CARRIER_INFO8";
-    const camel = "ClearCarrierInfo8";
+    const pascal = "ClearCarrierInfo8";
     try std.testing.expectEqualStrings(
         upper_snake,
-        camelToUpperSnake(camel),
+        pascalToUpperSnake(pascal),
     );
 }
 
