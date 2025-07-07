@@ -73,6 +73,8 @@ message Request{
       float distance = 7;
     }
     Control control_kind = 8;
+    /// Flag for activating collision avoidance system
+    bool enable_cas = 9;
   }
 
   message PushCarrier{
@@ -84,6 +86,8 @@ message Request{
     /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 5;
     optional uint32 axis_id = 6;
+    /// Flag for activating collision avoidance system
+    bool enable_cas = 7;
   }
 
   message PullCarrier{
@@ -100,6 +104,8 @@ message Request{
         uint32 axis = 7;
         float location = 8;
     }
+    /// Flag for activating collision avoidance system
+    bool enable_cas = 9;
   }
 
   message IsolateCarrier{
