@@ -9,13 +9,6 @@ message Request{
     uint32 command_id = 1;
   }
 
-  /// Request hall alarm status of the specified axis from the server
-  /// Expected response: Info.Response.HallAlarm
-  message HallAlarm{
-    uint32 line_id = 1;
-    uint32 axis_id = 2;
-  }
-
   /// Request carrier status either from carrier ID or axis ID from the server.
   /// Expected response: Info.Response.Carrier
   message Carrier{
@@ -71,8 +64,6 @@ message Request{
   oneof body{
     /// Get command status
     Command command = 20;
-    /// Get hall alarm status
-    HallAlarm hall_alarm = 21;
     /// Get carrier information
     Carrier carrier = 22;
     /// Get axis information
@@ -161,12 +152,6 @@ message Response{
     repeated Station stations = 2;
   }
 
-  /// Hall alarm status of an axis
-  message HallAlarm{
-    bool front = 1;
-    bool back = 2;
-  }
-
   /// Carrier information
   message Carrier{
     uint32 main_axis_id = 1;
@@ -229,8 +214,6 @@ message Response{
   oneof body{
     /// Command information response
     Command command = 1;
-    /// Hall alarm status response
-    HallAlarm hall_alarm = 2;
     /// Carrier information response
     Carrier carrier = 3;
     /// Axis information response
