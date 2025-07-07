@@ -197,8 +197,8 @@ message Request{
     ClearErrors clear_errors = 1;
     /// Clear carrier information.
     ClearCarrierInfo clear_carrier_info = 2;
-    /// Reset mcl bytes.
-    NoParam reset_mcl = 3;
+    /// Reset state.
+    NoParam reset_state = 3;
     /// Release the servo of an axis.
     ReleaseAxisServo release_axis_servo = 4;
     /// Stop pulling carrier on an axis.
@@ -219,10 +219,13 @@ message Request{
     Calibrate calibrate = 12;
     /// Set a zero location of the specified line.
     SetLineZero set_line_zero = 13;
-    /// Cancel a command
+    /// Cancel a command.
     CancelCommand cancel_command = 14;
-    /// Remove a command
+    /// Remove a command.
     RemoveCommand remove_command = 15;
+    /// Clear all commands information. Invalidate command info request until
+    /// new command use the command ID.
+    NoParam clear_commands = 16;
   }
 }
 
@@ -249,7 +252,8 @@ message Response{
     COMMAND_REQUEST_ERROR_INVALID_ACCELERATION = 5;
     /// Attempted to use velocity value outside of 0-196
     COMMAND_REQUEST_ERROR_INVALID_VELOCITY = 6;
-    /// Server unable to receive new command caused by out of memory. Try reset_command.
+    /// Server unable to receive new command caused by out of memory. 
+    /// Try Command.Request.clear_commands to free the memory.
     COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 7;
     /// A command missing the required parameter
     COMMAND_REQUEST_ERROR_MISSING_PARAMETER = 8;

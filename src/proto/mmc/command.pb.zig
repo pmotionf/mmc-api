@@ -22,7 +22,7 @@ pub const Request = struct {
     pub const _body_case = enum {
         clear_errors,
         clear_carrier_info,
-        reset_mcl,
+        reset_state,
         release_axis_servo,
         stop_pull_carrier,
         stop_push_carrier,
@@ -35,11 +35,12 @@ pub const Request = struct {
         set_line_zero,
         cancel_command,
         remove_command,
+        clear_commands,
     };
     pub const body_union = union(_body_case) {
         clear_errors: Request.ClearErrors,
         clear_carrier_info: Request.ClearCarrierInfo,
-        reset_mcl: Request.NoParam,
+        reset_state: Request.NoParam,
         release_axis_servo: Request.ReleaseAxisServo,
         stop_pull_carrier: Request.StopPullCarrier,
         stop_push_carrier: Request.StopPushCarrier,
@@ -52,10 +53,11 @@ pub const Request = struct {
         set_line_zero: Request.SetLineZero,
         cancel_command: Request.CancelCommand,
         remove_command: Request.RemoveCommand,
+        clear_commands: Request.NoParam,
         pub const _union_desc = .{
             .clear_errors = fd(1, .{ .SubMessage = {} }),
             .clear_carrier_info = fd(2, .{ .SubMessage = {} }),
-            .reset_mcl = fd(3, .{ .SubMessage = {} }),
+            .reset_state = fd(3, .{ .SubMessage = {} }),
             .release_axis_servo = fd(4, .{ .SubMessage = {} }),
             .stop_pull_carrier = fd(5, .{ .SubMessage = {} }),
             .stop_push_carrier = fd(7, .{ .SubMessage = {} }),
@@ -68,6 +70,7 @@ pub const Request = struct {
             .set_line_zero = fd(13, .{ .SubMessage = {} }),
             .cancel_command = fd(14, .{ .SubMessage = {} }),
             .remove_command = fd(15, .{ .SubMessage = {} }),
+            .clear_commands = fd(16, .{ .SubMessage = {} }),
         };
     };
 
