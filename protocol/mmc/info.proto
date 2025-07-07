@@ -2,48 +2,62 @@ syntax = "proto3";
 package mmc.info;
 
 message Request{
-    message Command{
-        uint32 command_id = 1;
-    }
+  message Command{
+    uint32 command_id = 1;
+  }
 
-    message HallAlarm{
-        uint32 line_id = 1;
-        uint32 axis_id = 2;
-    }
+  message HallAlarm{
+    uint32 line_id = 1;
+    uint32 axis_id = 2;
+  }
 
-    message Carrier{
-        uint32 line_id = 1;
-        oneof param{
-            uint32 carrier_id = 2;
-            uint32 axis_id = 3;
-        }
+  message Carrier{
+    uint32 line_id = 1;
+    oneof param{
+        uint32 carrier_id = 2;
+        uint32 axis_id = 3;
     }
+  }
 
-    message Axis{
-        uint32 line_id = 1;
-        message Range {
-          uint32 start_id = 1;
-          uint32 end_id = 2;
-        }
-        Range range = 2;
+  message Axis{
+    uint32 line_id = 1;
+    message Range {
+      uint32 start_id = 1;
+      uint32 end_id = 2;
     }
+    Range range = 2;
+  }
 
-    message Station{
-        uint32 line_id = 1;
-        message Range {
-          uint32 start_id = 1;
-          uint32 end_id = 2;
-        }
-        Range range = 2;
+  message Station{
+    uint32 line_id = 1;
+    message Range {
+      uint32 start_id = 1;
+      uint32 end_id = 2;
     }
+    Range range = 2;
+  }
 
-    oneof body{
-      Command command = 20;
-      HallAlarm hall_alarm = 21;
-      Carrier carrier = 22;
-      Axis axis = 26;
-      Station station = 27;
-    }
+  /// Cancel a command on the server for the specified command ID, if still in queue.
+  /// Expected response: Command
+  message CancelCommand{
+    uint32 command_id = 1;
+  }
+
+  /// Remove the command entry for the specified command ID. 
+  /// Expected response: Command
+  message RemoveCommand{
+    uint32 command_id = 1;
+  }
+
+  oneof body{
+    Command command = 20;
+    HallAlarm hall_alarm = 21;
+    Carrier carrier = 22;
+    Axis axis = 26;
+    Station station = 27;
+    CancelCommand cancel_command = 1;
+    RemoveCommand remove_command = 2;
+  }
 }
 
 message Response{
