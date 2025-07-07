@@ -235,23 +235,36 @@ message Response{
   }
   /// Error kind description
   enum RequestErrorKind {
+    /// Default enum value. Should never be used.
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
+    /// Attempted to use line ID outside of the configured line
     COMMAND_REQUEST_ERROR_INVALID_LINE = 1;
+    /// Attempted to use axis ID outside of the configured axis
     COMMAND_REQUEST_ERROR_INVALID_AXIS = 2;
+    /// Attempted to send command to uninitialized carrier
     COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND = 3;
+    /// Attempted to send a command when the CC Link connection is not established
     COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 4;
+    /// Attempted to use acceleration value outside of 0-196
     COMMAND_REQUEST_ERROR_INVALID_ACCELERATION = 5;
+    /// Attempted to use velocity value outside of 0-196
     COMMAND_REQUEST_ERROR_INVALID_VELOCITY = 6;
+    /// Server unable to receive new command caused by out of memory. Try reset_command.
     COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 7;
+    /// A command missing the required parameter
     COMMAND_REQUEST_ERROR_MISSING_PARAMETER = 8;
+    /// Using invalid direction for the command
     COMMAND_REQUEST_ERROR_INVALID_DIRECTION = 9;
+    /// Attempted to send a carrier to a location outside of the configured line
     COMMAND_REQUEST_ERROR_INVALID_LOCATION = 10;
+    /// Attempted to send a carrier exceeding the location range of the configured line
     COMMAND_REQUEST_ERROR_INVALID_DISTANCE = 11;
+    /// Attempted to send a command to carrier outside of 1-768
     COMMAND_REQUEST_ERROR_INVALID_CARRIER = 12;
-    /// Attempting to remove or cancel a progressing command
+    /// Attempted to remove or cancel a progressing command
     COMMAND_REQUEST_ERROR_COMMAND_PROGRESSING = 13;
-    /// Attempting to remove or cancel an invalid command
-    COMMAND_REQUEST_ERROR_INVALID_COMMAND_ID = 14;
+    /// Attempted to remove or cancel a removed or not initialized command
+    COMMAND_REQUEST_ERROR_COMMAND_NOT_FOUND = 14;
   }
 
   oneof body{

@@ -5,9 +5,13 @@ package mmc.core;
 message Request{
   /// List of server configuration to be retrieved
   enum Kind{
+    /// Default enum value. Should never be used.
     CORE_REQUEST_KIND_UNSPECIFIED = 0;
+    /// Request server's API version
     CORE_REQUEST_KIND_API_VERSION = 1;
+    /// Request server's version
     CORE_REQUEST_KIND_SERVER_INFO = 2;
+    /// Request the line information of the server
     CORE_REQUEST_KIND_LINE_CONFIG = 3;
   }
   Kind kind = 1;
@@ -18,9 +22,12 @@ message Response{
   /// Line configuration for the system
   message LineConfig{
     message Line{
+      /// Number of axes on the line
       uint32 axes = 1;
+      /// Line name
       string name = 2;
     }
+    /// Array of the configured lines
     repeated Line lines = 1;
   }
 
