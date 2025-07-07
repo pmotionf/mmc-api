@@ -30,9 +30,9 @@ message Request{
     Range range = 2;
   }
 
-  /// Request station information of the specified range from the server.
-  /// Expected response: Info.Response.Stations
-  message Station{
+  /// Request driver information of the specified range from the server.
+  /// Expected response: Info.Response.Drivers
+  message Driver{
     uint32 line_id = 1;
     message Range {
       uint32 start_id = 1;
@@ -49,8 +49,8 @@ message Request{
     Carrier carrier = 22;
     /// Get axis information
     Axis axis = 26;
-    /// Get station information
-    Station station = 27;
+    /// Get driver information
+    Driver driver = 27;
   }
 }
 
@@ -107,7 +107,7 @@ message Response{
       bool waiting_pull = 3;
       /// Waiting for a carrier arriving on the axis to be automatically pushed
       bool waiting_push = 4;
-      /// Error status on the station
+      /// Error status on the driver
       AxisError errors = 5;
       /// Detected initialized carrier ID on the carrier
       uint32 carrier_id = 6;
@@ -120,11 +120,11 @@ message Response{
     repeated Axis axes = 2;
   }
 
-  /// Station information, returned in the form of line ID and array of station
-  message Stations{
-    message Station{
-      /// Station's error description
-      message StationError{
+  /// Driver information, returned in the form of line ID and array of driver
+  message Drivers{
+    message Driver{
+      /// Driver's error description
+      message DriverError{
         bool control_loop_time_exceeded = 1;
         message PowerError{
           bool overvoltage = 1;
@@ -138,25 +138,25 @@ message Response{
         }
         CommError communication_error = 4;
       }
-      /// Connection status between station and CC link
+      /// Connection status between driver and CC link
       bool connected = 1;
-      /// Whether the station is ready to receive command or not
+      /// Whether the driver is ready to receive command or not
       bool available = 2;
       /// Servo status
       bool servo_enabled = 3;
       /// Emergency stop status
       bool stopped = 4;
-      /// Station pause status
+      /// Driver pause status
       bool paused = 5;
-      /// Error status on the station
-      StationError errors = 6;
-      /// Station ID
+      /// Error status on the driver
+      DriverError errors = 6;
+      /// Driver ID
       uint32 id = 7;
     }
     /// Line ID
     uint32 line_id = 1;
-    /// Array of requested station information
-    repeated Station stations = 2;
+    /// Array of requested driver information
+    repeated Driver drivers = 2;
   }
 
   /// Carrier information
@@ -222,8 +222,8 @@ message Response{
     INFO_REQUEST_ERROR_INVALID_LINE = 1;
     /// Attempted to use axis ID outside of the configured axis
     INFO_REQUEST_ERROR_INVALID_AXIS = 2;
-    /// Attempted to use station ID outside of the configured station
-    INFO_REQUEST_ERROR_INVALID_STATION = 3;
+    /// Attempted to use driver ID outside of the configured driver
+    INFO_REQUEST_ERROR_INVALID_DRIVER = 3;
     /// Attempted to retrieve uninitialized carrier information
     INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4;
     /// Attempted to retrieve info when the CC Link connection is not established
@@ -239,8 +239,8 @@ message Response{
     Carrier carrier = 3;
     /// Axis information response
     Axes axis = 4;
-    /// Station information response
-    Stations station = 5;
+    /// Driver information response
+    Drivers driver = 5;
     /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 6;
   }
