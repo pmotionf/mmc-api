@@ -10,18 +10,21 @@ enum Direction{
 /// Command API: Send a command to operate the PMF's Server
 message Request{
   /// Release the carrier movement located on top of the axis
+  /// Expected response: command id (uint32)
   message ReleaseAxisServo{
     uint32 line_id = 1;
     uint32 axis_id = 2;
   }
 
   /// Stop pulling a carrier to the specified axis
+  /// Expected response: command id (uint32)
   message StopPullCarrier{
     uint32 line_id = 1;
     uint32 axis_id = 2;
   }
 
   /// Stop pushing a carrier from the specified axis
+  /// Expected response: command id (uint32)
   message StopPushCarrier{
     uint32 line_id = 1;
     uint32 axis_id = 2;
@@ -29,6 +32,7 @@ message Request{
 
   /// Clear all error informations on the axis, if specified. If not, clear
   /// error informations on every axis of the specified line ID.
+  /// Expected response: command id (uint32)
   message ClearErrors{
     uint32 line_id = 1;
     optional uint32 axis_id = 2;
@@ -36,27 +40,32 @@ message Request{
 
   /// Clear carrier information located on the axis, if specified. If not, clear
   /// all carrier informations of the specified line ID
+  /// Expected response: command id (uint32)
   message ClearCarrierInfo{
     uint32 line_id = 1;
     optional uint32 axis_id = 2;
   }
 
   /// Used for a command that does not have any required parameter
+  /// Expected response: command id (uint32)
   message NoParam {}
 
   /// Calibrate a line by positioning an unitiliazed carrier on the first axis 
   /// of the line
+  /// Expected response: command id (uint32)
   message Calibrate{
     uint32 line_id = 1;
   }
 
   /// Set a zero location of a line by positioning an initialized carrier on
   /// the first axis of the line
+  /// Expected response: command id (uint32)
   message SetLineZero{
     uint32 line_id = 1;
   }
 
   /// Automatically initialize carriers on every specified lines.
+  /// Expected response: command id (uint32)
   message AutoInitialize{
     message Lines{
       /// Line ID
@@ -70,6 +79,7 @@ message Request{
   }
 
   /// Move a carrier to the desired position.
+  /// Expected response: command id (uint32)
   message MoveCarrier{
     /// Kind of control movement reference
     enum Control{
@@ -105,6 +115,7 @@ message Request{
 
   /// Move a carrier by 1 carrier length to the specified direction. Useful for
   /// moving a carrier to different line.
+  /// Expected response: command id (uint32)
   message PushCarrier{
     /// Line ID
     uint32 line_id = 1;
@@ -123,6 +134,7 @@ message Request{
   }
 
   /// Pull a carrier into the specified line.
+  /// Expected response: command id (uint32)
   message PullCarrier{
     /// Line ID.
     uint32 line_id = 1;
@@ -148,6 +160,7 @@ message Request{
   }
 
   /// Initialize a carrier.
+  /// Expected response: command id (uint32)
   message IsolateCarrier{
     /// Line ID of the carrier to be initialized
     uint32 line_id = 1;
@@ -159,6 +172,23 @@ message Request{
     Direction direction = 4;
     /// [Optional] Axis ID of the linked axis
     optional Direction link_axis = 5;
+  }
+
+  /// Cancel a command on the server for the specified command ID, if still in 
+  /// queue.
+  /// Expected response: Command.Response.CommandOperation
+  /// - COMPLETED: The command is successfully cancelled from the server
+  message CancelCommand{
+    uint32 command_id = 1;
+  }
+
+  /// Remove the command entry for the specified command ID. Required to remove
+  /// the command when the command status from Info.Request.Command is either 
+  /// COMPLETED or FAILED.
+  /// Expected response: Command.Response.CommandOperation
+  /// - COMPLETED: The command is successfully removed from the server
+  message RemoveCommand{
+    uint32 command_id = 1;
   }
 
   /// Available commands for the server:
@@ -189,11 +219,20 @@ message Request{
     Calibrate calibrate = 12;
     /// Set a zero location of the specified line.
     SetLineZero set_line_zero = 13;
+    /// Cancel a command
+    CancelCommand cancel_command = 14;
+    /// Remove a command
+    RemoveCommand remove_command = 15;
   }
 }
 
 /// Response description to the command API
 message Response{
+  /// Command operation status.
+  enum CommandOperationStatus{
+    COMMAND_STATUS_UNSPECIFIED = 0;
+    COMMAND_STATUS_COMPLETED = 1;
+  }
   /// Error kind description
   enum RequestErrorKind {
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
@@ -209,6 +248,10 @@ message Response{
     COMMAND_REQUEST_ERROR_INVALID_LOCATION = 10;
     COMMAND_REQUEST_ERROR_INVALID_DISTANCE = 11;
     COMMAND_REQUEST_ERROR_INVALID_CARRIER = 12;
+    /// Attempting to remove or cancel a progressing command
+    COMMAND_REQUEST_ERROR_COMMAND_PROGRESSING = 13;
+    /// Attempting to remove or cancel an invalid command
+    COMMAND_REQUEST_ERROR_INVALID_COMMAND_ID = 14;
   }
 
   oneof body{
@@ -216,5 +259,7 @@ message Response{
     uint32 command_id = 1;
     /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 2;
+    /// Response for cancelling or removing a command
+    CommandOperation command_operation = 3;
   }
 }

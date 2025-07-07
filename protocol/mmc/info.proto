@@ -41,25 +41,6 @@ message Request{
     Range range = 2;
   }
 
-  /// Cancel a command on the server for the specified command ID, if still in queue.
-  /// Expected response: Info.Response.Command (COMPLETED or PROGRESSING)
-  /// - COMPLETED: The command is successfully cancelled from the server
-  /// - PROGRESSING: The command cannot be cancelled as it is being executed by 
-  ///                the server.
-  message CancelCommand{
-    uint32 command_id = 1;
-  }
-
-  /// Remove the command entry for the specified command ID. Required to remove
-  /// the command when the status is COMPLETED or FAILED.
-  /// Expected response: Info.Response.Command (COMPLETED)
-  /// - COMPLETED: The command is successfully removed from the server
-  /// - PROGRESSING: The command cannot be removed as it is being executed by 
-  ///                the server. Re-request for retrying to remove the command.
-  message RemoveCommand{
-    uint32 command_id = 1;
-  }
-
   /// Available info from the server
   oneof body{
     /// Get command status
@@ -70,10 +51,6 @@ message Request{
     Axis axis = 26;
     /// Get station information
     Station station = 27;
-    /// Cancel a command
-    CancelCommand cancel_command = 1;
-    /// Remove a command
-    RemoveCommand remove_command = 2;
   }
 }
 
