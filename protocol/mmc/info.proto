@@ -1,16 +1,23 @@
 syntax = "proto3";
 package mmc.info;
 
+/// API for requesting information from the PMF's MMC Server
 message Request{
+  /// Request for a command status from the server.
+  /// Expected response: Info.Response.Command
   message Command{
     uint32 command_id = 1;
   }
 
+  /// Request hall alarm status of the specified axis from the server
+  /// Expected response: Info.Response.HallAlarm
   message HallAlarm{
     uint32 line_id = 1;
     uint32 axis_id = 2;
   }
 
+  /// Request carrier status either from carrier ID or axis ID from the server.
+  /// Expected response: Info.Response.Carrier
   message Carrier{
     uint32 line_id = 1;
     oneof param{
@@ -19,6 +26,8 @@ message Request{
     }
   }
 
+  /// Request axis information of the specified range from the server.
+  /// Expected response: Info.Response.Axes
   message Axis{
     uint32 line_id = 1;
     message Range {
@@ -28,6 +37,8 @@ message Request{
     Range range = 2;
   }
 
+  /// Request station information of the specified range from the server.
+  /// Expected response: Info.Response.Stations
   message Station{
     uint32 line_id = 1;
     message Range {
@@ -38,29 +49,46 @@ message Request{
   }
 
   /// Cancel a command on the server for the specified command ID, if still in queue.
-  /// Expected response: Command
+  /// Expected response: Info.Response.Command (COMPLETED or PROGRESSING)
+  /// - COMPLETED: The command is successfully cancelled from the server
+  /// - PROGRESSING: The command cannot be cancelled as it is being executed by 
+  ///                the server.
   message CancelCommand{
     uint32 command_id = 1;
   }
 
-  /// Remove the command entry for the specified command ID. 
-  /// Expected response: Command
+  /// Remove the command entry for the specified command ID. Required to remove
+  /// the command when the status is COMPLETED or FAILED.
+  /// Expected response: Info.Response.Command (COMPLETED)
+  /// - COMPLETED: The command is successfully removed from the server
+  /// - PROGRESSING: The command cannot be removed as it is being executed by 
+  ///                the server. Re-request for retrying to remove the command.
   message RemoveCommand{
     uint32 command_id = 1;
   }
 
+  /// Available info from the server
   oneof body{
+    /// Get command status
     Command command = 20;
+    /// Get hall alarm status
     HallAlarm hall_alarm = 21;
+    /// Get carrier information
     Carrier carrier = 22;
+    /// Get axis information
     Axis axis = 26;
+    /// Get station information
     Station station = 27;
+    /// Cancel a command
     CancelCommand cancel_command = 1;
+    /// Remove a command
     RemoveCommand remove_command = 2;
   }
 }
 
+/// Response description to the request info API
 message Response{
+  /// Command information. `error_response` is returned if the status is FAILED.
   message Command{
     enum Status {
       STATUS_UNSPECIFIED = 0;
@@ -83,6 +111,7 @@ message Response{
     optional ErrorKind error_response = 2;
   }
 
+  /// Axis information, returned in the form of line ID and array of axis
   message Axes{
     message Axis {
       message HallAlarm{
@@ -102,6 +131,7 @@ message Response{
     repeated Axis axes = 2;
   }
 
+  /// Station information, returned in the form of line ID and array of station
   message Stations{
     message Station{
       bool connected = 1;
@@ -131,11 +161,13 @@ message Response{
     repeated Station stations = 2;
   }
 
+  /// Hall alarm status of an axis
   message HallAlarm{
     bool front = 1;
     bool back = 2;
   }
 
+  /// Carrier information
   message Carrier{
     uint32 main_axis_id = 1;
     uint32 aux_axis_id = 2;
@@ -183,6 +215,7 @@ message Response{
     }
   }
 
+  /// Error kind description
   enum RequestErrorKind {
     INFO_REQUEST_ERROR_UNSPECIFIED = 0;
     INFO_REQUEST_ERROR_INVALID_LINE = 1;
@@ -194,11 +227,17 @@ message Response{
   }
 
   oneof body{
+    /// Command information response
     Command command = 1;
+    /// Hall alarm status response
     HallAlarm hall_alarm = 2;
+    /// Carrier information response
     Carrier carrier = 3;
+    /// Axis information response
     Axes axis = 4;
+    /// Station information response
     Stations station = 5;
+    /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 6;
   }
 }

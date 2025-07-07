@@ -7,45 +7,59 @@ enum Direction{
   DIRECTION_FORWARD = 2;
 }
 
+/// Command API: Send a command to operate the PMF's Server
 message Request{
+  /// Release the carrier movement located on top of the axis
   message ReleaseAxisServo{
     uint32 line_id = 1;
     uint32 axis_id = 2;
   }
 
-  // TODO: Squeeze StopPullCarrier and StopPushCarrier to StopPushPull
+  /// Stop pulling a carrier to the specified axis
   message StopPullCarrier{
     uint32 line_id = 1;
     uint32 axis_id = 2;
   }
 
+  /// Stop pushing a carrier from the specified axis
   message StopPushCarrier{
     uint32 line_id = 1;
     uint32 axis_id = 2;
   }
 
+  /// Clear all error informations on the axis, if specified. If not, clear
+  /// error informations on every axis of the specified line ID.
   message ClearErrors{
     uint32 line_id = 1;
     optional uint32 axis_id = 2;
   }
 
+  /// Clear carrier information located on the axis, if specified. If not, clear
+  /// all carrier informations of the specified line ID
   message ClearCarrierInfo{
     uint32 line_id = 1;
     optional uint32 axis_id = 2;
   }
 
+  /// Used for a command that does not have any required parameter
   message NoParam {}
 
+  /// Calibrate a line by positioning an unitiliazed carrier on the first axis 
+  /// of the line
   message Calibrate{
     uint32 line_id = 1;
   }
 
+  /// Set a zero location of a line by positioning an initialized carrier on
+  /// the first axis of the line
   message SetLineZero{
     uint32 line_id = 1;
   }
 
+  /// Automatically initialize carriers on every specified lines.
   message AutoInitialize{
     message Lines{
+      /// Line ID
       uint32 line_id = 1;
       /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
       uint32 velocity = 2;
@@ -55,85 +69,132 @@ message Request{
     repeated Lines lines = 1;
   }
 
+  /// Move a carrier to the desired position.
   message MoveCarrier{
+    /// Kind of control movement reference
     enum Control{
       CONTROL_UNSPECIFIED = 0;
+      /// Move the carrier with position control 
       CONTROL_POSITION = 1;
+      /// Move the carrier with velocity control
       CONTROL_VELOCITY = 2;
     }
+
+    /// Line ID
     uint32 line_id = 1;
+    /// Carrier ID 
     uint32 carrier_id = 2;
     /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 3;
     /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 4;
+    /// Kind of desired position of the carrier. Only one can be set.
     oneof target{
+      /// Axis ID of the desired position.
       uint32 axis = 5;
+      /// Final location on the line of the desired carrier position.
       float location = 6;
+      /// Distance from the current carrier position. Negative value for backward
+      /// movement.
       float distance = 7;
     }
     Control control_kind = 8;
-    /// Flag for activating collision avoidance system
+    /// Flag for activating the collision avoidance system (CAS).
     bool enable_cas = 9;
   }
 
+  /// Move a carrier by 1 carrier length to the specified direction. Useful for
+  /// moving a carrier to different line.
   message PushCarrier{
+    /// Line ID
     uint32 line_id = 1;
+    /// Carrier ID
     uint32 carrier_id = 2;
+    /// Direction of carrier movement.
     Direction direction = 3;
     /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 4;
     /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 5;
+    /// If specified, wait a carrier at the specified axis and push it automatically.
     optional uint32 axis_id = 6;
-    /// Flag for activating collision avoidance system
+    /// Flag for activating the collision avoidance system (CAS).
     bool enable_cas = 7;
   }
 
+  /// Pull a carrier into the specified line.
   message PullCarrier{
+    /// Line ID.
     uint32 line_id = 1;
+    /// The axis that will wait for a new carrier from different line.
     uint32 axis_id = 2;
+    /// The new carrier ID for the incoming carrier.
     uint32 carrier_id = 3;
+    /// The direction at which the incoming carrier will come.
     Direction direction = 4;
     /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 5;
     /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 6;
-    /// Optional carrier target after pull completion.
+    /// [Optional] Carrier desired position after pull completion.
     oneof target {
-        uint32 axis = 7;
-        float location = 8;
+      /// Axis ID of the desired position
+      uint32 axis = 7;
+      /// Desired location
+      float location = 8;
     }
-    /// Flag for activating collision avoidance system
+    /// Flag for activating the collision avoidance system (CAS).
     bool enable_cas = 9;
   }
 
+  /// Initialize a carrier.
   message IsolateCarrier{
+    /// Line ID of the carrier to be initialized
     uint32 line_id = 1;
+    /// Axis ID of the carrier position
     uint32 axis_id = 2;
+    /// ID to be assigned to the new carrier
     uint32 carrier_id = 3;
+    /// Isolation movement for the new carrier
     Direction direction = 4;
+    /// [Optional] Axis ID of the linked axis
     optional Direction link_axis = 5;
   }
 
+  /// Available commands for the server:
   oneof body{
+    /// Clear error information.
     ClearErrors clear_errors = 1;
+    /// Clear carrier information.
     ClearCarrierInfo clear_carrier_info = 2;
+    /// Reset mcl bytes.
     NoParam reset_mcl = 3;
+    /// Release the servo of an axis.
     ReleaseAxisServo release_axis_servo = 4;
+    /// Stop pulling carrier on an axis.
     StopPullCarrier stop_pull_carrier = 5;
-    AutoInitialize auto_initialize = 6;
+    /// Stop pushing carrier on an axis.
     StopPushCarrier stop_push_carrier = 7;
+    /// Initialize all carriers of the specified line(s).
+    AutoInitialize auto_initialize = 6;
+    /// Move a carrier to the desired position.
     MoveCarrier move_carrier = 8;
+    /// Push a carrier by 1 carrier length to the specified direction.
     PushCarrier push_carrier = 9;
+    /// Pull a carrier into a line.
     PullCarrier pull_carrier = 10;
+    /// Initialize a carrier.
     IsolateCarrier isolate_carrier = 11;
+    /// Calibrate a line.
     Calibrate calibrate = 12;
+    /// Set a zero location of the specified line.
     SetLineZero set_line_zero = 13;
   }
 }
 
+/// Response description to the command API
 message Response{
+  /// Error kind description
   enum RequestErrorKind {
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
     COMMAND_REQUEST_ERROR_INVALID_LINE = 1;
@@ -151,6 +212,7 @@ message Response{
   }
 
   oneof body{
+    /// Command ID response for the command sent to the server
     uint32 command_id = 1;
     /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 2;
