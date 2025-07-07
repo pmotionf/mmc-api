@@ -273,6 +273,6 @@ message Response{
     /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 2;
     /// Response for cancelling or removing a command
-    CommandOperation command_operation = 3;
+    CommandOperationStatus command_operation = 3;
   }
 }
