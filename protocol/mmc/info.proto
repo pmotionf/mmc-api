@@ -81,6 +81,8 @@ message Response{
       bool waiting_push = 4;
       bool overcurrent = 5;
       uint32 carrier_id = 6;
+      /// Axis ID
+      uint32 id = 7;
     }
     uint32 line_id = 1;
     repeated Axis axes = 2;
@@ -108,6 +110,8 @@ message Response{
         CommError communication_error = 4;
       }
       StationError errors = 6;
+      /// Station ID
+      uint32 id = 7;
     }
     uint32 line_id = 1;
     repeated Station stations = 2;
