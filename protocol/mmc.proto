@@ -5,21 +5,21 @@ import "mmc/command.proto";
 import "mmc/core.proto";
 import "mmc/info.proto";
 
-message Request{
-  oneof body{
+message Request {
+  oneof body {
     mmc.core.Request core = 1;
     mmc.command.Request command = 2;
     mmc.info.Request info = 3;
   }
 }
 
-message Response{
-  enum RequestError{
+message Response {
+  enum RequestError {
     MMC_REQUEST_ERROR_UNSPECIFIED = 0;
     /// The request could not be parsed as a valid message.
     MMC_REQUEST_ERROR_INVALID_MESSAGE = 1;
   }
-  oneof body{
+  oneof body {
     mmc.core.Response core = 1;
     mmc.command.Response command = 2;
     mmc.info.Response info = 3;

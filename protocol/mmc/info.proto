@@ -2,27 +2,25 @@ syntax = "proto3";
 package mmc.info;
 
 /// API for requesting information from the PMF's MMC Server
-message Request{
+message Request {
   /// Request for a command status from the server. If no command ID is
   /// provided, then request for statuses of all commands from the server.
   /// Expected response: Info.Response.Command
-  message Command{
-    optional uint32 id = 1;
-  }
+  message Command { optional uint32 id = 1; }
 
   /// Request carrier status either from carrier ID or axis ID from the server.
   /// Expected response: Info.Response.Carrier
-  message Carrier{
+  message Carrier {
     uint32 line_id = 1;
-    oneof param{
-        uint32 carrier_id = 2;
-        uint32 axis_id = 3;
+    oneof param {
+      uint32 carrier_id = 2;
+      uint32 axis_id = 3;
     }
   }
 
   /// Request axis information of the specified range from the server.
   /// Expected response: Info.Response.Axes
-  message Axis{
+  message Axis {
     uint32 line_id = 1;
     message Range {
       uint32 start_id = 1;
@@ -33,7 +31,7 @@ message Request{
 
   /// Request driver information of the specified range from the server.
   /// Expected response: Info.Response.Drivers
-  message Driver{
+  message Driver {
     uint32 line_id = 1;
     message Range {
       uint32 start_id = 1;
@@ -43,7 +41,7 @@ message Request{
   }
 
   /// Available info from the server
-  oneof body{
+  oneof body {
     /// Get command status
     Command command = 20;
     /// Get carrier information
@@ -56,10 +54,10 @@ message Request{
 }
 
 /// Response description to the request info API
-message Response{
+message Response {
   /// Command information.
   /// `error_response` is returned if the status is FAILED.
-  message Command{
+  message Command {
     enum Status {
       /// Default enum value. Should never be used.
       STATUS_UNSPECIFIED = 0;
@@ -76,7 +74,7 @@ message Response{
     uint32 id = 1;
     /// Command status
     Status status = 2;
-    enum ErrorKind{
+    enum ErrorKind {
       ERROR_KIND_UNSPECIFIED = 0;
       ERROR_KIND_INVALID_COMMAND = 1;
       ERROR_KIND_CARRIER_NOT_FOUND = 2;
@@ -91,19 +89,15 @@ message Response{
     optional ErrorKind error_response = 2;
   }
 
-  message Commands{
-    repeated Command commands = 1;
-  }
+  message Commands { repeated Command commands = 1; }
 
   /// Axis information, returned in the form of line ID and array of axis
-  message Axes{
+  message Axes {
     message Axis {
       /// Axis' error description
-      message AxisError{
-        bool overcurrent = 1;
-      }
+      message AxisError { bool overcurrent = 1; }
       /// Hall alarm status of the axis
-      message HallAlarm{
+      message HallAlarm {
         bool front = 1;
         bool back = 2;
       }
@@ -130,18 +124,18 @@ message Response{
   }
 
   /// Driver information, returned in the form of line ID and array of driver
-  message Drivers{
-    message Driver{
+  message Drivers {
+    message Driver {
       /// Driver's error description
-      message DriverError{
+      message DriverError {
         bool control_loop_time_exceeded = 1;
-        message PowerError{
+        message PowerError {
           bool overvoltage = 1;
           bool undervoltage = 2;
         }
         PowerError power_error = 2;
         bool inverter_overheat = 3;
-        message CommError{
+        message CommError {
           bool from_prev = 1;
           bool from_next = 2;
         }
@@ -169,7 +163,7 @@ message Response{
   }
 
   /// Carrier information
-  message Carrier{
+  message Carrier {
     /// Main Axis ID position of the carrier
     uint32 main_axis_id = 1;
     /// Auxiliary Axis ID position of the carrier
@@ -185,7 +179,7 @@ message Response{
     /// Carrier's collision avoidance system (CAS) status
     bool is_cas_triggered = 8;
 
-    enum State{
+    enum State {
       CARRIER_STATE_NONE = 0;
 
       CARRIER_STATE_WARMUP_PROGRESSING = 1;
@@ -235,13 +229,14 @@ message Response{
     INFO_REQUEST_ERROR_INVALID_DRIVER = 3;
     /// Attempted to retrieve uninitialized carrier information
     INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4;
-    /// Attempted to retrieve info when the CC Link connection is not established
+    /// Attempted to retrieve info when the CC Link connection is not
+    /// established
     INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5;
     /// A request missing the required parameter
     INFO_REQUEST_ERROR_MISSING_PARAMETER = 6;
   }
 
-  oneof body{
+  oneof body {
     /// Command information response if command ID was provided.
     Command command = 1;
     /// Command information response if no command ID was provided.

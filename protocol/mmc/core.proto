@@ -2,9 +2,9 @@ syntax = "proto3";
 package mmc.core;
 
 /// Core API: Request server configuration
-message Request{
+message Request {
   /// List of server configuration to be retrieved
-  enum Kind{
+  enum Kind {
     /// Default enum value. Should never be used.
     CORE_REQUEST_KIND_UNSPECIFIED = 0;
     /// Request server's API version
@@ -18,10 +18,10 @@ message Request{
 }
 
 /// Response description to the core API
-message Response{
+message Response {
   /// Line configuration for the system
-  message LineConfig{
-    message Line{
+  message LineConfig {
+    message Line {
       /// Number of axes on the line
       uint32 axes = 1;
       /// Line name
@@ -32,14 +32,14 @@ message Response{
   }
 
   /// Version description
-  message SemanticVersion{
+  message SemanticVersion {
     uint32 major = 1;
     uint32 minor = 2;
     uint32 patch = 3;
   }
 
   /// Server version and name
-  message Server{
+  message Server {
     SemanticVersion version = 1;
     string name = 2;
   }
@@ -50,7 +50,7 @@ message Response{
     CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1;
   }
 
-  oneof body{
+  oneof body {
     Server server = 1;
     SemanticVersion api_version = 2;
     LineConfig line_config = 3;
