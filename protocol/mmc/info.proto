@@ -3,10 +3,11 @@ package mmc.info;
 
 /// API for requesting information from the PMF's MMC Server
 message Request{
-  /// Request for a command status from the server.
+  /// Request for a command status from the server. If no command ID is
+  /// provided, then request for statuses of all commands from the server.
   /// Expected response: Info.Response.Command
   message Command{
-    uint32 command_id = 1;
+    optional uint32 id = 1;
   }
 
   /// Request carrier status either from carrier ID or axis ID from the server.
@@ -56,7 +57,8 @@ message Request{
 
 /// Response description to the request info API
 message Response{
-  /// Command information. `error_response` is returned if the status is FAILED.
+  /// Command information.
+  /// `error_response` is returned if the status is FAILED.
   message Command{
     enum Status {
       /// Default enum value. Should never be used.
@@ -70,8 +72,10 @@ message Response{
       /// Command is waiting to be executed by the server.
       STATUS_QUEUED = 4;
     }
+    /// Command ID
+    uint32 id = 1;
     /// Command status
-    Status status = 1;
+    Status status = 2;
     enum ErrorKind{
       ERROR_KIND_UNSPECIFIED = 0;
       ERROR_KIND_INVALID_COMMAND = 1;
@@ -81,9 +85,14 @@ message Response{
       ERROR_KIND_INVALID_SYSTEM_STATE = 5;
       ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
       ERROR_KIND_INVALID_AXIS = 7;
+      // TODO: Add auto-initialize failures
     }
     /// Command error kind, if failed.
     optional ErrorKind error_response = 2;
+  }
+
+  message Commands{
+    repeated Command commands = 1;
   }
 
   /// Axis information, returned in the form of line ID and array of axis
@@ -233,8 +242,10 @@ message Response{
   }
 
   oneof body{
-    /// Command information response
+    /// Command information response if command ID was provided.
     Command command = 1;
+    /// Command information response if no command ID was provided.
+    Commands commands = 2;
     /// Carrier information response
     Carrier carrier = 3;
     /// Axis information response
