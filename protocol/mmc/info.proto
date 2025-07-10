@@ -86,7 +86,7 @@ message Response {
       // TODO: Add auto-initialize failures
     }
     /// Command error kind, if failed.
-    optional ErrorKind error_response = 2;
+    optional ErrorKind error_response = 3;
   }
 
   message Commands { repeated Command commands = 1; }

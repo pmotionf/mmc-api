@@ -16,14 +16,20 @@ pub const Direction = enum(i32) {
     _,
 };
 
+pub const ControlKind = enum(i32) {
+    CONTROL_UNSPECIFIED = 0,
+    CONTROL_POSITION = 1,
+    CONTROL_VELOCITY = 2,
+    _,
+};
+
 pub const Request = struct {
     body: ?body_union,
 
     pub const _body_case = enum {
         clear_errors,
         clear_carrier_info,
-        reset_state,
-        release_axis_servo,
+        release_control,
         stop_pull_carrier,
         stop_push_carrier,
         auto_initialize,
@@ -33,15 +39,13 @@ pub const Request = struct {
         isolate_carrier,
         calibrate,
         set_line_zero,
-        cancel_command,
-        remove_command,
+        clear_command,
         clear_commands,
     };
     pub const body_union = union(_body_case) {
         clear_errors: Request.ClearErrors,
-        clear_carrier_info: Request.ClearCarrierInfo,
-        reset_state: Request.NoParam,
-        release_axis_servo: Request.ReleaseAxisServo,
+        clear_carrier_info: Request.ClearCarriers,
+        release_control: Request.ReleaseControl,
         stop_pull_carrier: Request.StopPullCarrier,
         stop_push_carrier: Request.StopPushCarrier,
         auto_initialize: Request.AutoInitialize,
@@ -51,26 +55,23 @@ pub const Request = struct {
         isolate_carrier: Request.IsolateCarrier,
         calibrate: Request.Calibrate,
         set_line_zero: Request.SetLineZero,
-        cancel_command: Request.CancelCommand,
-        remove_command: Request.RemoveCommand,
-        clear_commands: Request.NoParam,
+        clear_command: Request.ClearCommand,
+        clear_commands: Request.ClearCommands,
         pub const _union_desc = .{
             .clear_errors = fd(1, .{ .SubMessage = {} }),
             .clear_carrier_info = fd(2, .{ .SubMessage = {} }),
-            .reset_state = fd(3, .{ .SubMessage = {} }),
-            .release_axis_servo = fd(4, .{ .SubMessage = {} }),
-            .stop_pull_carrier = fd(5, .{ .SubMessage = {} }),
-            .stop_push_carrier = fd(7, .{ .SubMessage = {} }),
+            .release_control = fd(3, .{ .SubMessage = {} }),
+            .stop_pull_carrier = fd(4, .{ .SubMessage = {} }),
+            .stop_push_carrier = fd(5, .{ .SubMessage = {} }),
             .auto_initialize = fd(6, .{ .SubMessage = {} }),
-            .move_carrier = fd(8, .{ .SubMessage = {} }),
-            .push_carrier = fd(9, .{ .SubMessage = {} }),
-            .pull_carrier = fd(10, .{ .SubMessage = {} }),
-            .isolate_carrier = fd(11, .{ .SubMessage = {} }),
-            .calibrate = fd(12, .{ .SubMessage = {} }),
-            .set_line_zero = fd(13, .{ .SubMessage = {} }),
-            .cancel_command = fd(14, .{ .SubMessage = {} }),
-            .remove_command = fd(15, .{ .SubMessage = {} }),
-            .clear_commands = fd(16, .{ .SubMessage = {} }),
+            .move_carrier = fd(7, .{ .SubMessage = {} }),
+            .push_carrier = fd(8, .{ .SubMessage = {} }),
+            .pull_carrier = fd(9, .{ .SubMessage = {} }),
+            .isolate_carrier = fd(10, .{ .SubMessage = {} }),
+            .calibrate = fd(11, .{ .SubMessage = {} }),
+            .set_line_zero = fd(12, .{ .SubMessage = {} }),
+            .clear_command = fd(13, .{ .SubMessage = {} }),
+            .clear_commands = fd(14, .{ .SubMessage = {} }),
         };
     };
 
@@ -78,9 +79,9 @@ pub const Request = struct {
         .body = fd(null, .{ .OneOf = body_union }),
     };
 
-    pub const ReleaseAxisServo = struct {
+    pub const ReleaseControl = struct {
         line_id: u32 = 0,
-        axis_id: u32 = 0,
+        axis_id: ?u32 = null,
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
@@ -92,7 +93,7 @@ pub const Request = struct {
 
     pub const StopPullCarrier = struct {
         line_id: u32 = 0,
-        axis_id: u32 = 0,
+        axis_id: ?u32 = null,
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
@@ -104,7 +105,7 @@ pub const Request = struct {
 
     pub const StopPushCarrier = struct {
         line_id: u32 = 0,
-        axis_id: u32 = 0,
+        axis_id: ?u32 = null,
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
@@ -116,17 +117,17 @@ pub const Request = struct {
 
     pub const ClearErrors = struct {
         line_id: u32 = 0,
-        axis_id: ?u32 = null,
+        driver_id: ?u32 = null,
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
-            .axis_id = fd(2, .{ .Varint = .Simple }),
+            .driver_id = fd(2, .{ .Varint = .Simple }),
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
     };
 
-    pub const ClearCarrierInfo = struct {
+    pub const ClearCarriers = struct {
         line_id: u32 = 0,
         axis_id: ?u32 = null,
 
@@ -134,12 +135,6 @@ pub const Request = struct {
             .line_id = fd(1, .{ .Varint = .Simple }),
             .axis_id = fd(2, .{ .Varint = .Simple }),
         };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
-    };
-
-    pub const NoParam = struct {
-        pub const _desc_table = .{};
 
         pub usingnamespace protobuf.MessageMixins(@This());
     };
@@ -165,16 +160,16 @@ pub const Request = struct {
     };
 
     pub const AutoInitialize = struct {
-        lines: ArrayList(Request.AutoInitialize.Lines),
+        lines: ArrayList(Request.AutoInitialize.Line),
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .List = .{ .SubMessage = {} } }),
         };
 
-        pub const Lines = struct {
+        pub const Line = struct {
             line_id: u32 = 0,
-            velocity: u32 = 0,
-            acceleration: u32 = 0,
+            velocity: ?u32 = null,
+            acceleration: ?u32 = null,
 
             pub const _desc_table = .{
                 .line_id = fd(1, .{ .Varint = .Simple }),
@@ -193,8 +188,8 @@ pub const Request = struct {
         carrier_id: u32 = 0,
         velocity: u32 = 0,
         acceleration: u32 = 0,
-        control_kind: Request.MoveCarrier.Control = @enumFromInt(0),
-        enable_cas: bool = false,
+        control_kind: ControlKind = @enumFromInt(0),
+        disable_cas: bool = false,
         target: ?target_union,
 
         pub const _target_case = enum {
@@ -219,15 +214,8 @@ pub const Request = struct {
             .velocity = fd(3, .{ .Varint = .Simple }),
             .acceleration = fd(4, .{ .Varint = .Simple }),
             .control_kind = fd(8, .{ .Varint = .Simple }),
-            .enable_cas = fd(9, .{ .Varint = .Simple }),
+            .disable_cas = fd(9, .{ .Varint = .Simple }),
             .target = fd(null, .{ .OneOf = target_union }),
-        };
-
-        pub const Control = enum(i32) {
-            CONTROL_UNSPECIFIED = 0,
-            CONTROL_POSITION = 1,
-            CONTROL_VELOCITY = 2,
-            _,
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
@@ -240,7 +228,6 @@ pub const Request = struct {
         velocity: u32 = 0,
         acceleration: u32 = 0,
         axis_id: ?u32 = null,
-        enable_cas: bool = false,
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
@@ -249,7 +236,6 @@ pub const Request = struct {
             .velocity = fd(4, .{ .Varint = .Simple }),
             .acceleration = fd(5, .{ .Varint = .Simple }),
             .axis_id = fd(6, .{ .Varint = .Simple }),
-            .enable_cas = fd(7, .{ .Varint = .Simple }),
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
@@ -262,21 +248,7 @@ pub const Request = struct {
         direction: Direction = @enumFromInt(0),
         velocity: u32 = 0,
         acceleration: u32 = 0,
-        enable_cas: bool = false,
-        target: ?target_union,
-
-        pub const _target_case = enum {
-            axis,
-            location,
-        };
-        pub const target_union = union(_target_case) {
-            axis: u32,
-            location: f32,
-            pub const _union_desc = .{
-                .axis = fd(7, .{ .Varint = .Simple }),
-                .location = fd(8, .{ .FixedInt = .I32 }),
-            };
-        };
+        transition: ?Request.PullCarrier.Transition = null,
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
@@ -285,8 +257,37 @@ pub const Request = struct {
             .direction = fd(4, .{ .Varint = .Simple }),
             .velocity = fd(5, .{ .Varint = .Simple }),
             .acceleration = fd(6, .{ .Varint = .Simple }),
-            .enable_cas = fd(9, .{ .Varint = .Simple }),
-            .target = fd(null, .{ .OneOf = target_union }),
+            .transition = fd(7, .{ .SubMessage = {} }),
+        };
+
+        pub const Transition = struct {
+            control_kind: ControlKind = @enumFromInt(0),
+            disable_cas: bool = false,
+            target: ?target_union,
+
+            pub const _target_case = enum {
+                axis,
+                location,
+                distance,
+            };
+            pub const target_union = union(_target_case) {
+                axis: u32,
+                location: f32,
+                distance: f32,
+                pub const _union_desc = .{
+                    .axis = fd(2, .{ .Varint = .Simple }),
+                    .location = fd(3, .{ .FixedInt = .I32 }),
+                    .distance = fd(4, .{ .FixedInt = .I32 }),
+                };
+            };
+
+            pub const _desc_table = .{
+                .control_kind = fd(1, .{ .Varint = .Simple }),
+                .disable_cas = fd(5, .{ .Varint = .Simple }),
+                .target = fd(null, .{ .OneOf = target_union }),
+            };
+
+            pub usingnamespace protobuf.MessageMixins(@This());
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
@@ -310,7 +311,7 @@ pub const Request = struct {
         pub usingnamespace protobuf.MessageMixins(@This());
     };
 
-    pub const CancelCommand = struct {
+    pub const ClearCommand = struct {
         command_id: u32 = 0,
 
         pub const _desc_table = .{
@@ -320,12 +321,8 @@ pub const Request = struct {
         pub usingnamespace protobuf.MessageMixins(@This());
     };
 
-    pub const RemoveCommand = struct {
-        command_id: u32 = 0,
-
-        pub const _desc_table = .{
-            .command_id = fd(1, .{ .Varint = .Simple }),
-        };
+    pub const ClearCommands = struct {
+        pub const _desc_table = .{};
 
         pub usingnamespace protobuf.MessageMixins(@This());
     };

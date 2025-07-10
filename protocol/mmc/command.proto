@@ -40,7 +40,7 @@ message Request {
   /// Expected response: command id (uint32)
   message StopPushCarrier {
     uint32 line_id = 1;
-    uint32 axis_id = 2;
+    optional uint32 axis_id = 2;
   }
 
   /// Clear all error informations on the driver, if specified. If not, clear
@@ -196,9 +196,9 @@ message Request {
     /// Clear error information.
     ClearErrors clear_errors = 1;
     /// Clear carrier information.
-    ClearCarrierInfo clear_carrier_info = 2;
+    ClearCarriers clear_carrier_info = 2;
     /// Release the servo of an axis.
-    ReleaseAxisServo release_axis_servo = 3;
+    ReleaseControl release_control = 3;
     /// Stop pulling carrier on an axis.
     StopPullCarrier stop_pull_carrier = 4;
     /// Stop pushing carrier on an axis.
