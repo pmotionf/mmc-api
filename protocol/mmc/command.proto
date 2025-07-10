@@ -235,9 +235,9 @@ message Response {
   enum RequestErrorKind {
     /// Default enum value. Should never be used.
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
-    /// Attempted to use line ID outside of the configured line
+    /// Attempted to use line ID outside of the configured lines
     COMMAND_REQUEST_ERROR_INVALID_LINE = 1;
-    /// Attempted to use axis ID outside of the configured axis
+    /// Attempted to use axis ID outside of the configured axes of the line
     COMMAND_REQUEST_ERROR_INVALID_AXIS = 2;
     /// Attempted to send command to uninitialized carrier
     COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND = 3;
@@ -266,6 +266,10 @@ message Response {
     COMMAND_REQUEST_ERROR_COMMAND_PROGRESSING = 13;
     /// Attempted to remove or cancel a removed or not initialized command
     COMMAND_REQUEST_ERROR_COMMAND_NOT_FOUND = 14;
+    /// Attempted to run more than 8 auto initialize instance
+    COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED = 15;
+    /// Attempted to use driver ID outside of the configured drivers of the line
+    COMMAND_REQUEST_ERROR_INVALID_DRIVER = 16;
   }
 
   oneof body {
