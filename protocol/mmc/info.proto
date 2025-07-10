@@ -234,6 +234,8 @@ message Response {
     INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5;
     /// A request missing the required parameter
     INFO_REQUEST_ERROR_MISSING_PARAMETER = 6;
+    /// Attempted to request unknown command info
+    INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 7;
   }
 
   oneof body {
