@@ -36,10 +36,10 @@ pub const Request = struct {
     };
 
     pub const Command = struct {
-        command_id: u32 = 0,
+        id: ?u32 = null,
 
         pub const _desc_table = .{
-            .command_id = fd(1, .{ .Varint = .Simple }),
+            .id = fd(1, .{ .Varint = .Simple }),
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
@@ -126,6 +126,7 @@ pub const Response = struct {
 
     pub const _body_case = enum {
         command,
+        commands,
         carrier,
         axis,
         driver,
@@ -133,12 +134,14 @@ pub const Response = struct {
     };
     pub const body_union = union(_body_case) {
         command: Response.Command,
+        commands: Response.Commands,
         carrier: Response.Carrier,
         axis: Response.Axes,
         driver: Response.Drivers,
         request_error: Response.RequestErrorKind,
         pub const _union_desc = .{
             .command = fd(1, .{ .SubMessage = {} }),
+            .commands = fd(2, .{ .SubMessage = {} }),
             .carrier = fd(3, .{ .SubMessage = {} }),
             .axis = fd(4, .{ .SubMessage = {} }),
             .driver = fd(5, .{ .SubMessage = {} }),
@@ -162,12 +165,14 @@ pub const Response = struct {
     };
 
     pub const Command = struct {
+        id: u32 = 0,
         status: Response.Command.Status = @enumFromInt(0),
         error_response: ?Response.Command.ErrorKind = null,
 
         pub const _desc_table = .{
-            .status = fd(1, .{ .Varint = .Simple }),
-            .error_response = fd(2, .{ .Varint = .Simple }),
+            .id = fd(1, .{ .Varint = .Simple }),
+            .status = fd(2, .{ .Varint = .Simple }),
+            .error_response = fd(3, .{ .Varint = .Simple }),
         };
 
         pub const Status = enum(i32) {
@@ -189,6 +194,16 @@ pub const Response = struct {
             ERROR_KIND_CARRIER_ALREADY_EXISTS = 6,
             ERROR_KIND_INVALID_AXIS = 7,
             _,
+        };
+
+        pub usingnamespace protobuf.MessageMixins(@This());
+    };
+
+    pub const Commands = struct {
+        commands: ArrayList(Response.Command),
+
+        pub const _desc_table = .{
+            .commands = fd(1, .{ .List = .{ .SubMessage = {} } }),
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
