@@ -347,7 +347,7 @@ pub const Response = struct {
         position: f32 = 0,
         id: u32 = 0,
         state: Response.Carrier.State = @enumFromInt(0),
-        is_cas_triggered: bool = false,
+        cas: ?Response.Carrier.Cas = null,
 
         pub const _desc_table = .{
             .main_axis_id = fd(1, .{ .Varint = .Simple }),
@@ -356,7 +356,7 @@ pub const Response = struct {
             .position = fd(5, .{ .FixedInt = .I32 }),
             .id = fd(6, .{ .Varint = .Simple }),
             .state = fd(7, .{ .Varint = .Simple }),
-            .is_cas_triggered = fd(8, .{ .Varint = .Simple }),
+            .cas = fd(8, .{ .SubMessage = {} }),
         };
 
         pub const State = enum(i32) {
@@ -389,6 +389,18 @@ pub const Response = struct {
             CARRIER_STATE_PUSH_COMPLETED = 26,
             CARRIER_STATE_OVERCURRENT = 27,
             _,
+        };
+
+        pub const Cas = struct {
+            triggered: bool = false,
+            enabled: bool = false,
+
+            pub const _desc_table = .{
+                .triggered = fd(1, .{ .Varint = .Simple }),
+                .enabled = fd(2, .{ .Varint = .Simple }),
+            };
+
+            pub usingnamespace protobuf.MessageMixins(@This());
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());

@@ -177,8 +177,12 @@ message Response {
     /// Carrier State
     State state = 7;
     /// Carrier's collision avoidance system (CAS) status
-    bool is_cas_triggered = 8;
+    Cas cas = 8;
 
+    message Cas {
+      bool triggered = 1;
+      bool enabled = 2;
+    }
     enum State {
       CARRIER_STATE_NONE = 0;
 
