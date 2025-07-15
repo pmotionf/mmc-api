@@ -58,6 +58,12 @@ message Response {
   /// Command information.
   /// `error_response` is returned if the status is FAILED.
   message Command {
+    /// Command ID
+    uint32 id = 1;
+    /// Command status
+    Status status = 2;
+
+
     enum Status {
       /// Default enum value. Should never be used.
       STATUS_UNSPECIFIED = 0;
@@ -70,10 +76,6 @@ message Response {
       /// Command is waiting to be executed by the server.
       STATUS_QUEUED = 4;
     }
-    /// Command ID
-    uint32 id = 1;
-    /// Command status
-    Status status = 2;
     enum ErrorKind {
       ERROR_KIND_UNSPECIFIED = 0;
       ERROR_KIND_INVALID_COMMAND = 1;
@@ -94,6 +96,22 @@ message Response {
   /// Axis information, returned in the form of line ID and array of axis
   message Axes {
     message Axis {
+      /// Axis ID
+      uint32 id = 1;      
+      /// Hall alarm status of the axis
+      HallAlarm hall_alarm = 2;
+      /// Whether the motor is controlling a carrier or not
+      bool motor_enabled = 3;
+      /// Waiting for a carrier to be pulled on the axis
+      bool waiting_pull = 4;
+      /// Waiting for a carrier arriving on the axis to be automatically pushed
+      bool waiting_push = 5;
+      /// Error status on the driver
+      AxisError errors = 6;
+      /// Detected initialized carrier ID on the carrier
+      uint32 carrier_id = 7;
+
+
       /// Axis' error description
       message AxisError { bool overcurrent = 1; }
       /// Hall alarm status of the axis
@@ -101,21 +119,6 @@ message Response {
         bool front = 1;
         bool back = 2;
       }
-
-      /// Hall alarm status of the axis
-      HallAlarm hall_alarm = 1;
-      /// Whether the motor is controlling a carrier or not
-      bool motor_enabled = 2;
-      /// Waiting for a carrier to be pulled on the axis
-      bool waiting_pull = 3;
-      /// Waiting for a carrier arriving on the axis to be automatically pushed
-      bool waiting_push = 4;
-      /// Error status on the driver
-      AxisError errors = 5;
-      /// Detected initialized carrier ID on the carrier
-      uint32 carrier_id = 6;
-      /// Axis ID
-      uint32 id = 7;
     }
     /// Line ID
     uint32 line_id = 1;
@@ -126,6 +129,22 @@ message Response {
   /// Driver information, returned in the form of line ID and array of driver
   message Drivers {
     message Driver {
+      /// Driver ID
+      uint32 id = 1;
+      /// Connection status between driver and CC link
+      bool connected = 2;
+      /// Whether the driver is ready to receive command or not
+      bool available = 3;
+      /// Servo status
+      bool servo_enabled = 4;
+      /// Emergency stop status
+      bool stopped = 5;
+      /// Driver pause status
+      bool paused = 6;
+      /// Error status on the driver
+      DriverError errors = 7;
+
+
       /// Driver's error description
       message DriverError {
         bool control_loop_time_exceeded = 1;
@@ -141,20 +160,6 @@ message Response {
         }
         CommError communication_error = 4;
       }
-      /// Connection status between driver and CC link
-      bool connected = 1;
-      /// Whether the driver is ready to receive command or not
-      bool available = 2;
-      /// Servo status
-      bool servo_enabled = 3;
-      /// Emergency stop status
-      bool stopped = 4;
-      /// Driver pause status
-      bool paused = 5;
-      /// Error status on the driver
-      DriverError errors = 6;
-      /// Driver ID
-      uint32 id = 7;
     }
     /// Line ID
     uint32 line_id = 1;
@@ -164,21 +169,23 @@ message Response {
 
   /// Carrier information
   message Carrier {
-    /// Main Axis ID position of the carrier
-    uint32 main_axis_id = 1;
-    /// Auxiliary Axis ID position of the carrier
-    uint32 aux_axis_id = 2;
-    /// Line ID of the carrier
-    uint32 line_id = 4;
-    /// Position of the carrier
-    float position = 5;
     /// Carrier ID
-    uint32 id = 6;
+    uint32 id = 1;
+    /// Line ID of the carrier
+    uint32 line_id = 2;
+    /// Position of the carrier
+    float position = 3;
+    /// Axis ID position of the carrier
+    Axis axis = 4;
     /// Carrier State
-    State state = 7;
+    State state = 6;
     /// Carrier's collision avoidance system (CAS) status
-    Cas cas = 8;
+    Cas cas = 7;
 
+    message Axis {
+      uint32 first = 1;
+      optional uint32 second = 2;
+    }
     message Cas {
       bool triggered = 1;
       bool enabled = 2;

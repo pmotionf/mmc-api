@@ -220,22 +220,22 @@ pub const Response = struct {
         };
 
         pub const Axis = struct {
+            id: u32 = 0,
             hall_alarm: ?Response.Axes.Axis.HallAlarm = null,
             motor_enabled: bool = false,
             waiting_pull: bool = false,
             waiting_push: bool = false,
             errors: ?Response.Axes.Axis.AxisError = null,
             carrier_id: u32 = 0,
-            id: u32 = 0,
 
             pub const _desc_table = .{
-                .hall_alarm = fd(1, .{ .SubMessage = {} }),
-                .motor_enabled = fd(2, .{ .Varint = .Simple }),
-                .waiting_pull = fd(3, .{ .Varint = .Simple }),
-                .waiting_push = fd(4, .{ .Varint = .Simple }),
-                .errors = fd(5, .{ .SubMessage = {} }),
-                .carrier_id = fd(6, .{ .Varint = .Simple }),
-                .id = fd(7, .{ .Varint = .Simple }),
+                .id = fd(1, .{ .Varint = .Simple }),
+                .hall_alarm = fd(2, .{ .SubMessage = {} }),
+                .motor_enabled = fd(3, .{ .Varint = .Simple }),
+                .waiting_pull = fd(4, .{ .Varint = .Simple }),
+                .waiting_push = fd(5, .{ .Varint = .Simple }),
+                .errors = fd(6, .{ .SubMessage = {} }),
+                .carrier_id = fd(7, .{ .Varint = .Simple }),
             };
 
             pub const AxisError = struct {
@@ -276,22 +276,22 @@ pub const Response = struct {
         };
 
         pub const Driver = struct {
+            id: u32 = 0,
             connected: bool = false,
             available: bool = false,
             servo_enabled: bool = false,
             stopped: bool = false,
             paused: bool = false,
             errors: ?Response.Drivers.Driver.DriverError = null,
-            id: u32 = 0,
 
             pub const _desc_table = .{
-                .connected = fd(1, .{ .Varint = .Simple }),
-                .available = fd(2, .{ .Varint = .Simple }),
-                .servo_enabled = fd(3, .{ .Varint = .Simple }),
-                .stopped = fd(4, .{ .Varint = .Simple }),
-                .paused = fd(5, .{ .Varint = .Simple }),
-                .errors = fd(6, .{ .SubMessage = {} }),
-                .id = fd(7, .{ .Varint = .Simple }),
+                .id = fd(1, .{ .Varint = .Simple }),
+                .connected = fd(2, .{ .Varint = .Simple }),
+                .available = fd(3, .{ .Varint = .Simple }),
+                .servo_enabled = fd(4, .{ .Varint = .Simple }),
+                .stopped = fd(5, .{ .Varint = .Simple }),
+                .paused = fd(6, .{ .Varint = .Simple }),
+                .errors = fd(7, .{ .SubMessage = {} }),
             };
 
             pub const DriverError = struct {
@@ -341,22 +341,20 @@ pub const Response = struct {
     };
 
     pub const Carrier = struct {
-        main_axis_id: u32 = 0,
-        aux_axis_id: u32 = 0,
+        id: u32 = 0,
         line_id: u32 = 0,
         position: f32 = 0,
-        id: u32 = 0,
+        axis: ?Response.Carrier.Axis = null,
         state: Response.Carrier.State = @enumFromInt(0),
         cas: ?Response.Carrier.Cas = null,
 
         pub const _desc_table = .{
-            .main_axis_id = fd(1, .{ .Varint = .Simple }),
-            .aux_axis_id = fd(2, .{ .Varint = .Simple }),
-            .line_id = fd(4, .{ .Varint = .Simple }),
-            .position = fd(5, .{ .FixedInt = .I32 }),
-            .id = fd(6, .{ .Varint = .Simple }),
-            .state = fd(7, .{ .Varint = .Simple }),
-            .cas = fd(8, .{ .SubMessage = {} }),
+            .id = fd(1, .{ .Varint = .Simple }),
+            .line_id = fd(2, .{ .Varint = .Simple }),
+            .position = fd(3, .{ .FixedInt = .I32 }),
+            .axis = fd(4, .{ .SubMessage = {} }),
+            .state = fd(6, .{ .Varint = .Simple }),
+            .cas = fd(7, .{ .SubMessage = {} }),
         };
 
         pub const State = enum(i32) {
@@ -389,6 +387,18 @@ pub const Response = struct {
             CARRIER_STATE_PUSH_COMPLETED = 26,
             CARRIER_STATE_OVERCURRENT = 27,
             _,
+        };
+
+        pub const Axis = struct {
+            first: u32 = 0,
+            second: ?u32 = null,
+
+            pub const _desc_table = .{
+                .first = fd(1, .{ .Varint = .Simple }),
+                .second = fd(2, .{ .Varint = .Simple }),
+            };
+
+            pub usingnamespace protobuf.MessageMixins(@This());
         };
 
         pub const Cas = struct {
