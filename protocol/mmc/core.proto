@@ -1,43 +1,56 @@
 syntax = "proto3";
 package mmc.core;
 
-
-message Request{
-  enum Kind{
+/// Core API: Request server configuration
+message Request {
+  /// List of server configuration to be retrieved
+  enum Kind {
+    /// Default enum value. Should never be used.
     CORE_REQUEST_KIND_UNSPECIFIED = 0;
+    /// Request server's API version
     CORE_REQUEST_KIND_API_VERSION = 1;
+    /// Request server's version
     CORE_REQUEST_KIND_SERVER_INFO = 2;
+    /// Request the line information of the server
     CORE_REQUEST_KIND_LINE_CONFIG = 3;
   }
   Kind kind = 1;
 }
 
-message Response{
-  message LineConfig{
-    message Line{
+/// Response description to the core API
+message Response {
+  /// Line configuration for the system
+  message LineConfig {
+    message Line {
+      /// Number of axes on the line
       uint32 axes = 1;
+      /// Line name
       string name = 2;
     }
+    /// Array of the configured lines
     repeated Line lines = 1;
   }
 
-  message SemanticVersion{
+  /// Version description
+  message SemanticVersion {
     uint32 major = 1;
     uint32 minor = 2;
     uint32 patch = 3;
   }
 
-  message Server{
+  /// Server version and name
+  message Server {
     SemanticVersion version = 1;
     string name = 2;
   }
 
+  /// Error kind description
   enum RequestErrorKind {
     CORE_REQUEST_ERROR_UNSPECIFIED = 0;
     CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1;
   }
 
-  oneof body{
+  oneof body {
     Server server = 1;
     SemanticVersion api_version = 2;
     LineConfig line_config = 3;

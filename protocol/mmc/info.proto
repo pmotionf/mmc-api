@@ -1,62 +1,82 @@
 syntax = "proto3";
 package mmc.info;
 
-message Request{
-    message Command{
-        uint32 command_id = 1;
-    }
+/// API for requesting information from the PMF's MMC Server
+message Request {
+  /// Request for a command status from the server. If no command ID is
+  /// provided, then request for statuses of all commands from the server.
+  /// Expected response: Info.Response.Command
+  message Command { optional uint32 id = 1; }
 
-    message HallAlarm{
-        uint32 line_id = 1;
-        uint32 axis_id = 2;
+  /// Request carrier status either from carrier ID or axis ID from the server.
+  /// Expected response: Info.Response.Carrier
+  message Carrier {
+    uint32 line_id = 1;
+    oneof param {
+      uint32 carrier_id = 2;
+      uint32 axis_id = 3;
     }
+  }
 
-    message Carrier{
-        uint32 line_id = 1;
-        oneof param{
-            uint32 carrier_id = 2;
-            uint32 axis_id = 3;
-        }
+  /// Request axis information of the specified range from the server.
+  /// Expected response: Info.Response.Axes
+  message Axis {
+    uint32 line_id = 1;
+    message Range {
+      uint32 start_id = 1;
+      uint32 end_id = 2;
     }
+    Range range = 2;
+  }
 
-    message Axis{
-        uint32 line_id = 1;
-        message Range {
-          uint32 start_id = 1;
-          uint32 end_id = 2;
-        }
-        Range range = 2;
+  /// Request driver information of the specified range from the server.
+  /// Expected response: Info.Response.Drivers
+  message Driver {
+    uint32 line_id = 1;
+    message Range {
+      uint32 start_id = 1;
+      uint32 end_id = 2;
     }
+    Range range = 2;
+  }
 
-    message Station{
-        uint32 line_id = 1;
-        message Range {
-          uint32 start_id = 1;
-          uint32 end_id = 2;
-        }
-        Range range = 2;
-    }
-
-    oneof body{
-      Command command = 20;
-      HallAlarm hall_alarm = 21;
-      Carrier carrier = 22;
-      Axis axis = 26;
-      Station station = 27;
-    }
+  /// Available info from the server
+  oneof body {
+    /// Get command status
+    Command command = 20;
+    /// Get carrier information
+    Carrier carrier = 22;
+    /// Get axis information
+    Axis axis = 26;
+    /// Get driver information
+    Driver driver = 27;
+  }
 }
 
-message Response{
-  message Command{
+/// Response description to the request info API
+message Response {
+  /// Command information.
+  /// `error_response` is returned if the status is FAILED.
+  message Command {
+    /// Command ID
+    uint32 id = 1;
+    /// Command status
+    Status status = 2;
+
+
     enum Status {
+      /// Default enum value. Should never be used.
       STATUS_UNSPECIFIED = 0;
+      /// Command is being executed by the server.
       STATUS_PROGRESSING = 1;
+      /// Command execution is completed.
       STATUS_COMPLETED = 2;
+      /// Command execution is failed. `error_response` is returned as well.
       STATUS_FAILED = 3;
+      /// Command is waiting to be executed by the server.
       STATUS_QUEUED = 4;
     }
-    Status status = 1;
-    enum ErrorKind{
+    enum ErrorKind {
       ERROR_KIND_UNSPECIFIED = 0;
       ERROR_KIND_INVALID_COMMAND = 1;
       ERROR_KIND_CARRIER_NOT_FOUND = 2;
@@ -65,69 +85,112 @@ message Response{
       ERROR_KIND_INVALID_SYSTEM_STATE = 5;
       ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
       ERROR_KIND_INVALID_AXIS = 7;
+      // TODO: Add auto-initialize failures
     }
-    optional ErrorKind error_response = 2;
+    /// Command error kind, if failed.
+    optional ErrorKind error_response = 3;
   }
 
-  message Axes{
+  message Commands { repeated Command commands = 1; }
+
+  /// Axis information, returned in the form of line ID and array of axis
+  message Axes {
     message Axis {
-      message HallAlarm{
+      /// Axis ID
+      uint32 id = 1;      
+      /// Hall alarm status of the axis
+      HallAlarm hall_alarm = 2;
+      /// Whether the motor is controlling a carrier or not
+      bool motor_enabled = 3;
+      /// Waiting for a carrier to be pulled on the axis
+      bool waiting_pull = 4;
+      /// Waiting for a carrier arriving on the axis to be automatically pushed
+      bool waiting_push = 5;
+      /// Error status on the driver
+      AxisError errors = 6;
+      /// Detected initialized carrier ID on the carrier
+      uint32 carrier_id = 7;
+
+
+      /// Axis' error description
+      message AxisError { bool overcurrent = 1; }
+      /// Hall alarm status of the axis
+      message HallAlarm {
         bool front = 1;
         bool back = 2;
       }
-      HallAlarm hall_alarm = 1;
-      bool motor_enabled = 2;
-      bool waiting_pull = 3;
-      bool waiting_push = 4;
-      bool overcurrent = 5;
-      uint32 carrier_id = 6;
     }
+    /// Line ID
     uint32 line_id = 1;
+    /// Array of requested axis information
     repeated Axis axes = 2;
   }
 
-  message Stations{
-    message Station{
-      bool connected = 1;
-      bool available = 2;
-      bool servo_enabled = 3;
-      bool stopped = 4;
-      bool paused = 5;
-      message StationError{
+  /// Driver information, returned in the form of line ID and array of driver
+  message Drivers {
+    message Driver {
+      /// Driver ID
+      uint32 id = 1;
+      /// Connection status between driver and CC link
+      bool connected = 2;
+      /// Whether the driver is ready to receive command or not
+      bool available = 3;
+      /// Servo status
+      bool servo_enabled = 4;
+      /// Emergency stop status
+      bool stopped = 5;
+      /// Driver pause status
+      bool paused = 6;
+      /// Error status on the driver
+      DriverError errors = 7;
+
+
+      /// Driver's error description
+      message DriverError {
         bool control_loop_time_exceeded = 1;
-        message PowerError{
+        message PowerError {
           bool overvoltage = 1;
           bool undervoltage = 2;
         }
         PowerError power_error = 2;
         bool inverter_overheat = 3;
-        message CommError{
+        message CommError {
           bool from_prev = 1;
           bool from_next = 2;
         }
         CommError communication_error = 4;
       }
-      StationError errors = 6;
     }
+    /// Line ID
     uint32 line_id = 1;
-    repeated Station stations = 2;
+    /// Array of requested driver information
+    repeated Driver drivers = 2;
   }
 
-  message HallAlarm{
-    bool front = 1;
-    bool back = 2;
-  }
+  /// Carrier information
+  message Carrier {
+    /// Carrier ID
+    uint32 id = 1;
+    /// Line ID of the carrier
+    uint32 line_id = 2;
+    /// Position of the carrier
+    float position = 3;
+    /// Axis ID position of the carrier
+    Axis axis = 4;
+    /// Carrier State
+    State state = 6;
+    /// Carrier's collision avoidance system (CAS) status
+    Cas cas = 7;
 
-  message Carrier{
-    uint32 main_axis_id = 1;
-    uint32 aux_axis_id = 2;
-    uint32 line_id = 4;
-    float location = 5;
-    uint32 id = 6;
-    State state = 7;
-    bool is_cas_triggered = 8;
-
-    enum State{
+    message Axis {
+      uint32 first = 1;
+      optional uint32 second = 2;
+    }
+    message Cas {
+      bool triggered = 1;
+      bool enabled = 2;
+    }
+    enum State {
       CARRIER_STATE_NONE = 0;
 
       CARRIER_STATE_WARMUP_PROGRESSING = 1;
@@ -165,22 +228,39 @@ message Response{
     }
   }
 
+  /// Error kind description
   enum RequestErrorKind {
+    /// Default enum value. Should never be used.
     INFO_REQUEST_ERROR_UNSPECIFIED = 0;
+    /// Attempted to use line ID outside of the configured line
     INFO_REQUEST_ERROR_INVALID_LINE = 1;
+    /// Attempted to use axis ID outside of the configured axis
     INFO_REQUEST_ERROR_INVALID_AXIS = 2;
-    INFO_REQUEST_ERROR_INVALID_STATION = 3;
+    /// Attempted to use driver ID outside of the configured driver
+    INFO_REQUEST_ERROR_INVALID_DRIVER = 3;
+    /// Attempted to retrieve uninitialized carrier information
     INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4;
+    /// Attempted to retrieve info when the CC Link connection is not
+    /// established
     INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5;
+    /// A request missing the required parameter
     INFO_REQUEST_ERROR_MISSING_PARAMETER = 6;
+    /// Attempted to request unknown command info
+    INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 7;
   }
 
-  oneof body{
+  oneof body {
+    /// Command information response if command ID was provided.
     Command command = 1;
-    HallAlarm hall_alarm = 2;
+    /// Command information response if no command ID was provided.
+    Commands commands = 2;
+    /// Carrier information response
     Carrier carrier = 3;
+    /// Axis information response
     Axes axis = 4;
-    Stations station = 5;
+    /// Driver information response
+    Drivers driver = 5;
+    /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 6;
   }
 }

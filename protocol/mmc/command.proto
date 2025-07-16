@@ -1,152 +1,283 @@
 syntax = "proto3";
 package mmc.command;
 
-enum Direction{
+enum Direction {
   DIRECTION_UNSPECIFIED = 0;
   DIRECTION_BACKWARD = 1;
   DIRECTION_FORWARD = 2;
 }
 
-message Request{
-  message ReleaseAxisServo{
-    uint32 line_id = 1;
-    uint32 axis_id = 2;
-  }
+/// Carrier movement control kind.
+enum ControlKind {
+  CONTROL_UNSPECIFIED = 0;
+  /// Move the carrier with position control
+  CONTROL_POSITION = 1;
+  /// Move the carrier with velocity control
+  CONTROL_VELOCITY = 2;
+}
 
-  // TODO: Squeeze StopPullCarrier and StopPushCarrier to StopPushPull
-  message StopPullCarrier{
-    uint32 line_id = 1;
-    uint32 axis_id = 2;
-  }
-
-  message StopPushCarrier{
-    uint32 line_id = 1;
-    uint32 axis_id = 2;
-  }
-
-  message ClearErrors{
+/// Command API: Send a command to operate the PMF's Server
+message Request {
+  /// Release motor control of carriers. If an axis is specified, only the
+  /// carrier on top of a certain axis will be released from motor control.
+  /// Otherwise, all carriers on the provided line will be released.
+  /// Expected response: command id (uint32)
+  message ReleaseControl {
     uint32 line_id = 1;
     optional uint32 axis_id = 2;
   }
 
-  message ClearCarrierInfo{
+  /// Stop pulling a carrier to the specified axis. If no axis is provided,
+  /// then all pending carrier pulls on the line will be stopped.
+  /// Expected response: command id (uint32)
+  message StopPullCarrier {
     uint32 line_id = 1;
     optional uint32 axis_id = 2;
   }
 
-  message NoParam {}
-
-  message Calibrate{
+  /// Stop pushing a carrier from the specified axis. If no axis is provided,
+  /// then all pending carrier pushes on the line will be stopped.
+  /// Expected response: command id (uint32)
+  message StopPushCarrier {
     uint32 line_id = 1;
+    optional uint32 axis_id = 2;
   }
 
-  message SetLineZero{
+  /// Clear all error informations on the driver, if specified. If not, clear
+  /// error informations on every driver of the specified line ID.
+  /// Expected response: command id (uint32)
+  message ClearErrors {
     uint32 line_id = 1;
+    optional uint32 driver_id = 2;
   }
 
-  message AutoInitialize{
-    message Lines{
+  /// Clear carrier information located on the axis, if specified. If not,
+  /// clear all carrier informations of the specified line ID
+  /// Expected response: command id (uint32)
+  message ClearCarriers {
+    uint32 line_id = 1;
+    optional uint32 axis_id = 2;
+  }
+
+  /// Calibrate a line by positioning an unitiliazed carrier on the first axis
+  /// of the line
+  /// Expected response: command id (uint32)
+  message Calibrate { uint32 line_id = 1; }
+
+  /// Set a zero location of a line by positioning an initialized carrier on
+  /// the first axis of the line
+  /// Expected response: command id (uint32)
+  message SetLineZero { uint32 line_id = 1; }
+
+  /// Automatically initialize carriers on every specified lines.
+  /// Expected response: command id (uint32)
+  message AutoInitialize {
+    message Line {
+      /// Line ID
       uint32 line_id = 1;
       /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
-      uint32 velocity = 2;
+      optional uint32 velocity = 2;
       /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
-      uint32 acceleration = 3;
+      optional uint32 acceleration = 3;
     }
-    repeated Lines lines = 1;
+    repeated Line lines = 1;
   }
 
-  message MoveCarrier{
-    enum Control{
-      CONTROL_UNSPECIFIED = 0;
-      CONTROL_POSITION = 1;
-      CONTROL_VELOCITY = 2;
-    }
+  /// Move a carrier to the desired position.
+  /// Expected response: command id (uint32)
+  message MoveCarrier {
+    /// Line ID
     uint32 line_id = 1;
+    /// Carrier ID
     uint32 carrier_id = 2;
     /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 3;
     /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 4;
-    oneof target{
+    /// Kind of desired position of the carrier. Only one can be set.
+    oneof target {
+      /// Desired axis ID. The axis ID increments starting from 1 at the start
+      /// of the line, with each axis stepping up by 1. The carrier will move
+      /// to the center position of the provided axis.
       uint32 axis = 5;
+      /// Absolute location movement within line. Relative only to the
+      /// zero-point of the line, which is set by default at the center of
+      /// the line's first axis after calibration, but can also be set with
+      /// the `SetLineZero` command.
       float location = 6;
+      /// Distance movement relative to current carrier position. Negative
+      /// distance moves the carrier backwards.
       float distance = 7;
     }
-    Control control_kind = 8;
+    ControlKind control_kind = 8;
+    /// Flag for disabling the carrier's collision avoidance system (CAS).
+    bool disable_cas = 9;
   }
 
-  message PushCarrier{
+  /// Move a carrier by 1 carrier length to the specified direction. Useful for
+  /// moving a carrier to different line.
+  /// Expected response: command id (uint32)
+  message PushCarrier {
+    /// Line ID
     uint32 line_id = 1;
+    /// Carrier ID
     uint32 carrier_id = 2;
+    /// Direction of carrier movement.
     Direction direction = 3;
     /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 4;
     /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 5;
+    /// If specified, wait a carrier at the specified axis and push it
+    /// automatically.
     optional uint32 axis_id = 6;
   }
 
-  message PullCarrier{
+  /// Pull a carrier into the specified line.
+  /// Expected response: command id (uint32)
+  message PullCarrier {
+    /// Line ID.
     uint32 line_id = 1;
+    /// The axis that will wait for a new carrier from different line.
     uint32 axis_id = 2;
+    /// The new carrier ID for the incoming carrier.
     uint32 carrier_id = 3;
+    /// The direction at which the incoming carrier will come.
     Direction direction = 4;
     /// Fixed point integer from 0-30, representing 0.0-3.0 m/s.
     uint32 velocity = 5;
     /// Fixed point integer from 0-196, representing 0.0-19.6 m/s^2.
     uint32 acceleration = 6;
-    /// Optional carrier target after pull completion.
-    oneof target {
-        uint32 axis = 7;
-        float location = 8;
+    /// Smoothly transition to carrier movement after pull completion..
+    optional Transition transition = 7;
+
+    message Transition {
+      ControlKind control_kind = 1;
+      oneof target {
+        uint32 axis = 2;
+        float location = 3;
+        float distance = 4;
+      }
+      /// Flag for disabling the carrier's collision avoidance system (CAS).
+      bool disable_cas = 5;
     }
   }
 
-  message IsolateCarrier{
+  /// Initialize a carrier.
+  /// Expected response: command id (uint32)
+  message IsolateCarrier {
+    /// Line ID of the carrier to be initialized
     uint32 line_id = 1;
+    /// Axis ID of the carrier position
     uint32 axis_id = 2;
+    /// ID to be assigned to the new carrier
     uint32 carrier_id = 3;
+    /// Isolation movement for the new carrier
     Direction direction = 4;
+    /// [Optional] Axis ID of the linked axis
     optional Direction link_axis = 5;
   }
 
-  oneof body{
+  /// Cancel a command on the server for the specified command ID, if still in
+  /// queue. If the command is already completed, remove the command status
+  /// from the server command history.
+  /// Expected response: Command.Response.CommandOperation
+  /// - COMPLETED: The command is successfully cancelled/removed.
+  message ClearCommand { uint32 command_id = 1; }
+
+  /// Cancel all commands running on the server, and remove all statuses from
+  /// the server command history.
+  /// Expected response: Command.Response.CommandOperation
+  /// - COMPLETED: All commands are successfully cancelled/removed.
+  message ClearCommands {}
+
+  /// Available commands for the server:
+  oneof body {
+    /// Clear error information.
     ClearErrors clear_errors = 1;
-    ClearCarrierInfo clear_carrier_info = 2;
-    NoParam reset_mcl = 3;
-    ReleaseAxisServo release_axis_servo = 4;
-    StopPullCarrier stop_pull_carrier = 5;
+    /// Clear carrier information.
+    ClearCarriers clear_carrier_info = 2;
+    /// Release the servo of an axis.
+    ReleaseControl release_control = 3;
+    /// Stop pulling carrier on an axis.
+    StopPullCarrier stop_pull_carrier = 4;
+    /// Stop pushing carrier on an axis.
+    StopPushCarrier stop_push_carrier = 5;
+    /// Initialize all carriers of the specified line(s).
     AutoInitialize auto_initialize = 6;
-    StopPushCarrier stop_push_carrier = 7;
-    MoveCarrier move_carrier = 8;
-    PushCarrier push_carrier = 9;
-    PullCarrier pull_carrier = 10;
-    IsolateCarrier isolate_carrier = 11;
-    Calibrate calibrate = 12;
-    SetLineZero set_line_zero = 13;
+    /// Move a carrier to the desired position.
+    MoveCarrier move_carrier = 7;
+    /// Push a carrier by 1 carrier length to the specified direction.
+    PushCarrier push_carrier = 8;
+    /// Pull a carrier into a line.
+    PullCarrier pull_carrier = 9;
+    /// Initialize a carrier.
+    IsolateCarrier isolate_carrier = 10;
+    /// Calibrate a line.
+    Calibrate calibrate = 11;
+    /// Set a zero location of the specified line.
+    SetLineZero set_line_zero = 12;
+    /// Cancel a running command or remove its status history.
+    ClearCommand clear_command = 13;
+    /// Clear all commands and command histories.
+    ClearCommands clear_commands = 14;
   }
 }
 
-message Response{
+/// Response description to the command API
+message Response {
+  /// Command operation status.
+  enum CommandOperationStatus {
+    COMMAND_STATUS_UNSPECIFIED = 0;
+    COMMAND_STATUS_COMPLETED = 1;
+  }
+  /// Error kind description
   enum RequestErrorKind {
+    /// Default enum value. Should never be used.
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
+    /// Attempted to use line ID outside of the configured lines
     COMMAND_REQUEST_ERROR_INVALID_LINE = 1;
+    /// Attempted to use axis ID outside of the configured axes of the line
     COMMAND_REQUEST_ERROR_INVALID_AXIS = 2;
+    /// Attempted to send command to uninitialized carrier
     COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND = 3;
+    /// Attempted to send a command when the CC Link connection is not
+    /// established
     COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 4;
+    /// Attempted to use acceleration value outside of 0-196
     COMMAND_REQUEST_ERROR_INVALID_ACCELERATION = 5;
+    /// Attempted to use velocity value outside of 0-196
     COMMAND_REQUEST_ERROR_INVALID_VELOCITY = 6;
+    /// Server unable to receive new command caused by out of memory.
+    /// Try Command.Request.clear_commands to free the memory.
     COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 7;
+    /// A command missing the required parameter
     COMMAND_REQUEST_ERROR_MISSING_PARAMETER = 8;
+    /// Using invalid direction for the command
     COMMAND_REQUEST_ERROR_INVALID_DIRECTION = 9;
+    /// Attempted to send a carrier to a location outside of the configured line
     COMMAND_REQUEST_ERROR_INVALID_LOCATION = 10;
+    /// Attempted to send a carrier exceeding the location range of the
+    /// configured line
     COMMAND_REQUEST_ERROR_INVALID_DISTANCE = 11;
+    /// Attempted to send a command to carrier outside of 1-768
     COMMAND_REQUEST_ERROR_INVALID_CARRIER = 12;
+    /// Attempted to remove or cancel a progressing command
+    COMMAND_REQUEST_ERROR_COMMAND_PROGRESSING = 13;
+    /// Attempted to remove or cancel a removed or not initialized command
+    COMMAND_REQUEST_ERROR_COMMAND_NOT_FOUND = 14;
+    /// Attempted to run more than 8 auto initialize instance
+    COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED = 15;
+    /// Attempted to use driver ID outside of the configured drivers of the line
+    COMMAND_REQUEST_ERROR_INVALID_DRIVER = 16;
   }
 
-  oneof body{
+  oneof body {
+    /// Command ID response for the command sent to the server
     uint32 command_id = 1;
     /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 2;
+    /// Response for cancelling or removing a command
+    CommandOperationStatus command_operation = 3;
   }
 }

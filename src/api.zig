@@ -105,12 +105,21 @@ pub fn nestedWrite(
     const ti = @typeInfo(@TypeOf(val));
     switch (ti) {
         .optional => {
-            written_bytes += try nestedWrite(
-                name,
-                val.?,
-                indent,
-                writer,
-            );
+            if (val) |v| {
+                written_bytes += try nestedWrite(
+                    name,
+                    v,
+                    indent,
+                    writer,
+                );
+            } else {
+                try writer.writeBytesNTimes("    ", indent);
+                written_bytes += 4 * indent;
+                try writer.print("{s}: ", .{name});
+                written_bytes += name.len + 2;
+                try writer.print("None,\n", .{});
+                written_bytes += std.fmt.count("None,\n", .{});
+            }
         },
         .@"struct" => {
             try writer.writeBytesNTimes("    ", indent);
