@@ -182,6 +182,7 @@ pub const Response = struct {
             STATUS_COMPLETED = 2,
             STATUS_FAILED = 3,
             STATUS_QUEUED = 4,
+            STATUS_CANCELLED = 5,
             _,
         };
 
