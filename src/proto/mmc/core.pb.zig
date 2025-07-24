@@ -69,10 +69,24 @@ pub const Response = struct {
         pub const Line = struct {
             axes: u32 = 0,
             name: ManagedString = .Empty,
+            length: ?Response.LineConfig.Line.Length = null,
 
             pub const _desc_table = .{
                 .axes = fd(1, .{ .Varint = .Simple }),
                 .name = fd(2, .String),
+                .length = fd(3, .{ .SubMessage = {} }),
+            };
+
+            pub const Length = struct {
+                axis: f32 = 0,
+                carrier: f32 = 0,
+
+                pub const _desc_table = .{
+                    .axis = fd(1, .{ .FixedInt = .I32 }),
+                    .carrier = fd(2, .{ .FixedInt = .I32 }),
+                };
+
+                pub usingnamespace protobuf.MessageMixins(@This());
             };
 
             pub usingnamespace protobuf.MessageMixins(@This());
