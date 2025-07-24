@@ -22,10 +22,15 @@ message Response {
   /// Line configuration for the system
   message LineConfig {
     message Line {
+      message Length {
+        float axis = 1;
+        float carrier = 2;
+      }
       /// Number of axes on the line
       uint32 axes = 1;
       /// Line name
       string name = 2;
+      Length length = 3;
     }
     /// Array of the configured lines
     repeated Line lines = 1;
