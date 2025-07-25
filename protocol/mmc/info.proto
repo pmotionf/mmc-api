@@ -75,8 +75,6 @@ message Response {
       STATUS_FAILED = 3;
       /// Command is waiting to be executed by the server.
       STATUS_QUEUED = 4;
-      /// Command is cancelled by the user
-      STATUS_CANCELLED = 5;
     }
     enum ErrorKind {
       ERROR_KIND_UNSPECIFIED = 0;
