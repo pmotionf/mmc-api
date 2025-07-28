@@ -18,6 +18,21 @@ message Request {
     }
   }
 
+  message Carriers{
+    message Range {
+      uint32 start_id = 1;
+      uint32 end_id = 2;
+    }
+    message MultipleIds {
+      repeated uint32 carrier_id = 1;
+    }
+    uint32 line_id = 1;
+    oneof param{
+      MultipleIds carrier_id = 2;
+      Range range = 3;
+    }
+  }
+
   /// Request axis information of the specified range from the server.
   /// Expected response: Info.Response.Axes
   message Axis {
@@ -228,6 +243,11 @@ message Response {
     }
   }
 
+  /// Carriers information
+  message Carriers {
+    repeated Carrier carriers = 1;
+  }
+
   /// Error kind description
   enum RequestErrorKind {
     /// Default enum value. Should never be used.
@@ -262,5 +282,7 @@ message Response {
     Drivers driver = 5;
     /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 6;
+    /// Multiple carriers information response
+    Carriers carriers = 7;
   }
 }

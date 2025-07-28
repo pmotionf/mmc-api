@@ -70,6 +70,53 @@ pub const Request = struct {
         pub usingnamespace protobuf.MessageMixins(@This());
     };
 
+    pub const Carriers = struct {
+        line_id: u32 = 0,
+        param: ?param_union,
+
+        pub const _param_case = enum {
+            carrier_id,
+            range,
+        };
+        pub const param_union = union(_param_case) {
+            carrier_id: Request.Carriers.MultipleIds,
+            range: Request.Carriers.Range,
+            pub const _union_desc = .{
+                .carrier_id = fd(2, .{ .SubMessage = {} }),
+                .range = fd(3, .{ .SubMessage = {} }),
+            };
+        };
+
+        pub const _desc_table = .{
+            .line_id = fd(1, .{ .Varint = .Simple }),
+            .param = fd(null, .{ .OneOf = param_union }),
+        };
+
+        pub const Range = struct {
+            start_id: u32 = 0,
+            end_id: u32 = 0,
+
+            pub const _desc_table = .{
+                .start_id = fd(1, .{ .Varint = .Simple }),
+                .end_id = fd(2, .{ .Varint = .Simple }),
+            };
+
+            pub usingnamespace protobuf.MessageMixins(@This());
+        };
+
+        pub const MultipleIds = struct {
+            carrier_id: ArrayList(u32),
+
+            pub const _desc_table = .{
+                .carrier_id = fd(1, .{ .PackedList = .{ .Varint = .Simple } }),
+            };
+
+            pub usingnamespace protobuf.MessageMixins(@This());
+        };
+
+        pub usingnamespace protobuf.MessageMixins(@This());
+    };
+
     pub const Axis = struct {
         line_id: u32 = 0,
         range: ?Request.Axis.Range = null,
@@ -131,6 +178,7 @@ pub const Response = struct {
         axis,
         driver,
         request_error,
+        carriers,
     };
     pub const body_union = union(_body_case) {
         command: Response.Command,
@@ -139,6 +187,7 @@ pub const Response = struct {
         axis: Response.Axes,
         driver: Response.Drivers,
         request_error: Response.RequestErrorKind,
+        carriers: Response.Carriers,
         pub const _union_desc = .{
             .command = fd(1, .{ .SubMessage = {} }),
             .commands = fd(2, .{ .SubMessage = {} }),
@@ -146,6 +195,7 @@ pub const Response = struct {
             .axis = fd(4, .{ .SubMessage = {} }),
             .driver = fd(5, .{ .SubMessage = {} }),
             .request_error = fd(6, .{ .Varint = .Simple }),
+            .carriers = fd(7, .{ .SubMessage = {} }),
         };
     };
 
@@ -411,6 +461,16 @@ pub const Response = struct {
             };
 
             pub usingnamespace protobuf.MessageMixins(@This());
+        };
+
+        pub usingnamespace protobuf.MessageMixins(@This());
+    };
+
+    pub const Carriers = struct {
+        carriers: ArrayList(Response.Carrier),
+
+        pub const _desc_table = .{
+            .carriers = fd(1, .{ .List = .{ .SubMessage = {} } }),
         };
 
         pub usingnamespace protobuf.MessageMixins(@This());
