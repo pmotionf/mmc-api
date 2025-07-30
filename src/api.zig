@@ -36,6 +36,8 @@ pub fn convertEnum(
         ).?;
         break :blk ti.fields[0].name[0..diff_idx];
     };
+    const _ti = @typeInfo(Target).@"enum";
+    std.log.debug("{s}\n{s}", .{ _ti.fields[0].name, _ti.fields[1].name });
     const target_style = blk: {
         switch (@typeInfo(@TypeOf(source))) {
             .@"enum" => |ti| {
@@ -77,6 +79,7 @@ pub fn convertEnum(
             return @enumFromInt(field.value);
         }
     }
+    std.log.debug("Converted name: {s}", .{target_name});
     unreachable;
 }
 
