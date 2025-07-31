@@ -133,6 +133,51 @@ pub const Response = struct {
         _,
     };
 
+    pub const Commands = struct {
+        commands: ArrayList(Response.Commands.Command),
+
+        pub const _desc_table = .{
+            .commands = fd(1, .{ .List = .{ .SubMessage = {} } }),
+        };
+
+        pub const Command = struct {
+            id: u32 = 0,
+            status: Response.Commands.Command.Status = @enumFromInt(0),
+            error_response: ?Response.Commands.Command.ErrorKind = null,
+
+            pub const _desc_table = .{
+                .id = fd(1, .{ .Varint = .Simple }),
+                .status = fd(2, .{ .Varint = .Simple }),
+                .error_response = fd(3, .{ .Varint = .Simple }),
+            };
+
+            pub const Status = enum(i32) {
+                STATUS_UNSPECIFIED = 0,
+                STATUS_PROGRESSING = 1,
+                STATUS_COMPLETED = 2,
+                STATUS_FAILED = 3,
+                STATUS_QUEUED = 4,
+                _,
+            };
+
+            pub const ErrorKind = enum(i32) {
+                ERROR_KIND_UNSPECIFIED = 0,
+                ERROR_KIND_INVALID_COMMAND = 1,
+                ERROR_KIND_CARRIER_NOT_FOUND = 2,
+                ERROR_KIND_HOMING_FAILED = 3,
+                ERROR_KIND_INVALID_PARAMETER = 4,
+                ERROR_KIND_INVALID_SYSTEM_STATE = 5,
+                ERROR_KIND_CARRIER_ALREADY_EXISTS = 6,
+                ERROR_KIND_INVALID_AXIS = 7,
+                _,
+            };
+
+            pub usingnamespace protobuf.MessageMixins(@This());
+        };
+
+        pub usingnamespace protobuf.MessageMixins(@This());
+    };
+
     pub const System = struct {
         line_id: u32 = 0,
         driver_infos: ArrayList(Response.System.Driver.Info),
@@ -288,26 +333,27 @@ pub const Response = struct {
 
                 pub const State = enum(i32) {
                     CARRIER_STATE_NONE = 0,
-                    CARRIER_STATE_CALIBARTING = 1,
-                    CARRIER_STATE_MOVING = 2,
-                    CARRIER_STATE_MOVEMENT_COMPLETED = 3,
-                    CARRIER_STATE_ISOLATING = 4,
-                    CARRIER_STATE_ISOLATION_COMPLETED = 5,
-                    CARRIER_STATE_PUSHING = 6,
-                    CARRIER_STATE_PUSH_COMPLETED = 7,
-                    CARRIER_STATE_PULLING = 8,
-                    CARRIER_STATE_PULL_COMPLETED = 9,
-                    CARRIER_STATE_OVERCURRENT = 10,
+                    CARRIER_STATE_CALIBRATING = 1,
+                    CARRIER_STATE_CALIBRATE_COMPLETED = 2,
+                    CARRIER_STATE_MOVING = 3,
+                    CARRIER_STATE_MOVE_COMPLETED = 4,
+                    CARRIER_STATE_ISOLATING = 5,
+                    CARRIER_STATE_ISOLATE_COMPLETED = 6,
+                    CARRIER_STATE_PUSHING = 7,
+                    CARRIER_STATE_PUSH_COMPLETED = 8,
+                    CARRIER_STATE_PULLING = 9,
+                    CARRIER_STATE_PULL_COMPLETED = 10,
+                    CARRIER_STATE_OVERCURRENT = 11,
                     _,
                 };
 
                 pub const Axis = struct {
-                    first: u32 = 0,
-                    second: ?u32 = null,
+                    main: u32 = 0,
+                    auxiliary: ?u32 = null,
 
                     pub const _desc_table = .{
-                        .first = fd(1, .{ .Varint = .Simple }),
-                        .second = fd(2, .{ .Varint = .Simple }),
+                        .main = fd(1, .{ .Varint = .Simple }),
+                        .auxiliary = fd(2, .{ .Varint = .Simple }),
                     };
 
                     pub usingnamespace protobuf.MessageMixins(@This());
@@ -326,51 +372,6 @@ pub const Response = struct {
                 };
 
                 pub usingnamespace protobuf.MessageMixins(@This());
-            };
-
-            pub usingnamespace protobuf.MessageMixins(@This());
-        };
-
-        pub usingnamespace protobuf.MessageMixins(@This());
-    };
-
-    pub const Commands = struct {
-        commands: ArrayList(Response.Commands.Command),
-
-        pub const _desc_table = .{
-            .commands = fd(1, .{ .List = .{ .SubMessage = {} } }),
-        };
-
-        pub const Command = struct {
-            id: u32 = 0,
-            status: Response.Commands.Command.Status = @enumFromInt(0),
-            error_response: ?Response.Commands.Command.ErrorKind = null,
-
-            pub const _desc_table = .{
-                .id = fd(1, .{ .Varint = .Simple }),
-                .status = fd(2, .{ .Varint = .Simple }),
-                .error_response = fd(3, .{ .Varint = .Simple }),
-            };
-
-            pub const Status = enum(i32) {
-                STATUS_UNSPECIFIED = 0,
-                STATUS_PROGRESSING = 1,
-                STATUS_COMPLETED = 2,
-                STATUS_FAILED = 3,
-                STATUS_QUEUED = 4,
-                _,
-            };
-
-            pub const ErrorKind = enum(i32) {
-                ERROR_KIND_UNSPECIFIED = 0,
-                ERROR_KIND_INVALID_COMMAND = 1,
-                ERROR_KIND_CARRIER_NOT_FOUND = 2,
-                ERROR_KIND_HOMING_FAILED = 3,
-                ERROR_KIND_INVALID_PARAMETER = 4,
-                ERROR_KIND_INVALID_SYSTEM_STATE = 5,
-                ERROR_KIND_CARRIER_ALREADY_EXISTS = 6,
-                ERROR_KIND_INVALID_AXIS = 7,
-                _,
             };
 
             pub usingnamespace protobuf.MessageMixins(@This());

@@ -43,8 +43,8 @@ message Request {
     optional uint32 axis_id = 2;
   }
 
-  /// Clear all error informations on the driver, if specified. If not, clear
-  /// error informations on every driver of the specified line ID.
+  /// Clear all error information on the driver, if specified. If not, clear
+  /// error information on every driver of the specified line ID.
   /// Expected response: command id (uint32)
   message ClearErrors {
     uint32 line_id = 1;
@@ -52,7 +52,7 @@ message Request {
   }
 
   /// Clear carrier information located on the axis, if specified. If not,
-  /// clear all carrier informations of the specified line ID
+  /// clear all carrier information of the specified line ID
   /// Expected response: command id (uint32)
   message ClearCarriers {
     uint32 line_id = 1;

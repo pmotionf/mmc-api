@@ -64,6 +64,43 @@ message Response {
     RequestErrorKind request_error = 3;
   }
 
+  message Commands { 
+    repeated Command commands = 1;
+
+    /// Command information.
+    /// `error_response` is returned if the status is FAILED.
+    message Command {
+      /// Command ID
+      uint32 id = 1;
+      /// Command status
+      Status status = 2;
+      /// Command error kind, if failed.
+      optional ErrorKind error_response = 3;
+      enum Status {
+        /// Default enum value. Should never be used.
+        STATUS_UNSPECIFIED = 0;
+        /// Command is being executed by the server.
+        STATUS_PROGRESSING = 1;
+        /// Command execution is completed.
+        STATUS_COMPLETED = 2;
+        /// Command execution is failed. `error_response` is returned as well.
+        STATUS_FAILED = 3;
+        /// Command is waiting to be executed by the server.
+        STATUS_QUEUED = 4;
+      }
+      enum ErrorKind {
+        ERROR_KIND_UNSPECIFIED = 0;
+        ERROR_KIND_INVALID_COMMAND = 1;
+        ERROR_KIND_CARRIER_NOT_FOUND = 2;
+        ERROR_KIND_HOMING_FAILED = 3;
+        ERROR_KIND_INVALID_PARAMETER = 4;
+        ERROR_KIND_INVALID_SYSTEM_STATE = 5;
+        ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
+        ERROR_KIND_INVALID_AXIS = 7;
+      }
+    }  
+  }
+  
   /// System information description. Validation is required to check if
   /// each field has the requested information.
   message System {
@@ -173,10 +210,10 @@ message Response {
         State state = 5;
 
         message Axis {
-          /// First id of the carrier
-          uint32 first = 1;
-          /// Optional second id of the carrier
-          optional uint32 second = 2;
+          /// ID of the main axis
+          uint32 main = 1;
+          /// ID of the auxiliary axis
+          optional uint32 auxiliary = 2;
         }
         message Cas {
           bool enabled = 1;
@@ -184,56 +221,20 @@ message Response {
         }
         enum State {
           CARRIER_STATE_NONE = 0;
-          CARRIER_STATE_CALIBARTING = 1;
-          CARRIER_STATE_MOVING = 2;
-          CARRIER_STATE_MOVEMENT_COMPLETED = 3;
-          CARRIER_STATE_ISOLATING = 4;
-          CARRIER_STATE_ISOLATION_COMPLETED = 5;
-          CARRIER_STATE_PUSHING = 6;
-          CARRIER_STATE_PUSH_COMPLETED = 7;
-          CARRIER_STATE_PULLING = 8;
-          CARRIER_STATE_PULL_COMPLETED = 9;
-          CARRIER_STATE_OVERCURRENT = 10;
+          CARRIER_STATE_CALIBRATING = 1;
+          CARRIER_STATE_CALIBRATE_COMPLETED = 2;
+          CARRIER_STATE_MOVING = 3;
+          CARRIER_STATE_MOVE_COMPLETED = 4;
+          CARRIER_STATE_ISOLATING = 5;
+          CARRIER_STATE_ISOLATE_COMPLETED = 6;
+          CARRIER_STATE_PUSHING = 7;
+          CARRIER_STATE_PUSH_COMPLETED = 8;
+          CARRIER_STATE_PULLING = 9;
+          CARRIER_STATE_PULL_COMPLETED = 10;
+          CARRIER_STATE_OVERCURRENT = 11;
         }
       }
     }
-  }
-
-  message Commands { 
-    repeated Command commands = 1;
-
-    /// Command information.
-    /// `error_response` is returned if the status is FAILED.
-    message Command {
-      /// Command ID
-      uint32 id = 1;
-      /// Command status
-      Status status = 2;
-      /// Command error kind, if failed.
-      optional ErrorKind error_response = 3;
-      enum Status {
-        /// Default enum value. Should never be used.
-        STATUS_UNSPECIFIED = 0;
-        /// Command is being executed by the server.
-        STATUS_PROGRESSING = 1;
-        /// Command execution is completed.
-        STATUS_COMPLETED = 2;
-        /// Command execution is failed. `error_response` is returned as well.
-        STATUS_FAILED = 3;
-        /// Command is waiting to be executed by the server.
-        STATUS_QUEUED = 4;
-      }
-      enum ErrorKind {
-        ERROR_KIND_UNSPECIFIED = 0;
-        ERROR_KIND_INVALID_COMMAND = 1;
-        ERROR_KIND_CARRIER_NOT_FOUND = 2;
-        ERROR_KIND_HOMING_FAILED = 3;
-        ERROR_KIND_INVALID_PARAMETER = 4;
-        ERROR_KIND_INVALID_SYSTEM_STATE = 5;
-        ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
-        ERROR_KIND_INVALID_AXIS = 7;
-      }
-    }  
   }
 
   /// Error kind description
