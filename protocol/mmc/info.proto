@@ -1,368 +1,239 @@
 syntax = "proto3";
 package mmc.info;
 
+/// Range can be axis range or driver range. End ID is inclusive.
+message Range {
+  uint32 start_id = 1;
+  uint32 end_id = 2;
+}
+
+/// Contains multiple ids, possibly containing only one id.
+message Ids {
+  repeated uint32 ids = 1;
+}
+
 /// API for requesting information from the PMF's MMC Server
 message Request {
   /// Available info from the server
   oneof body {
-    /// Get command status
+    /// Get command(s) status
     Command command = 1;
-    /// Get axis information(s)
-    Axes axis_info = 2;
-    /// Get axis error(s)
-    Axes axis_error = 3;
-    /// Get axis information(s) and error(s)
-    Axes axis = 4;
-    /// Get driver information(s)
-    Drivers driver_info = 5;
-    /// Get driver error(s)
-    Drivers driver_error = 6;
-    /// Get driver information(s) and error(s)
-    Drivers driver = 7;
-    /// Get carrier information(s)
-    Carriers carrier = 8;
-    /// Get driver, axis, and carrier information(s)
-    Drivers extensive_info = 9;
-    /// Get driver and axis error(s)
-    Drivers extensive_error = 10;
-    /// Get driver, axis, and carrier information(s) and error(s)
-    Drivers complete = 11;
+    /// Get system information
+    System system = 2;
   }
   /// Request for a command status from the server. If no command ID is
   /// provided, then request for statuses of all commands from the server.
-  /// Expected response: Info.Response.Command or Info.Response.Commands
+  /// Expected response: Info.Response.Commands
   message Command { optional uint32 id = 1; }
 
-  /// Request carrier status either from multiple carrier IDs or a range of axis
-  /// ID from the server. Expected response: Info.Response.Carriers
-  message Carriers{
-    /// Axis range to retrieve the carrier informations
-    message Range {
-      uint32 start_id = 1;
-      uint32 end_id = 2;
-    }
-    /// Carrier ids to retrieve the carrier informations
-    message Ids {
-      repeated uint32 ids = 1;
-    }
+  /// Request for system status from the server. At least, either driver, axis,
+  /// or carrier flag should be on to retrieve the interested information. If the
+  /// source are driver range or axis range, it will retrieve any set flag
+  /// information from the system based on the specified range. If the carrier
+  /// ids is provided for the range, it will retrieve any set flag information
+  /// from the system based on the location of the carrier.
+  message System {
+    /// Line ID
     uint32 line_id = 1;
-    oneof param{
-      Ids carrier_ids = 2;
-      Range range = 3;
+    /// Flag for retrieving driver information from the server
+    bool driver = 2;
+    /// Flag for retrieving axis information from the server
+    bool axis = 3;
+    /// Flag for retrieving carrier information from the server
+    bool carrier = 4;
+    /// Parameter to indicate the source of information that want to be retrieved
+    oneof source {
+      /// Retrieve the information from the driver range
+      Range driver_range = 5;
+      /// Retrieve the information from the axis range
+      Range axis_range = 6;
+      /// Retrieve the information from the location of the carrier(s)
+      Ids carriers = 7;
     }
-  }
-
-  /// Request axis information of the specified range from the server.
-  message Axes {
-    uint32 line_id = 1;
-    /// Axis range to retrieve the axis informations
-    message Range {
-      uint32 start_id = 1;
-      uint32 end_id = 2;
-    }
-    /// If range is not provided, get every axis data on the specified line
-    optional Range range = 2;
-  }
-
-  /// Request driver information of the specified range from the server.
-  message Drivers {
-    uint32 line_id = 1;
-    /// Driver range to retrieve the driver informations
-    message Range {
-      uint32 start_id = 1;
-      uint32 end_id = 2;
-    }
-    /// If range is not provided, get every driver data on the specified line
-    optional Range range = 2;
   }
 }
 
 /// Response description to the request info API
 message Response {
   oneof body {
-    /// Single command information response
-    Command command = 1;
-    /// Multiple informations response
-    Commands commands = 2;
-    /// Axis informations response
-    AxesInfo axis_info = 3;
-    /// Axis errors response
-    AxesError axis_error = 4;
-    /// Complete axis response
-    AxesComplete axis = 5;
-    /// Driver informations response
-    DriversInfo driver_info = 6;
-    /// Driver errors response
-    DriversError driver_error = 7;
-    /// Complete driver response
-    DriversComplete driver = 8;
-    /// Carrier information response
-    Carriers carrier = 9;
-    /// Extensive information response
-    ExtensiveInfo extensive_info = 10;
-    /// Extensive error response
-    ExtensiveError extensive_error = 11;
-    /// Complete axis, driver, and carrier response
-    Complete complete = 12;
+    /// Commands information response
+    Commands commands = 1;
+    /// System information response
+    System system = 2;
     /// Error kind if this response's request was invalid
-    RequestErrorKind request_error = 13;
+    RequestErrorKind request_error = 3;
   }
 
-  /// Command information.
-  /// `error_response` is returned if the status is FAILED.
-  message Command {
-    /// Command ID
-    uint32 id = 1;
-    /// Command status
-    Status status = 2;
-
-
-    enum Status {
-      /// Default enum value. Should never be used.
-      STATUS_UNSPECIFIED = 0;
-      /// Command is being executed by the server.
-      STATUS_PROGRESSING = 1;
-      /// Command execution is completed.
-      STATUS_COMPLETED = 2;
-      /// Command execution is failed. `error_response` is returned as well.
-      STATUS_FAILED = 3;
-      /// Command is waiting to be executed by the server.
-      STATUS_QUEUED = 4;
-    }
-    enum ErrorKind {
-      ERROR_KIND_UNSPECIFIED = 0;
-      ERROR_KIND_INVALID_COMMAND = 1;
-      ERROR_KIND_CARRIER_NOT_FOUND = 2;
-      ERROR_KIND_HOMING_FAILED = 3;
-      ERROR_KIND_INVALID_PARAMETER = 4;
-      ERROR_KIND_INVALID_SYSTEM_STATE = 5;
-      ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
-      ERROR_KIND_INVALID_AXIS = 7;
-      // TODO: Add auto-initialize failures
-    }
-    /// Command error kind, if failed.
-    optional ErrorKind error_response = 3;
-  }
-
-  message Commands { repeated Command commands = 1; }
-
-  /// Complete axis info and error description.
-  message Axis {
-    /// Axis' info description
-    message Info {
-      /// Axis ID
-      uint32 id = 1;      
-      /// Whether the motor is controlling a carrier or not
-      bool motor_enabled = 2;
-      /// Waiting for a carrier to be pulled on the axis
-      bool waiting_pull = 3;
-      /// Waiting for a carrier arriving on the axis to be automatically pushed
-      bool waiting_push = 4;
-      /// Detected initialized carrier ID on the carrier
-      uint32 carrier_id = 5;
-      /// Hall alarm status of the axis
-      HallAlarm hall_alarm = 6;
-
-      /// Hall alarm status of the axis
-      message HallAlarm {
-        bool back = 1;
-        bool front = 2;
-      }
-    }
-
-    /// Axis' error description
-    message Error {
-      /// Axis ID
-      uint32 id = 1;
-      /// Overcurrent error flag 
-      bool overcurrent = 2; 
-    }
-  }
-
-  /// Multiple axes information, returned in the form of line ID and array of axis info
-  message AxesInfo {
+  /// System information description. Validation is required to check if
+  /// each field has the requested information.
+  message System {
     /// Line ID
     uint32 line_id = 1;
-    /// Array of axis information
-    repeated Axis.Info axis_infos = 2;
-  }
-
-  /// Multiple axes error, returned in the form of line ID and array of axis error
-  message AxesError {
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of axis error
-    repeated Axis.Error axis_errors = 2;
-  }
-
-  /// Multiple complete axes info and error, returned in the form of line ID and 
-  /// array of axis info and error
-  message AxesComplete {
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of axis information
-    repeated Axis.Info axis_infos = 2;
-    /// Array of axis error
-    repeated Axis.Error axis_errors = 3;
-  }
-
-  message Driver {
-    /// Driver's info description
-    message Info {
-      /// Driver ID
-      uint32 id = 1;
-      /// Connection status between driver and CC link
-      bool connected = 2;
-      /// Whether the driver is ready to receive command or not
-      bool available = 3;
-      /// Servo status
-      bool servo_enabled = 4;
-      /// Emergency stop status
-      bool stopped = 5;
-      /// Driver pause status
-      bool paused = 6;
-    }
-
-    /// Driver's error description
-    message Error {
-      /// Driver ID
-      uint32 id = 1;
-      /// Flag when control loop exceeding maximum loop time
-      bool control_loop_time_exceeded = 2;
-      /// Flag when the inverter is overheated
-      bool inverter_overheat = 3;
-      PowerError power_error = 4;
-      CommError communication_error = 5;
-
-      message CommError {
-        /// Flag when there is communication error from previous driver
-        bool from_prev = 1;
-        /// Flag when there is communication error from next driver
-        bool from_next = 2;
-      }
-      message PowerError {
-        /// Flag when the driver detects overvoltage
-        bool overvoltage = 1;
-        /// Flag when the driver detects undervoltage
-        bool undervoltage = 2;
-      }
-    }
-  }
-
-  /// Multiple drivers information, returned in the form of line ID and array of 
-  /// driver info
-  message DriversInfo {
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of driver information
+    /// Array of driver's information
     repeated Driver.Info driver_infos = 2;
-  }
-
-  /// Multiple drivers error, returned in the form of line ID and array of driver 
-  /// error
-  message DriversError {
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of driver error
-    repeated Driver.Error driver_errors = 2;
-  }
-
-  /// Multiple complete drivers info and error, returned in the form of line ID and 
-  /// array of driver info and error
-  message DriversComplete {
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of driver information
-    repeated Driver.Info driver_infos = 2;
-    /// Array of driver error
+    /// Array of driver's error
     repeated Driver.Error driver_errors = 3;
-  }
+    /// Array of axis' information
+    repeated Axis.Info axis_infos = 4;
+    /// Array of axis' error
+    repeated Axis.Error axis_errors = 5;
+    /// Array of carrier's information
+    repeated Carrier.Info carrier_infos = 6;
 
-  /// Complete carrier description
-  message Carrier {
-    /// Carrier's info description
-    message Info {
-      /// Carrier ID
-      uint32 id = 1;
-      /// Position of the carrier
-      float position = 2;
-      /// Axis ID position of the carrier
-      Axis axis = 3;
-      /// Carrier's collision avoidance system (CAS) status
-      Cas cas = 4;
-      /// Carrier State
-      State state = 5;
+    /// Complete axis info and error description.
+    message Axis {
+      /// Axis' info description
+      message Info {
+        /// Axis ID
+        uint32 id = 1;      
+        /// Whether the motor is controlling a carrier or not
+        bool motor_enabled = 2;
+        /// Waiting for a carrier to be pulled on the axis
+        bool waiting_pull = 3;
+        /// Waiting for a carrier arriving on the axis to be automatically pushed
+        bool waiting_push = 4;
+        /// Detected initialized carrier ID on the carrier
+        uint32 carrier_id = 5;
+        /// Hall alarm status of the axis
+        HallAlarm hall_alarm = 6;
 
-      message Axis {
-        /// First id of the carrier
-        uint32 first = 1;
-        /// Optional second id of the carrier
-        optional uint32 second = 2;
+        /// Hall alarm status of the axis
+        message HallAlarm {
+          bool back = 1;
+          bool front = 2;
+        }
       }
-      message Cas {
-        bool enabled = 1;
-        bool triggered = 2;
+
+      /// Axis' error description
+      message Error {
+        /// Axis ID
+        uint32 id = 1;
+        /// Overcurrent error flag 
+        bool overcurrent = 2; 
       }
-      enum State {
-        CARRIER_STATE_NONE = 0;
-        CARRIER_STATE_CALIBARTING = 1;
-        CARRIER_STATE_MOVING = 2;
-        CARRIER_STATE_MOVEMENT_COMPLETED = 3;
-        CARRIER_STATE_ISOLATING = 4;
-        CARRIER_STATE_ISOLATION_COMPLETED = 5;
-        CARRIER_STATE_PUSHING = 6;
-        CARRIER_STATE_PUSH_COMPLETED = 7;
-        CARRIER_STATE_PULLING = 8;
-        CARRIER_STATE_PULL_COMPLETED = 9;
-        CARRIER_STATE_OVERCURRENT = 10;
+    }
+
+    /// Complete driver info and error description
+    message Driver {
+      /// Driver's info description
+      message Info {
+        /// Driver ID
+        uint32 id = 1;
+        /// Connection status between driver and CC link
+        bool connected = 2;
+        /// Whether the driver is ready to receive command or not
+        bool available = 3;
+        /// Servo status
+        bool servo_enabled = 4;
+        /// Emergency stop status
+        bool stopped = 5;
+        /// Driver pause status
+        bool paused = 6;
+      }
+
+      /// Driver's error description
+      message Error {
+        /// Driver ID
+        uint32 id = 1;
+        /// Flag when control loop exceeding maximum loop time
+        bool control_loop_time_exceeded = 2;
+        /// Flag when the inverter is overheated
+        bool inverter_overheat = 3;
+        PowerError power_error = 4;
+        CommError communication_error = 5;
+
+        message CommError {
+          /// Flag when there is communication error from previous driver
+          bool from_prev = 1;
+          /// Flag when there is communication error from next driver
+          bool from_next = 2;
+        }
+        message PowerError {
+          /// Flag when the driver detects overvoltage
+          bool overvoltage = 1;
+          /// Flag when the driver detects undervoltage
+          bool undervoltage = 2;
+        }
+      }
+    }
+
+    /// Complete carrier description
+    message Carrier {
+      /// Carrier's info description
+      message Info {
+        /// Carrier ID
+        uint32 id = 1;
+        /// Position of the carrier
+        float position = 2;
+        /// Axis ID position of the carrier
+        Axis axis = 3;
+        /// Carrier's collision avoidance system (CAS) status
+        Cas cas = 4;
+        /// Carrier State
+        State state = 5;
+
+        message Axis {
+          /// First id of the carrier
+          uint32 first = 1;
+          /// Optional second id of the carrier
+          optional uint32 second = 2;
+        }
+        message Cas {
+          bool enabled = 1;
+          bool triggered = 2;
+        }
+        enum State {
+          CARRIER_STATE_NONE = 0;
+          CARRIER_STATE_CALIBARTING = 1;
+          CARRIER_STATE_MOVING = 2;
+          CARRIER_STATE_MOVEMENT_COMPLETED = 3;
+          CARRIER_STATE_ISOLATING = 4;
+          CARRIER_STATE_ISOLATION_COMPLETED = 5;
+          CARRIER_STATE_PUSHING = 6;
+          CARRIER_STATE_PUSH_COMPLETED = 7;
+          CARRIER_STATE_PULLING = 8;
+          CARRIER_STATE_PULL_COMPLETED = 9;
+          CARRIER_STATE_OVERCURRENT = 10;
+        }
       }
     }
   }
 
-  /// Carriers information
-  message Carriers {
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of the carriers
-    repeated Carrier.Info carriers = 2;
-  }
+  message Commands { 
+    repeated Command commands = 1;
 
-  /// Driver, axis, and carrier information
-  message ExtensiveInfo{
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of driver's information
-    repeated Driver.Info driver_infos = 2;
-    /// Array of axis' information
-    repeated Axis.Info axis_infos = 3;
-    /// Array of carrier's information
-    repeated Carrier.Info carrier_infos = 4;
-  }
-
-  /// Driver and axis error
-  message ExtensiveError{
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of driver's error
-    repeated Driver.Error driver_errors = 2;
-    /// Array of axis' error
-    repeated Axis.Error axis_errors = 3;
-  }
-
-  /// Driver, axis, and carrier information.
-  message Complete{
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of driver's information
-    repeated Driver.Info driver_infos = 2;
-    /// Array of axis' information
-    repeated Axis.Info axis_infos = 3;
-    /// Array of carrier's information
-    repeated Carrier.Info carrier_infos = 4;
-    /// Array of driver's error
-    repeated Driver.Error driver_errors = 5;
-    /// Array of axis' error
-    repeated Axis.Error axis_errors = 6;
+    /// Command information.
+    /// `error_response` is returned if the status is FAILED.
+    message Command {
+      /// Command ID
+      uint32 id = 1;
+      /// Command status
+      Status status = 2;
+      /// Command error kind, if failed.
+      optional ErrorKind error_response = 3;
+      enum Status {
+        /// Default enum value. Should never be used.
+        STATUS_UNSPECIFIED = 0;
+        /// Command is being executed by the server.
+        STATUS_PROGRESSING = 1;
+        /// Command execution is completed.
+        STATUS_COMPLETED = 2;
+        /// Command execution is failed. `error_response` is returned as well.
+        STATUS_FAILED = 3;
+        /// Command is waiting to be executed by the server.
+        STATUS_QUEUED = 4;
+      }
+      enum ErrorKind {
+        ERROR_KIND_UNSPECIFIED = 0;
+        ERROR_KIND_INVALID_COMMAND = 1;
+        ERROR_KIND_CARRIER_NOT_FOUND = 2;
+        ERROR_KIND_HOMING_FAILED = 3;
+        ERROR_KIND_INVALID_PARAMETER = 4;
+        ERROR_KIND_INVALID_SYSTEM_STATE = 5;
+        ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
+        ERROR_KIND_INVALID_AXIS = 7;
+      }
+    }  
   }
 
   /// Error kind description
