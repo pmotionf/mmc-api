@@ -90,13 +90,26 @@ message Response {
       }
       enum ErrorKind {
         ERROR_KIND_UNSPECIFIED = 0;
+        /// Invalid command code sent to the cc-link
         ERROR_KIND_INVALID_COMMAND = 1;
+        /// Carrier intended for a command is not found
         ERROR_KIND_CARRIER_NOT_FOUND = 2;
+        /// Deprecated
         ERROR_KIND_HOMING_FAILED = 3;
+        /// Invalid parameter for a command
         ERROR_KIND_INVALID_PARAMETER = 4;
+        /// Attempted to send a command without satisfying the command's 
+        /// preconditions
         ERROR_KIND_INVALID_SYSTEM_STATE = 5;
+        /// Attempted to isolate a carrier with ID that belongs to a carrier
+        /// on the line
         ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
+        /// Attempted to send a command with invalid axis
         ERROR_KIND_INVALID_AXIS = 7;
+        /// CC-link is disconnected while a command is progressing
+        ERROR_KIND_CC_LINK_DISCONNECTED = 8;
+        /// Failed to continue a command because system is running out of memory
+        ERROR_KIND_OUT_OF_MEMORY = 9;
       }
     }  
   }

@@ -391,6 +391,8 @@ pub const Response = struct {
                 ERROR_KIND_INVALID_SYSTEM_STATE = 5,
                 ERROR_KIND_CARRIER_ALREADY_EXISTS = 6,
                 ERROR_KIND_INVALID_AXIS = 7,
+                ERROR_KIND_CC_LINK_DISCONNECTED = 8,
+                ERROR_KIND_OUT_OF_MEMORY = 9,
                 _,
             };
 
