@@ -7,22 +7,30 @@ import "mmc/info.proto";
 
 message Request {
   oneof body {
+    // Core request API.
     mmc.core.Request core = 1;
+    // Command request API.
     mmc.command.Request command = 2;
+    // Info request API.
     mmc.info.Request info = 3;
+  }
+
+  enum Error {
+    MMC_REQUEST_ERROR_UNSPECIFIED = 0;
+    // The request could not be parsed as a valid message.
+    MMC_REQUEST_ERROR_INVALID_MESSAGE = 1;
   }
 }
 
 message Response {
-  enum RequestError {
-    MMC_REQUEST_ERROR_UNSPECIFIED = 0;
-    /// The request could not be parsed as a valid message.
-    MMC_REQUEST_ERROR_INVALID_MESSAGE = 1;
-  }
   oneof body {
+    // Core response API.
     mmc.core.Response core = 1;
+    // Command response API.
     mmc.command.Response command = 2;
+    // Info Response API.
     mmc.info.Response info = 3;
-    RequestError request_error = 4;
+    // Error caused by the API.
+    Request.Error request_error = 4;
   }
 }

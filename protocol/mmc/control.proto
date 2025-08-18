@@ -1,0 +1,11 @@
+syntax = "proto3";
+package mmc;
+
+// Carrier motor control kind.
+enum Control {
+  CONTROL_UNSPECIFIED = 0;
+  // Move the carrier with position control.
+  CONTROL_POSITION = 1;
+  // Move the carrier with velocity control.
+  CONTROL_VELOCITY = 2;
+}
