@@ -41,7 +41,6 @@ pub const Request = struct {
         isolate_carrier,
         calibrate,
         set_line_zero,
-        clear_command,
         clear_commands,
     };
     pub const body_union = union(_body_case) {
@@ -57,7 +56,6 @@ pub const Request = struct {
         isolate_carrier: Request.IsolateCarrier,
         calibrate: Request.Calibrate,
         set_line_zero: Request.SetLineZero,
-        clear_command: Request.ClearCommand,
         clear_commands: Request.ClearCommands,
         pub const _union_desc = .{
             .clear_errors = fd(1, .{ .SubMessage = {} }),
@@ -72,8 +70,7 @@ pub const Request = struct {
             .isolate_carrier = fd(10, .{ .SubMessage = {} }),
             .calibrate = fd(11, .{ .SubMessage = {} }),
             .set_line_zero = fd(12, .{ .SubMessage = {} }),
-            .clear_command = fd(13, .{ .SubMessage = {} }),
-            .clear_commands = fd(14, .{ .SubMessage = {} }),
+            .clear_commands = fd(13, .{ .SubMessage = {} }),
         };
     };
 
@@ -929,62 +926,12 @@ pub const Request = struct {
         }
     };
 
-    pub const ClearCommand = struct {
-        command_id: u32 = 0,
+    pub const ClearCommands = struct {
+        command_id: ?u32 = null,
 
         pub const _desc_table = .{
             .command_id = fd(1, .{ .Varint = .Simple }),
         };
-
-        pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {
-            return protobuf.pb_encode(self, allocator);
-        }
-        pub fn decode(input: []const u8, allocator: Allocator) UnionDecodingError!@This() {
-            return protobuf.pb_decode(@This(), input, allocator);
-        }
-        pub fn init(allocator: Allocator) @This() {
-            return protobuf.pb_init(@This(), allocator);
-        }
-        pub fn deinit(self: @This()) void {
-            return protobuf.pb_deinit(self);
-        }
-        pub fn dupe(self: @This(), allocator: Allocator) Allocator.Error!@This() {
-            return protobuf.pb_dupe(@This(), self, allocator);
-        }
-        pub fn json_decode(
-            input: []const u8,
-            options: json.ParseOptions,
-            allocator: Allocator,
-        ) !std.json.Parsed(@This()) {
-            return protobuf.pb_json_decode(@This(), input, options, allocator);
-        }
-        pub fn json_encode(
-            self: @This(),
-            options: json.Stringify.Options,
-            allocator: Allocator,
-        ) ![]const u8 {
-            return protobuf.pb_json_encode(self, options, allocator);
-        }
-
-        // This method is used by std.json
-        // internally for deserialization. DO NOT RENAME!
-        pub fn jsonParse(
-            allocator: Allocator,
-            source: anytype,
-            options: json.ParseOptions,
-        ) !@This() {
-            return protobuf.pb_json_parse(@This(), allocator, source, options);
-        }
-
-        // This method is used by std.json
-        // internally for serialization. DO NOT RENAME!
-        pub fn jsonStringify(self: *const @This(), jws: anytype) !void {
-            return protobuf.pb_jsonStringify(@This(), self, jws);
-        }
-    };
-
-    pub const ClearCommands = struct {
-        pub const _desc_table = .{};
 
         pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {
             return protobuf.pb_encode(self, allocator);
@@ -1091,7 +1038,7 @@ pub const Response = struct {
     pub const body_union = union(_body_case) {
         command_id: u32,
         request_error: Response.RequestErrorKind,
-        command_operation: Response.CommandOperationStatus,
+        command_operation: bool,
         pub const _union_desc = .{
             .command_id = fd(1, .{ .Varint = .Simple }),
             .request_error = fd(2, .{ .Varint = .Simple }),
@@ -1101,12 +1048,6 @@ pub const Response = struct {
 
     pub const _desc_table = .{
         .body = fd(null, .{ .OneOf = body_union }),
-    };
-
-    pub const CommandOperationStatus = enum(i32) {
-        COMMAND_STATUS_UNSPECIFIED = 0,
-        COMMAND_STATUS_COMPLETED = 1,
-        _,
     };
 
     pub const RequestErrorKind = enum(i32) {

@@ -178,18 +178,11 @@ message Request {
     optional Direction link_axis = 5;
   }
 
-  /// Cancel a command on the server for the specified command ID, if still in
-  /// queue. If the command is already completed, remove the command status
-  /// from the server command history.
-  /// Expected response: Command.Response.CommandOperation
-  /// - COMPLETED: The command is successfully cancelled/removed.
-  message ClearCommand { uint32 command_id = 1; }
-
-  /// Cancel all commands running on the server, and remove all statuses from
-  /// the server command history.
-  /// Expected response: Command.Response.CommandOperation
-  /// - COMPLETED: All commands are successfully cancelled/removed.
-  message ClearCommands {}
+  /// Remove a command on the server if the command ID is specified. If no
+  /// command ID is specified, remove any commands received by the server. If the
+  /// commands are still progressing, cancel the command execution.
+  /// Expected response: boolean
+  message ClearCommands { optional uint32 command_id = 1; }
 
   /// Available commands for the server:
   oneof body {
@@ -218,19 +211,12 @@ message Request {
     /// Set a zero location of the specified line.
     SetLineZero set_line_zero = 12;
     /// Cancel a running command or remove its status history.
-    ClearCommand clear_command = 13;
-    /// Clear all commands and command histories.
-    ClearCommands clear_commands = 14;
+    ClearCommands clear_commands = 13;
   }
 }
 
 /// Response description to the command API
 message Response {
-  /// Command operation status.
-  enum CommandOperationStatus {
-    COMMAND_STATUS_UNSPECIFIED = 0;
-    COMMAND_STATUS_COMPLETED = 1;
-  }
   /// Error kind description
   enum RequestErrorKind {
     /// Default enum value. Should never be used.
@@ -278,6 +264,6 @@ message Response {
     /// Error kind if this response's request was invalid.
     RequestErrorKind request_error = 2;
     /// Response for cancelling or removing a command
-    CommandOperationStatus command_operation = 3;
+    bool command_operation = 3;
   }
 }
