@@ -27,11 +27,11 @@ message Request {
   message Command { optional uint32 id = 1; }
 
   /// Request for system status from the server. At least, either driver, axis,
-  /// or carrier flag should be on to retrieve the interested information. If the
-  /// source are driver range or axis range, it will retrieve any set flag
-  /// information from the system based on the specified range. If the carrier
-  /// ids is provided for the range, it will retrieve any set flag information
-  /// from the system based on the location of the carrier.
+  /// or carrier flag should be on to retrieve the desired information. If the
+  /// filter is driver range or axis range, it will retrieve any set flag
+  /// information from the system based on the specified range. If the filter is
+  /// based on carrier id(s), it will retrieve any set flag information
+  /// from the system based on the location of the carrier(s).
   message System {
     /// Line ID
     uint32 line_id = 1;
@@ -41,8 +41,8 @@ message Request {
     bool axis = 3;
     /// Flag for retrieving carrier information from the server
     bool carrier = 4;
-    /// Parameter to indicate the source of information that want to be retrieved
-    oneof source {
+    /// Filter the information to be retrieved from the server
+    oneof filter {
       /// Retrieve the information from the driver range
       Range driver_range = 5;
       /// Retrieve the information from the axis range

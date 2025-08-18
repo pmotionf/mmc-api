@@ -200,14 +200,14 @@ pub const Request = struct {
         driver: bool = false,
         axis: bool = false,
         carrier: bool = false,
-        source: ?source_union,
+        filter: ?filter_union,
 
-        pub const _source_case = enum {
+        pub const _filter_case = enum {
             driver_range,
             axis_range,
             carriers,
         };
-        pub const source_union = union(_source_case) {
+        pub const filter_union = union(_filter_case) {
             driver_range: Range,
             axis_range: Range,
             carriers: Ids,
@@ -223,7 +223,7 @@ pub const Request = struct {
             .driver = fd(2, .{ .Varint = .Simple }),
             .axis = fd(3, .{ .Varint = .Simple }),
             .carrier = fd(4, .{ .Varint = .Simple }),
-            .source = fd(null, .{ .OneOf = source_union }),
+            .filter = fd(null, .{ .OneOf = filter_union }),
         };
 
         pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {
