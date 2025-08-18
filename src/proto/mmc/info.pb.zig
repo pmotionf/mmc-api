@@ -126,14 +126,14 @@ pub const Request = struct {
 
     pub const _body_case = enum {
         command,
-        system,
+        track,
     };
     pub const body_union = union(_body_case) {
         command: Request.Command,
-        system: Request.System,
+        track: Request.Track,
         pub const _union_desc = .{
             .command = fd(1, .{ .SubMessage = {} }),
-            .system = fd(2, .{ .SubMessage = {} }),
+            .track = fd(2, .{ .SubMessage = {} }),
         };
     };
 
@@ -195,7 +195,7 @@ pub const Request = struct {
         }
     };
 
-    pub const System = struct {
+    pub const Track = struct {
         line_id: u32 = 0,
         driver: bool = false,
         axis: bool = false,
@@ -325,16 +325,16 @@ pub const Response = struct {
 
     pub const _body_case = enum {
         commands,
-        system,
+        track,
         request_error,
     };
     pub const body_union = union(_body_case) {
         commands: Response.Commands,
-        system: Response.System,
+        track: Response.Track,
         request_error: Response.RequestErrorKind,
         pub const _union_desc = .{
             .commands = fd(1, .{ .SubMessage = {} }),
-            .system = fd(2, .{ .SubMessage = {} }),
+            .track = fd(2, .{ .SubMessage = {} }),
             .request_error = fd(3, .{ .Varint = .Simple }),
         };
     };
@@ -490,13 +490,13 @@ pub const Response = struct {
         }
     };
 
-    pub const System = struct {
+    pub const Track = struct {
         line_id: u32 = 0,
-        driver_infos: ArrayList(Response.System.Driver.Info),
-        driver_errors: ArrayList(Response.System.Driver.Error),
-        axis_infos: ArrayList(Response.System.Axis.Info),
-        axis_errors: ArrayList(Response.System.Axis.Error),
-        carrier_infos: ArrayList(Response.System.Carrier.Info),
+        driver_infos: ArrayList(Response.Track.Driver.Info),
+        driver_errors: ArrayList(Response.Track.Driver.Error),
+        axis_infos: ArrayList(Response.Track.Axis.Info),
+        axis_errors: ArrayList(Response.Track.Axis.Error),
+        carrier_infos: ArrayList(Response.Track.Carrier.Info),
 
         pub const _desc_table = .{
             .line_id = fd(1, .{ .Varint = .Simple }),
@@ -516,7 +516,7 @@ pub const Response = struct {
                 waiting_pull: bool = false,
                 waiting_push: bool = false,
                 carrier_id: u32 = 0,
-                hall_alarm: ?Response.System.Axis.Info.HallAlarm = null,
+                hall_alarm: ?Response.Track.Axis.Info.HallAlarm = null,
 
                 pub const _desc_table = .{
                     .id = fd(1, .{ .Varint = .Simple }),
@@ -804,8 +804,8 @@ pub const Response = struct {
                 id: u32 = 0,
                 control_loop_time_exceeded: bool = false,
                 inverter_overheat: bool = false,
-                power_error: ?Response.System.Driver.Error.PowerError = null,
-                communication_error: ?Response.System.Driver.Error.CommError = null,
+                power_error: ?Response.Track.Driver.Error.PowerError = null,
+                communication_error: ?Response.Track.Driver.Error.CommError = null,
 
                 pub const _desc_table = .{
                     .id = fd(1, .{ .Varint = .Simple }),
@@ -1027,9 +1027,9 @@ pub const Response = struct {
             pub const Info = struct {
                 id: u32 = 0,
                 position: f32 = 0,
-                axis: ?Response.System.Carrier.Info.Axis = null,
-                cas: ?Response.System.Carrier.Info.Cas = null,
-                state: Response.System.Carrier.Info.State = @enumFromInt(0),
+                axis: ?Response.Track.Carrier.Info.Axis = null,
+                cas: ?Response.Track.Carrier.Info.Cas = null,
+                state: Response.Track.Carrier.Info.State = @enumFromInt(0),
 
                 pub const _desc_table = .{
                     .id = fd(1, .{ .Varint = .Simple }),

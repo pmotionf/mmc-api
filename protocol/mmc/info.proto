@@ -18,21 +18,21 @@ message Request {
   oneof body {
     /// Get command(s) status
     Command command = 1;
-    /// Get system information
-    System system = 2;
+    /// Get track information
+    Track track = 2;
   }
   /// Request for a command status from the server. If no command ID is
   /// provided, then request for statuses of all commands from the server.
   /// Expected response: Info.Response.Commands
   message Command { optional uint32 id = 1; }
 
-  /// Request for system status from the server. At least, either driver, axis,
+  /// Request for track status from the server. At least, either driver, axis,
   /// or carrier flag should be on to retrieve the desired information. If the
   /// filter is driver range or axis range, it will retrieve any set flag
-  /// information from the system based on the specified range. If the filter is
+  /// information from the track based on the specified range. If the filter is
   /// based on carrier id(s), it will retrieve any set flag information
-  /// from the system based on the location of the carrier(s).
-  message System {
+  /// from the track based on the location of the carrier(s).
+  message Track {
     /// Line ID
     uint32 line_id = 1;
     /// Flag for retrieving driver information from the server
@@ -58,8 +58,8 @@ message Response {
   oneof body {
     /// Commands information response
     Commands commands = 1;
-    /// System information response
-    System system = 2;
+    /// Track information response
+    Track track = 2;
     /// Error kind if this response's request was invalid
     RequestErrorKind request_error = 3;
   }
@@ -114,9 +114,9 @@ message Response {
     }  
   }
   
-  /// System information description. Validation is required to check if
+  /// Track information description. Validation is required to check if
   /// each field has the requested information.
-  message System {
+  message Track {
     /// Line ID
     uint32 line_id = 1;
     /// Array of driver's information
