@@ -40,6 +40,12 @@ pub const Request = struct {
         .body = fd(null, .{ .OneOf = body_union }),
     };
 
+    pub const Error = enum(i32) {
+        MMC_REQUEST_ERROR_UNSPECIFIED = 0,
+        MMC_REQUEST_ERROR_INVALID_MESSAGE = 1,
+        _,
+    };
+
     pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {
         return protobuf.pb_encode(self, allocator);
     }
@@ -100,7 +106,7 @@ pub const Response = struct {
         core: mmc_core.Response,
         command: mmc_command.Response,
         info: mmc_info.Response,
-        request_error: Response.RequestError,
+        request_error: Request.Error,
         pub const _union_desc = .{
             .core = fd(1, .{ .SubMessage = {} }),
             .command = fd(2, .{ .SubMessage = {} }),
@@ -111,12 +117,6 @@ pub const Response = struct {
 
     pub const _desc_table = .{
         .body = fd(null, .{ .OneOf = body_union }),
-    };
-
-    pub const RequestError = enum(i32) {
-        MMC_REQUEST_ERROR_UNSPECIFIED = 0,
-        MMC_REQUEST_ERROR_INVALID_MESSAGE = 1,
-        _,
     };
 
     pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {

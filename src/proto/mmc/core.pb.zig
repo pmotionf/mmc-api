@@ -22,7 +22,13 @@ pub const Request = struct {
         CORE_REQUEST_KIND_UNSPECIFIED = 0,
         CORE_REQUEST_KIND_API_VERSION = 1,
         CORE_REQUEST_KIND_SERVER_INFO = 2,
-        CORE_REQUEST_KIND_LINE_CONFIG = 3,
+        CORE_REQUEST_KIND_TRACK_CONFIG = 3,
+        _,
+    };
+
+    pub const Error = enum(i32) {
+        CORE_REQUEST_ERROR_UNSPECIFIED = 0,
+        CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1,
         _,
     };
 
@@ -79,18 +85,18 @@ pub const Response = struct {
     pub const _body_case = enum {
         server,
         api_version,
-        line_config,
+        track_config,
         request_error,
     };
     pub const body_union = union(_body_case) {
         server: Response.Server,
         api_version: Response.SemanticVersion,
-        line_config: Response.LineConfig,
-        request_error: Response.RequestErrorKind,
+        track_config: Response.TrackConfig,
+        request_error: Request.Error,
         pub const _union_desc = .{
             .server = fd(1, .{ .SubMessage = {} }),
             .api_version = fd(2, .{ .SubMessage = {} }),
-            .line_config = fd(3, .{ .SubMessage = {} }),
+            .track_config = fd(3, .{ .SubMessage = {} }),
             .request_error = fd(4, .{ .Varint = .Simple }),
         };
     };
@@ -99,84 +105,26 @@ pub const Response = struct {
         .body = fd(null, .{ .OneOf = body_union }),
     };
 
-    pub const RequestErrorKind = enum(i32) {
-        CORE_REQUEST_ERROR_UNSPECIFIED = 0,
-        CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1,
-        _,
-    };
-
-    pub const LineConfig = struct {
-        lines: ArrayList(Response.LineConfig.Line),
+    pub const TrackConfig = struct {
+        lines: ArrayList(Response.TrackConfig.Line),
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .List = .{ .SubMessage = {} } }),
         };
 
         pub const Line = struct {
-            axes: u32 = 0,
+            id: u32 = 0,
             name: ManagedString = .Empty,
-            length: ?Response.LineConfig.Line.Length = null,
+            axes: u32 = 0,
+            axis_length: f32 = 0,
+            carrier_length: f32 = 0,
 
             pub const _desc_table = .{
-                .axes = fd(1, .{ .Varint = .Simple }),
+                .id = fd(1, .{ .Varint = .Simple }),
                 .name = fd(2, .String),
-                .length = fd(3, .{ .SubMessage = {} }),
-            };
-
-            pub const Length = struct {
-                axis: f32 = 0,
-                carrier: f32 = 0,
-
-                pub const _desc_table = .{
-                    .axis = fd(1, .{ .FixedInt = .I32 }),
-                    .carrier = fd(2, .{ .FixedInt = .I32 }),
-                };
-
-                pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {
-                    return protobuf.pb_encode(self, allocator);
-                }
-                pub fn decode(input: []const u8, allocator: Allocator) UnionDecodingError!@This() {
-                    return protobuf.pb_decode(@This(), input, allocator);
-                }
-                pub fn init(allocator: Allocator) @This() {
-                    return protobuf.pb_init(@This(), allocator);
-                }
-                pub fn deinit(self: @This()) void {
-                    return protobuf.pb_deinit(self);
-                }
-                pub fn dupe(self: @This(), allocator: Allocator) Allocator.Error!@This() {
-                    return protobuf.pb_dupe(@This(), self, allocator);
-                }
-                pub fn json_decode(
-                    input: []const u8,
-                    options: json.ParseOptions,
-                    allocator: Allocator,
-                ) !std.json.Parsed(@This()) {
-                    return protobuf.pb_json_decode(@This(), input, options, allocator);
-                }
-                pub fn json_encode(
-                    self: @This(),
-                    options: json.Stringify.Options,
-                    allocator: Allocator,
-                ) ![]const u8 {
-                    return protobuf.pb_json_encode(self, options, allocator);
-                }
-
-                // This method is used by std.json
-                // internally for deserialization. DO NOT RENAME!
-                pub fn jsonParse(
-                    allocator: Allocator,
-                    source: anytype,
-                    options: json.ParseOptions,
-                ) !@This() {
-                    return protobuf.pb_json_parse(@This(), allocator, source, options);
-                }
-
-                // This method is used by std.json
-                // internally for serialization. DO NOT RENAME!
-                pub fn jsonStringify(self: *const @This(), jws: anytype) !void {
-                    return protobuf.pb_jsonStringify(@This(), self, jws);
-                }
+                .axes = fd(3, .{ .Varint = .Simple }),
+                .axis_length = fd(4, .{ .FixedInt = .I32 }),
+                .carrier_length = fd(5, .{ .FixedInt = .I32 }),
             };
 
             pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {
@@ -332,12 +280,12 @@ pub const Response = struct {
     };
 
     pub const Server = struct {
-        version: ?Response.SemanticVersion = null,
         name: ManagedString = .Empty,
+        version: ?Response.SemanticVersion = null,
 
         pub const _desc_table = .{
-            .version = fd(1, .{ .SubMessage = {} }),
-            .name = fd(2, .String),
+            .name = fd(1, .String),
+            .version = fd(2, .{ .SubMessage = {} }),
         };
 
         pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {

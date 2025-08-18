@@ -1,237 +1,230 @@
 syntax = "proto3";
 package mmc.info;
 
-/// Range can be axis range or driver range. End ID is inclusive.
-message Range {
-  uint32 start_id = 1;
-  uint32 end_id = 2;
-}
+import "range.proto";
 
-/// Contains multiple ids, possibly containing only one id.
-message Ids {
-  repeated uint32 ids = 1;
-}
-
-/// API for requesting information from the PMF's MMC Server
+// Info API: Request information from the PMF's MMC Server.
 message Request {
-  /// Available info from the server
   oneof body {
-    /// Get command(s) status
+    // Get command(s) status.
     Command command = 1;
-    /// Get track information
+    // Get track information.
     Track track = 2;
   }
-  /// Request for a command status from the server. If no command ID is
-  /// provided, then request for statuses of all commands from the server.
-  /// Expected response: Info.Response.Commands
+  // Request for a command status from the server. If no command ID is
+  // provided, then request for status of all commands from the server.
+  //
+  // Expected response: `Response.Commands`
   message Command { optional uint32 id = 1; }
 
-  /// Request for track status from the server. At least, either driver, axis,
-  /// or carrier flag should be on to retrieve the desired information. If the
-  /// filter is driver range or axis range, it will retrieve any set flag
-  /// information from the track based on the specified range. If the filter is
-  /// based on carrier id(s), it will retrieve any set flag information
-  /// from the track based on the location of the carrier(s).
+  // Request track status from the server. At least, either driver, axis,
+  // or carrier flag should be on to retrieve the desired information. If the
+  // filter is driver range or axis range, it will retrieve any set flag
+  // information from the track based on the specified range. If the filter is
+  // based on carrier id, it will retrieve any set flag information from the
+  // track based on the location of the carrier.
+  //
+  // Expected response: `Response.Track`
   message Track {
-    /// Line ID
-    uint32 line_id = 1;
-    /// Flag for retrieving driver information from the server
+    // Line ID.
+    uint32 line = 1;
+    // Enable retrieving driver information from the server.
     bool driver = 2;
-    /// Flag for retrieving axis information from the server
+    // Enable retrieving axis information from the server
     bool axis = 3;
-    /// Flag for retrieving carrier information from the server
+    // Enable retrieving carrier information from the server
     bool carrier = 4;
-    /// Filter the information to be retrieved from the server
     oneof filter {
-      /// Retrieve the information from the driver range
+      // Retrieve the information from a driver range
       Range driver_range = 5;
-      /// Retrieve the information from the axis range
+      // Retrieve the information from an axis range
       Range axis_range = 6;
-      /// Retrieve the information from the location of the carrier(s)
+      // Retrieve the information based on the location of carrier(s)
       Ids carriers = 7;
     }
+
+    // Contains multiple ids, possibly containing only one id.
+    message Ids { repeated uint32 ids = 1; }
+  }
+
+  enum Error {
+    INFO_REQUEST_ERROR_UNSPECIFIED = 0;
+    // Attempted to use line ID outside of the configured line.
+    INFO_REQUEST_ERROR_INVALID_LINE = 1;
+    // Attempted to use axis ID outside of the configured axis.
+    INFO_REQUEST_ERROR_INVALID_AXIS = 2;
+    // Attempted to use driver ID outside of the configured driver.
+    INFO_REQUEST_ERROR_INVALID_DRIVER = 3;
+    // Attempted to retrieve uninitialized carrier information.
+    INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4;
+    // Attempted to retrieve info when the CC Link connection is not
+    // established.
+    INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5;
+    // A request missing the required parameter.
+    INFO_REQUEST_ERROR_MISSING_PARAMETER = 6;
+    // Attempted to request non-existing command information.
+    INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 7;
   }
 }
 
-/// Response description to the request info API
+// Response description to the info API
 message Response {
   oneof body {
-    /// Commands information response
-    Commands commands = 1;
-    /// Track information response
+    // Commands information response.
+    Commands command = 1;
+    // Track information response.
     Track track = 2;
-    /// Error kind if this response's request was invalid
-    RequestErrorKind request_error = 3;
+    // Error kind if this response's request was invalid
+    Request.Error request_error = 3;
   }
 
-  message Commands { 
-    repeated Command commands = 1;
+  message Commands { repeated Command items = 1; }
 
-    /// Command information.
-    /// `error_response` is returned if the status is FAILED.
-    message Command {
-      /// Command ID
-      uint32 id = 1;
-      /// Command status
-      Status status = 2;
-      /// Command error kind, if failed.
-      optional ErrorKind error_response = 3;
-      enum Status {
-        /// Default enum value. Should never be used.
-        STATUS_UNSPECIFIED = 0;
-        /// Command is being executed by the server.
-        STATUS_PROGRESSING = 1;
-        /// Command execution is completed.
-        STATUS_COMPLETED = 2;
-        /// Command execution is failed. `error_response` is returned as well.
-        STATUS_FAILED = 3;
-        /// Command is waiting to be executed by the server.
-        STATUS_QUEUED = 4;
-      }
-      enum ErrorKind {
-        ERROR_KIND_UNSPECIFIED = 0;
-        /// Invalid command code sent to the cc-link
-        ERROR_KIND_INVALID_COMMAND = 1;
-        /// Carrier intended for a command is not found
-        ERROR_KIND_CARRIER_NOT_FOUND = 2;
-        /// Deprecated
-        ERROR_KIND_HOMING_FAILED = 3;
-        /// Invalid parameter for a command
-        ERROR_KIND_INVALID_PARAMETER = 4;
-        /// Attempted to send a command without satisfying the command's 
-        /// preconditions
-        ERROR_KIND_INVALID_SYSTEM_STATE = 5;
-        /// Attempted to isolate a carrier with ID that belongs to a carrier
-        /// on the line
-        ERROR_KIND_CARRIER_ALREADY_EXISTS = 6;
-        /// Attempted to send a command with invalid axis
-        ERROR_KIND_INVALID_AXIS = 7;
-        /// CC-link is disconnected while a command is progressing
-        ERROR_KIND_CC_LINK_DISCONNECTED = 8;
-        /// Failed to continue a command because system is running out of memory
-        ERROR_KIND_OUT_OF_MEMORY = 9;
-      }
-    }  
+  // Information regarding a command sent to the server.
+  message Command {
+    // Command ID.
+    uint32 id = 1;
+    // Command status.
+    Status status = 2;
+    // Command error response, only if the status is `STATUS_FAILED`.
+    optional Error error = 3;
+
+    enum Status {
+      STATUS_UNSPECIFIED = 0;
+      // Command is progressing in the server.
+      STATUS_PROGRESSING = 1;
+      // Command is completed.
+      STATUS_COMPLETED = 2;
+      // Command is failed to be executed.
+      STATUS_FAILED = 3;
+    }
+    enum Error {
+      COMMAND_ERROR_UNSPECIFIED = 0;
+      // Invalid command sent to the cc-link.
+      COMMAND_ERROR_INVALID_COMMAND = 1;
+      // Attempted to send a command with invalid axis ID.
+      COMMAND_ERROR_INVALID_AXIS = 2;
+      // Invalid parameter for a command.
+      COMMAND_ERROR_INVALID_PARAMETER = 3;
+      // Attempted to send a command without satisfying the command's
+      // preconditions.
+      COMMAND_ERROR_INVALID_SYSTEM_STATE = 4;
+      // Carrier intended for a command is not found.
+      COMMAND_ERROR_CARRIER_NOT_FOUND = 5;
+      // Attempted to initialize a carrier with an ID that already belongs to
+      // another carrier on the line.
+      COMMAND_ERROR_CARRIER_ALREADY_EXISTS = 6;
+      // CC-link is disconnected while a command is progressing
+      COMMAND_ERROR_CC_LINK_DISCONNECTED = 7;
+      // Failed to continue a command because system is running out of memory
+      COMMAND_ERROR_OUT_OF_MEMORY = 8;
+      // Deprecated.
+      COMMAND_ERROR_HOMING_FAILED = 9;
+    }
   }
-  
-  /// Track information description. Validation is required to check if
-  /// each field has the requested information.
+
+  // Track information description. Client shall validate if the response match
+  // the requested information.
   message Track {
-    /// Line ID
-    uint32 line_id = 1;
-    /// Array of driver's information
+    // Line ID.
+    uint32 line = 1;
+    // Array of driver's information.
     repeated Driver.Info driver_infos = 2;
-    /// Array of driver's error
+    // Array of driver's error.
     repeated Driver.Error driver_errors = 3;
-    /// Array of axis' information
+    // Array of axis' information.
     repeated Axis.Info axis_infos = 4;
-    /// Array of axis' error
+    // Array of axis' error.
     repeated Axis.Error axis_errors = 5;
-    /// Array of carrier's information
+    // Array of carrier's information.
     repeated Carrier.Info carrier_infos = 6;
 
-    /// Complete axis info and error description.
+    // Complete axis info and error description.
     message Axis {
-      /// Axis' info description
+      // Axis' info description.
       message Info {
-        /// Axis ID
-        uint32 id = 1;      
-        /// Whether the motor is controlling a carrier or not
-        bool motor_enabled = 2;
-        /// Waiting for a carrier to be pulled on the axis
+        // Axis ID.
+        uint32 id = 1;
+        // Whether the motor is controlling a carrier or not.
+        bool motor_active = 2;
+        // Waiting for a carrier to be pulled on the axis.
         bool waiting_pull = 3;
-        /// Waiting for a carrier arriving on the axis to be automatically pushed
+        // Waiting for a carrier arriving on the axis to be automatically
+        // pushed.
         bool waiting_push = 4;
-        /// Detected initialized carrier ID on the carrier
-        uint32 carrier_id = 5;
-        /// Hall alarm status of the axis
-        HallAlarm hall_alarm = 6;
-
-        /// Hall alarm status of the axis
-        message HallAlarm {
-          bool back = 1;
-          bool front = 2;
-        }
+        // Detected initialized carrier ID on the axis.
+        uint32 carrier = 5;
+        // Back hall alarm status of the axis.
+        bool hall_alarm_back = 6;
+        // Front hall alarm status of the axis.
+        bool hall_alarm_front = 7;
       }
 
-      /// Axis' error description
+      // Axis' error description.
       message Error {
-        /// Axis ID
+        // Axis ID.
         uint32 id = 1;
-        /// Overcurrent error flag 
-        bool overcurrent = 2; 
+        // Motor is given too much current.
+        bool overcurrent = 2;
       }
     }
 
-    /// Complete driver info and error description
+    // Complete driver info and error description.
     message Driver {
-      /// Driver's info description
+      // Driver's info description.
       message Info {
-        /// Driver ID
+        // Driver ID.
         uint32 id = 1;
-        /// Connection status between driver and CC link
+        // Connection status between driver and CC link.
         bool connected = 2;
-        /// Whether the driver is ready to receive command or not
-        bool available = 3;
-        /// Servo status
-        bool servo_enabled = 4;
-        /// Emergency stop status
+        // Whether the driver is currently executing a command.
+        bool busy = 3;
+        // Motor status.
+        bool motor_disabled = 4;
+        // Emergency stop status.
         bool stopped = 5;
-        /// Driver pause status
+        // Driver pause status.
         bool paused = 6;
       }
 
-      /// Driver's error description
+      // Driver's error description.
       message Error {
-        /// Driver ID
+        // Driver ID.
         uint32 id = 1;
-        /// Flag when control loop exceeding maximum loop time
+        // Control loop exceeded maximum loop time.
         bool control_loop_time_exceeded = 2;
-        /// Flag when the inverter is overheated
+        // Inverter is overheated.
         bool inverter_overheat = 3;
-        PowerError power_error = 4;
-        CommError communication_error = 5;
-
-        message CommError {
-          /// Flag when there is communication error from previous driver
-          bool from_prev = 1;
-          /// Flag when there is communication error from next driver
-          bool from_next = 2;
-        }
-        message PowerError {
-          /// Flag when the driver detects overvoltage
-          bool overvoltage = 1;
-          /// Flag when the driver detects undervoltage
-          bool undervoltage = 2;
-        }
+        // Driver voltage supply too low.
+        bool undervoltage = 4;
+        // Driver voltage supply too high.
+        bool overvoltage = 5;
+        // Communication error with previous driver in line.
+        bool comm_error_prev = 6;
+        // Communication error with next driver in line.
+        bool comm_error_next = 7;
       }
     }
 
-    /// Complete carrier description
+    // Complete carrier description.
     message Carrier {
-      /// Carrier's info description
+      // Carrier's info description.
       message Info {
-        /// Carrier ID
+        // Carrier ID.
         uint32 id = 1;
-        /// Position of the carrier
+        // Position of the carrier in line.
         float position = 2;
-        /// Axis ID position of the carrier
-        Axis axis = 3;
-        /// Carrier's collision avoidance system (CAS) status
-        Cas cas = 4;
-        /// Carrier State
-        State state = 5;
+        // Main axis ID.
+        uint32 axis_main = 3;
+        // Auxiliary axis ID, if carrier is on top of two axes.
+        optional uint32 axis_auxiliary = 4;
+        // Collision avoidance system (CAS) disabled.
+        bool cas_disabled = 5;
+        // Collision avoidance system (CAS) triggered.
+        bool cas_triggered = 6;
+        // Carrier State.
+        State state = 7;
 
-        message Axis {
-          /// ID of the main axis
-          uint32 main = 1;
-          /// ID of the auxiliary axis
-          optional uint32 auxiliary = 2;
-        }
-        message Cas {
-          bool enabled = 1;
-          bool triggered = 2;
-        }
         enum State {
           CARRIER_STATE_NONE = 0;
           CARRIER_STATE_CALIBRATING = 1;
@@ -248,26 +241,5 @@ message Response {
         }
       }
     }
-  }
-
-  /// Error kind description
-  enum RequestErrorKind {
-    /// Default enum value. Should never be used.
-    INFO_REQUEST_ERROR_UNSPECIFIED = 0;
-    /// Attempted to use line ID outside of the configured line
-    INFO_REQUEST_ERROR_INVALID_LINE = 1;
-    /// Attempted to use axis ID outside of the configured axis
-    INFO_REQUEST_ERROR_INVALID_AXIS = 2;
-    /// Attempted to use driver ID outside of the configured driver
-    INFO_REQUEST_ERROR_INVALID_DRIVER = 3;
-    /// Attempted to retrieve uninitialized carrier information
-    INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4;
-    /// Attempted to retrieve info when the CC Link connection is not
-    /// established
-    INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5;
-    /// A request missing the required parameter
-    INFO_REQUEST_ERROR_MISSING_PARAMETER = 6;
-    /// Attempted to request unknown command info
-    INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 7;
   }
 }

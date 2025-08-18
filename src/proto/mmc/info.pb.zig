@@ -10,62 +10,8 @@ const fd = protobuf.fd;
 const ManagedStruct = protobuf.ManagedStruct;
 const json = protobuf.json;
 const UnionDecodingError = protobuf.UnionDecodingError;
-
-pub const Range = struct {
-    start_id: u32 = 0,
-    end_id: u32 = 0,
-
-    pub const _desc_table = .{
-        .start_id = fd(1, .{ .Varint = .Simple }),
-        .end_id = fd(2, .{ .Varint = .Simple }),
-    };
-
-    pub fn encode(self: @This(), allocator: Allocator) Allocator.Error![]u8 {
-        return protobuf.pb_encode(self, allocator);
-    }
-    pub fn decode(input: []const u8, allocator: Allocator) UnionDecodingError!@This() {
-        return protobuf.pb_decode(@This(), input, allocator);
-    }
-    pub fn init(allocator: Allocator) @This() {
-        return protobuf.pb_init(@This(), allocator);
-    }
-    pub fn deinit(self: @This()) void {
-        return protobuf.pb_deinit(self);
-    }
-    pub fn dupe(self: @This(), allocator: Allocator) Allocator.Error!@This() {
-        return protobuf.pb_dupe(@This(), self, allocator);
-    }
-    pub fn json_decode(
-        input: []const u8,
-        options: json.ParseOptions,
-        allocator: Allocator,
-    ) !std.json.Parsed(@This()) {
-        return protobuf.pb_json_decode(@This(), input, options, allocator);
-    }
-    pub fn json_encode(
-        self: @This(),
-        options: json.Stringify.Options,
-        allocator: Allocator,
-    ) ![]const u8 {
-        return protobuf.pb_json_encode(self, options, allocator);
-    }
-
-    // This method is used by std.json
-    // internally for deserialization. DO NOT RENAME!
-    pub fn jsonParse(
-        allocator: Allocator,
-        source: anytype,
-        options: json.ParseOptions,
-    ) !@This() {
-        return protobuf.pb_json_parse(@This(), allocator, source, options);
-    }
-
-    // This method is used by std.json
-    // internally for serialization. DO NOT RENAME!
-    pub fn jsonStringify(self: *const @This(), jws: anytype) !void {
-        return protobuf.pb_jsonStringify(@This(), self, jws);
-    }
-};
+/// import package range
+const range = @import("../range.pb.zig");
 
 pub const Ids = struct {
     ids: ArrayList(u32),
@@ -208,8 +154,8 @@ pub const Request = struct {
             carriers,
         };
         pub const filter_union = union(_filter_case) {
-            driver_range: Range,
-            axis_range: Range,
+            driver_range: range.Range,
+            axis_range: range.Range,
             carriers: Ids,
             pub const _union_desc = .{
                 .driver_range = fd(5, .{ .SubMessage = {} }),
