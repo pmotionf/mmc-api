@@ -146,6 +146,15 @@
     
       
       <p>
+        <a href="#message-mmc.command.Request.Pause">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>Pause</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
         <a href="#message-mmc.command.Request.Pull">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>Pull</code> 
@@ -191,9 +200,27 @@
     
       
       <p>
+        <a href="#message-mmc.command.Request.Resume">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>Resume</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
         <a href="#message-mmc.command.Request.SetZero">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>SetZero</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-mmc.command.Request.Stop">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>Stop</code> 
         </a>
       </p>
       
@@ -387,7 +414,7 @@ of the line.</p>
   <p>Remove a command on the server if the command ID is specified. If no
 command ID is specified, remove any commands received by the server. If
 the commands are still progressing, cancel the command execution.</p>
-<p>Expected response: cleared command ID (uint32)</p>
+<p>Expected response: cleared command ID (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -973,6 +1000,63 @@ distance moves the carrier backwards.</p></td>
           
         </tr>
       
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-mmc.command.Request.Pause">
+  <span>
+    <a href="#message-mmc.command.Request.Pause" title="mmc.command.Request.Pause">message Pause</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  <p>Pause any operation in PMF LMS. Any queued commands in the server will be
+continued once the resume command is given.</p>
+<p>Expected response: command ID (uint32).</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        lines
+      </td>
+      <td>
+        <code title="uint32">
+          
+            repeated
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Line ID. If provided, only pause any operations on the specified lines.</p></td>
+      
+    </tr>
+    
     
   </tbody>
 </table>
@@ -1638,6 +1722,67 @@ remains stored in a limited history buffer, and should be cleared with
           
         </tr>
       
+        
+
+        <tr>
+          <td>
+            14
+          </td>
+          <td>
+            stop
+          </td>
+          <td>
+            <code title="mmc.command.Request.Stop">
+              
+              <a href="mmc.command.html#message-mmc.command.Request.Stop"><span title="mmc.command.Request.Stop">mmc.command.Request.Stop</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Stop any currently running operation and remove any sent command to the
+server.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            15
+          </td>
+          <td>
+            pause
+          </td>
+          <td>
+            <code title="mmc.command.Request.Pause">
+              
+              <a href="mmc.command.html#message-mmc.command.Request.Pause"><span title="mmc.command.Request.Pause">mmc.command.Request.Pause</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Pause any currently running operation.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            16
+          </td>
+          <td>
+            resume
+          </td>
+          <td>
+            <code title="mmc.command.Request.Resume">
+              
+              <a href="mmc.command.html#message-mmc.command.Request.Resume"><span title="mmc.command.Request.Resume">mmc.command.Request.Resume</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Resume any paused operation in the PMF LMS system.</p></td>
+          
+        </tr>
+      
     
   </tbody>
 </table>
@@ -1753,6 +1898,64 @@ remains stored in a limited history buffer, and should be cleared with
       <div class="block">
         
 
+<h4 class="title is-4 type-heading" id="message-mmc.command.Request.Resume">
+  <span>
+    <a href="#message-mmc.command.Request.Resume" title="mmc.command.Request.Resume">message Resume</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  <p>Resume the lines that has been stopped or paused. If the line is not
+neither in paused nor emergency stop state, this command will do no
+operation to that line.</p>
+<p>Expected response: command ID (uint32).</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        lines
+      </td>
+      <td>
+        <code title="uint32">
+          
+            repeated
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Line ID. If provided, only resume the operation to those specified lines.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
 <h4 class="title is-4 type-heading" id="message-mmc.command.Request.SetZero">
   <span>
     <a href="#message-mmc.command.Request.SetZero" title="mmc.command.Request.SetZero">message SetZero</a>
@@ -1794,6 +1997,64 @@ the first axis of the line.</p>
         </code>
       </td>
       <td class="content"><p>Line ID.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-mmc.command.Request.Stop">
+  <span>
+    <a href="#message-mmc.command.Request.Stop" title="mmc.command.Request.Stop">message Stop</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  <p>Send an emergency stop command to stop any operation in PMF LMS. This
+command also removes all queued commands in the server.</p>
+<p>Expected response: command ID (uint32).</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        lines
+      </td>
+      <td>
+        <code title="uint32">
+          
+            repeated
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Line ID. If provided, only stop any operations on the specified lines and
+remove all commands that targeting those lines.</p></td>
       
     </tr>
     

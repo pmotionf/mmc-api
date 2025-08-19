@@ -328,9 +328,9 @@ message Request {
 message Response {
   oneof body {
     // Assigned ID for newly sent command.
-    uint32 command = 1;
+    uint32 id = 1;
     // ID of cleared existing command.
-    uint32 cleared_command = 3;
+    uint32 cleared_id = 3;
     // Error during command's execution.
     Request.Error request_error = 2;
   }
