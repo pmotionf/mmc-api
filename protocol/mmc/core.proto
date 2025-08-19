@@ -8,11 +8,11 @@ message Request {
   // List of server configuration to be retrieved
   enum Kind {
     CORE_REQUEST_KIND_UNSPECIFIED = 0;
-    // Request server's API version
+    // Request server's API version.
     CORE_REQUEST_KIND_API_VERSION = 1;
-    // Request server's version
+    // Request server's version.
     CORE_REQUEST_KIND_SERVER_INFO = 2;
-    // Request the track information of the server
+    // Request the track information of the server.
     CORE_REQUEST_KIND_TRACK_CONFIG = 3;
   }
 
