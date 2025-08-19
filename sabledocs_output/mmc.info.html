@@ -355,7 +355,7 @@
 <div class="block content">
   <p>Request for a command status from the server. If no command ID is
 provided, then request for status of all commands from the server.</p>
-<p>Expected response: <code>Response.Commands</code></p>
+<p>Expected response: <code>mmc.Response.body.info.body.commands</code></p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1473,7 +1473,7 @@ filter is driver range or axis range, it will retrieve any set flag
 information from the track based on the specified range. If the filter is
 based on carrier id, it will retrieve any set flag information from the
 track based on the location of the carrier.</p>
-<p>Expected response: <code>Response.Track</code></p>
+<p>Expected response: <code>mmc.Response.body.info.body.track</code></p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">

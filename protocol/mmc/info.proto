@@ -14,7 +14,7 @@ message Request {
   // Request for a command status from the server. If no command ID is
   // provided, then request for status of all commands from the server.
   //
-  // Expected response: `Response.Commands`
+  // Expected response: `mmc.Response.body.info.body.commands`
   message Command { optional uint32 id = 1; }
 
   // Request track status from the server. At least, either driver, axis,
@@ -24,7 +24,7 @@ message Request {
   // based on carrier id, it will retrieve any set flag information from the
   // track based on the location of the carrier.
   //
-  // Expected response: `Response.Track`
+  // Expected response: `mmc.Response.body.info.body.track`
   message Track {
     // Line ID.
     uint32 line = 1;

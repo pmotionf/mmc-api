@@ -52,7 +52,7 @@ message Request {
   // control. Otherwise, all carriers on the provided line will be released
   // from control.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Release {
     // Line ID.
     uint32 line = 1;
@@ -63,7 +63,7 @@ message Request {
   // Stop pulling a carrier to the specified axis. If no axis is provided,
   // then all pending carrier pulls on the line will be stopped.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message StopPull {
     // Line ID.
     uint32 line = 1;
@@ -74,7 +74,7 @@ message Request {
   // Stop pushing a carrier from the specified axis. If no axis is provided,
   // then all pending carrier pushes on the line will be stopped.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message StopPush {
     // Line ID.
     uint32 line = 1;
@@ -85,7 +85,7 @@ message Request {
   // Clear all error information on the driver, if specified. If not, clear
   // error information on every driver of the specified line ID.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message ClearErrors {
     // Line ID.
     uint32 line = 1;
@@ -96,7 +96,7 @@ message Request {
   // Clear carrier information located on the axis, if specified. If not,
   // clear all carrier information of the specified line ID
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Deinitialize {
     // Line ID.
     uint32 line = 1;
@@ -107,7 +107,7 @@ message Request {
   // Calibrate a line by positioning an unitiliazed carrier on the first axis
   // of the line.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Calibrate {
     // Line ID.
     uint32 line = 1;
@@ -116,7 +116,7 @@ message Request {
   // Set a zero position of a line by positioning an initialized carrier on
   // the first axis of the line.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message SetZero {
     // Line ID.
     uint32 line = 1;
@@ -124,7 +124,7 @@ message Request {
 
   // Automatically initialize carriers on every specified lines.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message AutoInitialize {
     message Line {
       // Line ID.
@@ -141,7 +141,7 @@ message Request {
 
   // Move a carrier to the desired position.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Move {
     // Line ID.
     uint32 line = 1;
@@ -170,7 +170,7 @@ message Request {
 
   // Push an initialized carrier to the specified direction.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Push {
     // Line ID.
     uint32 line = 1;
@@ -189,7 +189,7 @@ message Request {
 
   // Pull and initialize a new carrier into a line.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Pull {
     // Line ID.
     uint32 line = 1;
@@ -227,7 +227,7 @@ message Request {
 
   // Initialize a carrier.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Initialize {
     // Line ID.
     uint32 line = 1;
@@ -245,7 +245,7 @@ message Request {
   // command ID is specified, remove any commands received by the server. If
   // the commands are still progressing, cancel the command execution.
   //
-  // Expected response: cleared command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.cleared_id` (uint32).
   message ClearCommand {
     // Command ID.
     optional uint32 command = 1;
@@ -254,7 +254,7 @@ message Request {
   // Send an emergency stop command to stop any operation in PMF LMS. This
   // command also removes all queued commands in the server.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Stop {
     // Line ID. If provided, stop operations only on the specified lines and
     // remove all commands that targeting those lines.
@@ -264,7 +264,7 @@ message Request {
   // Pause any operation in PMF LMS. Any queued commands in the server will be
   // continued once the resume command is given.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Pause {
     // Line ID. If provided, pause operations only on the specified lines.
     repeated uint32 lines = 1;
@@ -274,7 +274,7 @@ message Request {
   // neither in paused nor emergency stop state, this command will do no
   // operation to that line.
   //
-  // Expected response: command ID (uint32).
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Resume {
     // Line ID. If provided, resume operations only to those specified lines.
     repeated uint32 lines = 1;
