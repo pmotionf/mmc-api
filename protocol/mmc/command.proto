@@ -38,6 +38,13 @@ message Request {
     ClearErrors clear_errors = 12;
     // Cancel a running command or remove its status history.
     ClearCommand clear_command = 13;
+    // Stop any currently running operation and remove any sent command to the
+    // server.
+    Stop stop = 14;
+    // Pause any currently running operation.
+    Pause pause = 15;
+    // Resume any paused operation in the PMF LMS system.
+    Resume resume = 16;
   }
 
   // Release the control imposed by the motor to the carrier. If a carrier is
@@ -238,10 +245,39 @@ message Request {
   // command ID is specified, remove any commands received by the server. If
   // the commands are still progressing, cancel the command execution.
   //
-  // Expected response: cleared command ID (uint32)
+  // Expected response: cleared command ID (uint32).
   message ClearCommand {
     // Command ID.
     optional uint32 command = 1;
+  }
+
+  // Send an emergency stop command to stop any operation in PMF LMS. This
+  // command also removes all queued commands in the server.
+  //
+  // Expected response: command ID (uint32).
+  message Stop {
+    // Line ID. If provided, stop operations only on the specified lines and
+    // remove all commands that targeting those lines.
+    repeated uint32 lines = 1;
+  }
+
+  // Pause any operation in PMF LMS. Any queued commands in the server will be
+  // continued once the resume command is given.
+  //
+  // Expected response: command ID (uint32).
+  message Pause {
+    // Line ID. If provided, pause operations only on the specified lines.
+    repeated uint32 lines = 1;
+  }
+
+  // Resume the lines that has been stopped or paused. If the line is not
+  // neither in paused nor emergency stop state, this command will do no
+  // operation to that line.
+  //
+  // Expected response: command ID (uint32).
+  message Resume {
+    // Line ID. If provided, resume operations only to those specified lines.
+    repeated uint32 lines = 1;
   }
 
   enum Direction {
