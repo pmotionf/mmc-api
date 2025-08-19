@@ -176,7 +176,8 @@
     </a>
             </code>
           </td>
-          <td class="content"><p>Core request API.</p></td>
+          <td class="content"><p>Core request API. Used to retrieve information about the server or the
+configured track.</p></td>
           
         </tr>
       
@@ -196,7 +197,8 @@
     </a>
             </code>
           </td>
-          <td class="content"><p>Command request API.</p></td>
+          <td class="content"><p>Command request API. Used to send and manage commands to the server,
+which will execute commands on the connected track.</p></td>
           
         </tr>
       
@@ -216,7 +218,8 @@
     </a>
             </code>
           </td>
-          <td class="content"><p>Info request API.</p></td>
+          <td class="content"><p>Info request API. Used to retrieve information about track state or
+commands processed by the server.</p></td>
           
         </tr>
       
@@ -342,7 +345,7 @@
     </a>
             </code>
           </td>
-          <td class="content"><p>Error caused by the API.</p></td>
+          <td class="content"><p>Top-level request error.</p></td>
           
         </tr>
       
@@ -434,7 +437,7 @@
     <tr>
       <td><code>MMC_REQUEST_ERROR_INVALID_MESSAGE</code></td>
       <td>1</td>
-      <td class="content"><p>The request could not be parsed as a valid message.</p></td>
+      <td class="content"><p>The request could not be decoded as a valid protobuf message.</p></td>
     </tr>
     
   </tbody>

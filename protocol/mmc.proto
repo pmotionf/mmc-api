@@ -7,17 +7,20 @@ import "mmc/info.proto";
 
 message Request {
   oneof body {
-    // Core request API.
+    // Core request API. Used to retrieve information about the server or the
+    // configured track.
     mmc.core.Request core = 1;
-    // Command request API.
+    // Command request API. Used to send and manage commands to the server,
+    // which will execute commands on the connected track.
     mmc.command.Request command = 2;
-    // Info request API.
+    // Info request API. Used to retrieve information about track state or
+    // commands processed by the server.
     mmc.info.Request info = 3;
   }
 
   enum Error {
     MMC_REQUEST_ERROR_UNSPECIFIED = 0;
-    // The request could not be parsed as a valid message.
+    // The request could not be decoded as a valid protobuf message.
     MMC_REQUEST_ERROR_INVALID_MESSAGE = 1;
   }
 }
@@ -30,7 +33,7 @@ message Response {
     mmc.command.Response command = 2;
     // Info Response API.
     mmc.info.Response info = 3;
-    // Error caused by the API.
+    // Top-level request error.
     Request.Error request_error = 4;
   }
 }

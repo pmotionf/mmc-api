@@ -1279,8 +1279,8 @@ push it once the carrier arrives.</p></td>
 <div class="block content">
   <p>Release the control imposed by the motor to the carrier. If a carrier is
 specified, the motor which control the specified carrier release the
-control. Otherwise, all carriers on the provided line will be released from
-control.</p>
+control. Otherwise, all carriers on the provided line will be released
+from control.</p>
 <p>Expected response: command ID (uint32).</p>
 </div>
 
@@ -1349,6 +1349,10 @@ control.</p>
 
 <div class="block content">
   <p>Command API: List of commands to operate the PMF's motion system.</p>
+<p>When a command is sent to the server, it will be queued for execution.
+Command execution status can be polled through the Info API. The status
+remains stored in a limited history buffer, and should be cleared with
+<code>clear_command</code> after completion.</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">

@@ -44,9 +44,9 @@ message Response {
       string name = 2;
       // Number of axes on the line.
       uint32 axes = 3;
-      // Axis length of the line.
+      // Length of each axis on the line, in meters.
       float axis_length = 4;
-      // Carrier length of the line.
+      // Supported carrier length for the line, in meters.
       float carrier_length = 5;
     }
     // Array of the configured lines.
