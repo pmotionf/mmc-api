@@ -237,7 +237,7 @@ message Request {
     uint32 carrier = 3;
     // Initialization direction for the new carrier.
     Direction direction = 4;
-    // Linked axis ID to the specified axis from the carrier.
+    // Linked axis direction from the specified axis.
     optional Direction link_axis = 5;
   }
 
