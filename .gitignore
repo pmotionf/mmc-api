@@ -13,6 +13,7 @@
 !.github/**
 !protocol/**
 !*.zig
+!sabledocs_output/**
 
 # Blacklist (overrides Whitelist)
 zig-out/**
