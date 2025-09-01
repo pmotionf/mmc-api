@@ -1,8 +1,8 @@
 .{
     .name = .mmc_api,
-    .version = "0.4.0",
+    .version = "1.0.0",
     .fingerprint = 0xdcdffdab47da9a3f,
-    .minimum_zig_version = "0.15.0-dev.1391+a5f891d0b",
+    .minimum_zig_version = "0.15.1",
     .dependencies = .{
         .protobuf = .{
             .url = "https://github.com/mochalins/zig-protobuf/archive/bdfc5f6.tar.gz",
