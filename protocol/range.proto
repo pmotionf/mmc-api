@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+message Range {
+  // Start of range, inclusive.
+  uint32 start = 1;
+  // End of range, inclusive.
+  uint32 end = 2;
+}

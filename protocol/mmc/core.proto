@@ -1,65 +1,75 @@
 syntax = "proto3";
 package mmc.core;
 
-/// Core API: Request server configuration
 message Request {
-  /// List of server configuration to be retrieved
-  enum Kind {
-    /// Default enum value. Should never be used.
-    CORE_REQUEST_KIND_UNSPECIFIED = 0;
-    /// Request server's API version
-    CORE_REQUEST_KIND_API_VERSION = 1;
-    /// Request server's version
-    CORE_REQUEST_KIND_SERVER_INFO = 2;
-    /// Request the line information of the server
-    CORE_REQUEST_KIND_LINE_CONFIG = 3;
-  }
   Kind kind = 1;
+
+  enum Kind {
+    // This request kind is unused, and should never be sent. It is reserved
+    // as the default request kind according to protobuf specification.
+    CORE_REQUEST_KIND_UNSPECIFIED = 0;
+    // Request server's API version. Use to check if API version matches
+    // client API compatibility.
+    CORE_REQUEST_KIND_API_VERSION = 1;
+    // Request server process information. This includes the configured server
+    // name and server implementation version.
+    CORE_REQUEST_KIND_SERVER_INFO = 2;
+    // Request the configured track information of the server.
+    CORE_REQUEST_KIND_TRACK_CONFIG = 3;
+  }
+
+  enum Error {
+    // This error code is unused, and will never be returned. It is reserved
+    // as the default error code according to protobuf specification.
+    CORE_REQUEST_ERROR_UNSPECIFIED = 0;
+    // The core request kind was unspecified.
+    CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1;
+  }
 }
 
-/// Response description to the core API
+// Response description to the core API.
 message Response {
-  /// Line configuration for the system
-  message LineConfig {
+  oneof body {
+    // Server process information.
+    Server server = 1;
+    // Server's API version.
+    SemanticVersion api_version = 2;
+    // Track configuration.
+    TrackConfig track_config = 3;
+    // Error response if the core request could not be handled.
+    Request.Error request_error = 4;
+  }
+
+  message TrackConfig {
     message Line {
-      message Length {
-        float axis = 1;
-        float carrier = 2;
-      }
-      /// Number of axes on the line
-      uint32 axes = 1;
-      /// Line name
+      // Line ID. Numeric ID, starting from 1, that is unique to each line in
+      // the track. This ID is used to address the line in other requests.
+      uint32 id = 1;
+      // Configured line name. This name is otherwise unused by the API, and
+      // is provided to the client for end-user convenience.
       string name = 2;
-      Length length = 3;
+      // Total number of axes in the line.
+      uint32 axes = 3;
+      // Length of each axis in the line, in meters.
+      float axis_length = 4;
+      // Carrier magnet length, in meters.
+      float carrier_length = 5;
     }
-    /// Array of the configured lines
+    // All configured lines in track.
     repeated Line lines = 1;
   }
 
-  /// Version description
   message SemanticVersion {
     uint32 major = 1;
     uint32 minor = 2;
     uint32 patch = 3;
   }
 
-  /// Server version and name
+  // Server version and name.
   message Server {
-    SemanticVersion version = 1;
-    string name = 2;
-  }
-
-  /// Error kind description
-  enum RequestErrorKind {
-    CORE_REQUEST_ERROR_UNSPECIFIED = 0;
-    CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1;
-  }
-
-  oneof body {
-    Server server = 1;
-    SemanticVersion api_version = 2;
-    LineConfig line_config = 3;
-    /// Error kind if this response's request was invalid.
-    RequestErrorKind request_error = 4;
+    // Server name.
+    string name = 1;
+    // Server implementation version.
+    SemanticVersion version = 2;
   }
 }

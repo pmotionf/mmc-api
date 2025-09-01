@@ -10,3 +10,7 @@ pub const info_msg = @import("proto/mmc/info.pb.zig");
 
 pub const version =
     std.SemanticVersion.parse(build.version) catch unreachable;
+
+test {
+    std.testing.refAllDeclsRecursive(@This());
+}
