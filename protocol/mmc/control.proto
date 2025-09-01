@@ -4,8 +4,8 @@ package mmc;
 // Carrier motor control kind.
 enum Control {
   CONTROL_UNSPECIFIED = 0;
-  // Move the carrier with position control.
+  // Carrier controlled with position priority.
   CONTROL_POSITION = 1;
-  // Move the carrier with velocity control.
+  // Carrier controlled with velocity priority.
   CONTROL_VELOCITY = 2;
 }

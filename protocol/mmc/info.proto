@@ -3,191 +3,199 @@ package mmc.info;
 
 import "range.proto";
 
-// Info API: Request information from the PMF's MMC Server.
 message Request {
   oneof body {
-    // Get command(s) status.
+    // Command information request. Get current status of command; necessary
+    // to determine if command is currently running, completed, or failed.
     Command command = 1;
-    // Get track information.
+    // Track information request. Get current track state information.
     Track track = 2;
   }
-  // Request for a command status from the server. If no command ID is
-  // provided, then request for status of all commands from the server.
+  // Request for status of specified command ID from the server. If no command
+  // ID is provided, then request for status of all commands from the server.
   //
   // Expected response: `mmc.Response.body.info.body.commands`
   message Command { optional uint32 id = 1; }
 
-  // Request track status from the server. At least, either driver, axis,
-  // or carrier flag should be on to retrieve the desired information. If the
-  // filter is driver range or axis range, it will retrieve any set flag
-  // information from the track based on the specified range. If the filter is
-  // based on carrier id, it will retrieve any set flag information from the
-  // track based on the location of the carrier.
+  // Request track state information from server. One or more of the `info_`
+  // flags must be enabled to select the kind of track information desired.
+  // A filter may be optionally provided to limit the source of information
+  // from the track.
   //
   // Expected response: `mmc.Response.body.info.body.track`
   message Track {
-    // Line ID.
+    // Line ID. Select line from which information will be retrieved.
     uint32 line = 1;
-    // Enable retrieving driver information from the server.
-    bool driver = 2;
-    // Enable retrieving axis information from the server
-    bool axis = 3;
-    // Enable retrieving carrier information from the server
-    bool carrier = 4;
+
+    // Retrieve driver state information.
+    bool info_driver_state = 2;
+    // Retrieve driver error information.
+    bool info_driver_errors = 3;
+    // Retrieve axis state information.
+    bool info_axis_state = 4;
+    // Retrieve axis errors information.
+    bool info_axis_errors = 5;
+    // Retrieve carrier state information.
+    bool info_carrier_state = 6;
+
+    // Filter information source if provided. Each filter is compatible with
+    // every information flag.
     oneof filter {
-      // Retrieve the information from a driver range
-      Range driver_range = 5;
-      // Retrieve the information from an axis range
-      Range axis_range = 6;
-      // Retrieve the information based on the location of carrier(s)
-      Ids carriers = 7;
+      // Retrieve information from driver ID range. Driver information flags
+      // will include drivers within this range. Axis information flags will
+      // include every axis belonging to the drivers in this range. Carrier
+      // information flags will include every carrier currently controlled by
+      // one of the drivers in this range.
+      Range drivers = 8;
+      // Retrieve information from axis ID range. Driver information flags
+      // will include drivers that contain one of the axes within this range.
+      // Axis information flags will include axes within this range. Carrier
+      // information flags will include every carrier currently controlled by
+      // one of the axes in this range.
+      Range axes = 9;
+      // Retrieve information from carrier IDs. Driver information flags will
+      // include drivers that control one of the carriers within this list.
+      // Axis information flags will include axes that control one of the
+      // carriers within this list. Carrier information flags will include
+      // carriers within this list.
+      Ids carriers = 10;
     }
 
-    // Contains multiple ids, possibly containing only one id.
+    // List of IDs. At least one ID must be provided.
     message Ids { repeated uint32 ids = 1; }
   }
 
   enum Error {
+    // This error code is unused, and will never be returned. It is reserved
+    // as the default error code according to protobuf specification.
     INFO_REQUEST_ERROR_UNSPECIFIED = 0;
-    // Attempted to use line ID outside of the configured line.
+    // Invalid line ID provided. Ensure that line ID exists in track
+    // configuration.
     INFO_REQUEST_ERROR_INVALID_LINE = 1;
-    // Attempted to use axis ID outside of the configured axis.
+    // Invalid axis ID provided. Ensure that axis ID exists in line.
     INFO_REQUEST_ERROR_INVALID_AXIS = 2;
-    // Attempted to use driver ID outside of the configured driver.
+    // Invalid driver ID provided. Ensure that driver ID exists in line.
     INFO_REQUEST_ERROR_INVALID_DRIVER = 3;
-    // Attempted to retrieve uninitialized carrier information.
-    INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4;
-    // Attempted to retrieve info when the CC Link connection is not
-    // established.
-    INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5;
-    // A request missing the required parameter.
-    INFO_REQUEST_ERROR_MISSING_PARAMETER = 6;
-    // Attempted to request non-existing command information.
-    INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 7;
+    // Request is missing a required parameter. If sending a track request,
+    // ensure that at least one of the information flags is selected. If using
+    // the `carriers` filter, ensure that at least one carrier ID is provided.
+    INFO_REQUEST_ERROR_MISSING_PARAMETER = 4;
   }
 }
 
-// Response description to the info API
 message Response {
   oneof body {
-    // Commands information response.
+    // Information for requested command(s). If empty, no matching command(s)
+    // was found.
     Commands command = 1;
-    // Track information response.
+    // Information for requested track state.
     Track track = 2;
-    // Error kind if this response's request was invalid
+    // Info request error. This error field will be returned if the provided
+    // info request could not be handled properly.
     Request.Error request_error = 3;
   }
 
   message Commands { repeated Command items = 1; }
 
-  // Information regarding a command sent to the server.
   message Command {
-    // Command ID.
+    // Command ID. Valid IDs begin from 1, and may be reused after command
+    // status is cleared from server history.
     uint32 id = 1;
     // Command status.
     Status status = 2;
-    // Command error response, only if the status is `STATUS_FAILED`.
+    // Command error response, only if the status is `COMMAND_STATUS_FAILED`.
     optional Error error = 3;
 
     enum Status {
-      STATUS_UNSPECIFIED = 0;
-      // Command is progressing in the server.
-      STATUS_PROGRESSING = 1;
-      // Command is completed.
-      STATUS_COMPLETED = 2;
-      // Command is failed to be executed.
-      STATUS_FAILED = 3;
+      // This command status is unused, and will never be returned. It is
+      // reserved as the default status code according to protobuf
+      // specification.
+      COMMAND_STATUS_UNSPECIFIED = 0;
+      // Command currently executing.
+      COMMAND_STATUS_PROGRESSING = 1;
+      // Command completed.
+      COMMAND_STATUS_COMPLETED = 2;
+      // Command execution failed.
+      COMMAND_STATUS_FAILED = 3;
     }
+
     enum Error {
+      // This error code is unused, and will never be returned. It is reserved
+      // as the default error code according to protobuf specification.
       COMMAND_ERROR_UNSPECIFIED = 0;
-      // Invalid command sent to the cc-link.
-      COMMAND_ERROR_INVALID_COMMAND = 1;
-      // Attempted to send a command with invalid axis ID.
-      COMMAND_ERROR_INVALID_AXIS = 2;
-      // Invalid parameter for a command.
-      COMMAND_ERROR_INVALID_PARAMETER = 3;
-      // Attempted to send a command without satisfying the command's
-      // preconditions.
-      COMMAND_ERROR_INVALID_SYSTEM_STATE = 4;
-      // Carrier intended for a command is not found.
-      COMMAND_ERROR_CARRIER_NOT_FOUND = 5;
-      // Attempted to initialize a carrier with an ID that already belongs to
-      // another carrier on the line.
-      COMMAND_ERROR_CARRIER_ALREADY_EXISTS = 6;
-      // CC-link is disconnected while a command is progressing
-      COMMAND_ERROR_CC_LINK_DISCONNECTED = 7;
-      // Failed to continue a command because system is running out of memory
-      COMMAND_ERROR_OUT_OF_MEMORY = 8;
-      // Deprecated.
-      COMMAND_ERROR_HOMING_FAILED = 9;
+      // System state prevented successful command execution. Ensure that all
+      // preconditions are met with track info request before sending command.
+      COMMAND_ERROR_INVALID_SYSTEM_STATE = 1;
+      // Command target carrier ID not found, or duplicate carrier ID exists
+      // in line.
+      COMMAND_ERROR_INVALID_CARRIER_ID = 2;
+      // Driver connection failed while command progressing.
+      COMMAND_ERROR_DRIVER_DISCONNECTED = 3;
+      // Unexpected command execution error. This is likely an implementation
+      // bug; please contact PMF support for assistance.
+      COMMAND_ERROR_UNEXPECTED = 4;
     }
   }
 
-  // Track information description. Client shall validate if the response match
-  // the requested information.
   message Track {
     // Line ID.
     uint32 line = 1;
-    // Array of driver's information.
-    repeated Driver.Info driver_infos = 2;
-    // Array of driver's error.
+    // Driver state information list. Empty if request flag was disabled.
+    repeated Driver.State driver_state = 2;
+    // Driver error information list. Empty if request flag was disabled.
     repeated Driver.Error driver_errors = 3;
-    // Array of axis' information.
-    repeated Axis.Info axis_infos = 4;
-    // Array of axis' error.
+    // Axis state information list. Empty if request flag was disabled.
+    repeated Axis.State axis_state = 4;
+    // Axis error information list. Empty if request flag was disabled.
     repeated Axis.Error axis_errors = 5;
-    // Array of carrier's information.
-    repeated Carrier.Info carrier_infos = 6;
+    // Carrier state information list. Empty if request flag was disabled.
+    repeated Carrier.State carrier_state = 6;
 
-    // Complete axis info and error description.
     message Axis {
-      // Axis' info description.
-      message Info {
+      message State {
         // Axis ID.
         uint32 id = 1;
-        // Whether the motor is controlling a carrier or not.
+        // Axis is currently controlling a carrier.
         bool motor_active = 2;
-        // Waiting for a carrier to be pulled on the axis.
+        // Axis is waiting to pull carrier.
         bool waiting_pull = 3;
-        // Waiting for a carrier arriving on the axis to be automatically
-        // pushed.
+        // Axis is waiting to push carrier.
         bool waiting_push = 4;
-        // Detected initialized carrier ID on the axis.
+        // Carrier ID; non-zero if an initialized carrier is on the axis.
         uint32 carrier = 5;
-        // Back hall alarm status of the axis.
+        // Axis back hall alarm is active. Magnet is detected above back hall
+        // sensor.
         bool hall_alarm_back = 6;
-        // Front hall alarm status of the axis.
+        // Axis front hall alarm is active. Magnet is detected above front
+        // hall sensor.
         bool hall_alarm_front = 7;
       }
 
-      // Axis' error description.
       message Error {
         // Axis ID.
         uint32 id = 1;
-        // Motor is given too much current.
+        // Motor overcurrent detected. Motor control released to prevent
+        // damage.
         bool overcurrent = 2;
       }
     }
 
-    // Complete driver info and error description.
     message Driver {
-      // Driver's info description.
-      message Info {
+      message State {
         // Driver ID.
         uint32 id = 1;
-        // Connection status between driver and CC link.
+        // Connection status between driver and server.
         bool connected = 2;
-        // Whether the driver is currently executing a command.
+        // Driver is currently executing a command.
         bool busy = 3;
-        // Motor status.
+        // Driver motor release activated. All driver motors are inactive.
         bool motor_disabled = 4;
-        // Emergency stop status.
+        // Driver emergency stop activated.
         bool stopped = 5;
-        // Driver pause status.
+        // Driver pause activated.
         bool paused = 6;
       }
 
-      // Driver's error description.
       message Error {
         // Driver ID.
         uint32 id = 1;
@@ -206,37 +214,54 @@ message Response {
       }
     }
 
-    // Complete carrier description.
     message Carrier {
-      // Carrier's info description.
-      message Info {
-        // Carrier ID.
+      message State {
+        // Carrier ID. Will always be non-zero.
         uint32 id = 1;
-        // Position of the carrier in line.
+        // Position of the carrier in line, in meters.
         float position = 2;
-        // Main axis ID.
+        // Carrier's primary axis ID.
         uint32 axis_main = 3;
-        // Auxiliary axis ID, if carrier is on top of two axes.
+        // Carrier's auxiliary axis ID, if carrier is on top of two axes.
         optional uint32 axis_auxiliary = 4;
         // Collision avoidance system (CAS) disabled.
         bool cas_disabled = 5;
-        // Collision avoidance system (CAS) triggered.
+        // Collision avoidance system (CAS) triggered. Carrier will
+        // automatically resume movement when path is clear.
         bool cas_triggered = 6;
-        // Carrier State.
+        // Carrier state.
         State state = 7;
 
         enum State {
           CARRIER_STATE_NONE = 0;
+          // Carrier is currently operating for line calibration.
           CARRIER_STATE_CALIBRATING = 1;
+          // Carrier has completed line calibration, and may now be used for
+          // normal operation.
           CARRIER_STATE_CALIBRATE_COMPLETED = 2;
+          // Carrier is currently moving towards target destination.
           CARRIER_STATE_MOVING = 3;
+          // Carrier has arrived within threshold at target destination.
           CARRIER_STATE_MOVE_COMPLETED = 4;
-          CARRIER_STATE_ISOLATING = 5;
-          CARRIER_STATE_ISOLATE_COMPLETED = 6;
+          // Carrier is initializing. Must not be used until initialization is
+          // completed.
+          CARRIER_STATE_INITIALIZING = 5;
+          // Carrier initialization completed. May now be used for normal
+          // operation.
+          CARRIER_STATE_INITIALIZE_COMPLETED = 6;
+          // Carrier is being pushed by axis. Used to eject carrier from line.
           CARRIER_STATE_PUSHING = 7;
+          // Carrier push completed by axis. This state is not observed when
+          // carrier is ejected from line.
           CARRIER_STATE_PUSH_COMPLETED = 8;
+          // Carrier is being pulled by axis. Must not be used until pull is
+          // completed.
           CARRIER_STATE_PULLING = 9;
+          // Carrier pull completed by axis. May now be used for normal
+          // operation.
           CARRIER_STATE_PULL_COMPLETED = 10;
+          // Overcurrent detected in carrier axis motor. Carrier movement has
+          // been canceled.
           CARRIER_STATE_OVERCURRENT = 11;
         }
       }

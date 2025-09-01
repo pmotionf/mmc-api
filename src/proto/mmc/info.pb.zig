@@ -32,10 +32,7 @@ pub const Request = struct {
         INFO_REQUEST_ERROR_INVALID_LINE = 1,
         INFO_REQUEST_ERROR_INVALID_AXIS = 2,
         INFO_REQUEST_ERROR_INVALID_DRIVER = 3,
-        INFO_REQUEST_ERROR_CARRIER_NOT_FOUND = 4,
-        INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED = 5,
-        INFO_REQUEST_ERROR_MISSING_PARAMETER = 6,
-        INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 7,
+        INFO_REQUEST_ERROR_MISSING_PARAMETER = 4,
         _,
     };
 
@@ -104,32 +101,36 @@ pub const Request = struct {
 
     pub const Track = struct {
         line: u32 = 0,
-        driver: bool = false,
-        axis: bool = false,
-        carrier: bool = false,
+        info_driver_state: bool = false,
+        info_driver_errors: bool = false,
+        info_axis_state: bool = false,
+        info_axis_errors: bool = false,
+        info_carrier_state: bool = false,
         filter: ?filter_union = null,
 
         pub const _filter_case = enum {
-            driver_range,
-            axis_range,
+            drivers,
+            axes,
             carriers,
         };
         pub const filter_union = union(_filter_case) {
-            driver_range: protobuf.Range,
-            axis_range: protobuf.Range,
+            drivers: protobuf.Range,
+            axes: protobuf.Range,
             carriers: Request.Track.Ids,
             pub const _desc_table = .{
-                .driver_range = fd(5, .submessage),
-                .axis_range = fd(6, .submessage),
-                .carriers = fd(7, .submessage),
+                .drivers = fd(8, .submessage),
+                .axes = fd(9, .submessage),
+                .carriers = fd(10, .submessage),
             };
         };
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
-            .driver = fd(2, .{ .scalar = .bool }),
-            .axis = fd(3, .{ .scalar = .bool }),
-            .carrier = fd(4, .{ .scalar = .bool }),
+            .info_driver_state = fd(2, .{ .scalar = .bool }),
+            .info_driver_errors = fd(3, .{ .scalar = .bool }),
+            .info_axis_state = fd(4, .{ .scalar = .bool }),
+            .info_axis_errors = fd(5, .{ .scalar = .bool }),
+            .info_carrier_state = fd(6, .{ .scalar = .bool }),
             .filter = fd(null, .{ .oneof = filter_union }),
         };
 
@@ -406,24 +407,19 @@ pub const Response = struct {
         };
 
         pub const Status = enum(i32) {
-            STATUS_UNSPECIFIED = 0,
-            STATUS_PROGRESSING = 1,
-            STATUS_COMPLETED = 2,
-            STATUS_FAILED = 3,
+            COMMAND_STATUS_UNSPECIFIED = 0,
+            COMMAND_STATUS_PROGRESSING = 1,
+            COMMAND_STATUS_COMPLETED = 2,
+            COMMAND_STATUS_FAILED = 3,
             _,
         };
 
         pub const Error = enum(i32) {
             COMMAND_ERROR_UNSPECIFIED = 0,
-            COMMAND_ERROR_INVALID_COMMAND = 1,
-            COMMAND_ERROR_INVALID_AXIS = 2,
-            COMMAND_ERROR_INVALID_PARAMETER = 3,
-            COMMAND_ERROR_INVALID_SYSTEM_STATE = 4,
-            COMMAND_ERROR_CARRIER_NOT_FOUND = 5,
-            COMMAND_ERROR_CARRIER_ALREADY_EXISTS = 6,
-            COMMAND_ERROR_CC_LINK_DISCONNECTED = 7,
-            COMMAND_ERROR_OUT_OF_MEMORY = 8,
-            COMMAND_ERROR_HOMING_FAILED = 9,
+            COMMAND_ERROR_INVALID_SYSTEM_STATE = 1,
+            COMMAND_ERROR_INVALID_CARRIER_ID = 2,
+            COMMAND_ERROR_DRIVER_DISCONNECTED = 3,
+            COMMAND_ERROR_UNEXPECTED = 4,
             _,
         };
 
@@ -485,25 +481,25 @@ pub const Response = struct {
 
     pub const Track = struct {
         line: u32 = 0,
-        driver_infos: std.ArrayListUnmanaged(Response.Track.Driver.Info) = .empty,
+        driver_state: std.ArrayListUnmanaged(Response.Track.Driver.State) = .empty,
         driver_errors: std.ArrayListUnmanaged(Response.Track.Driver.Error) = .empty,
-        axis_infos: std.ArrayListUnmanaged(Response.Track.Axis.Info) = .empty,
+        axis_state: std.ArrayListUnmanaged(Response.Track.Axis.State) = .empty,
         axis_errors: std.ArrayListUnmanaged(Response.Track.Axis.Error) = .empty,
-        carrier_infos: std.ArrayListUnmanaged(Response.Track.Carrier.Info) = .empty,
+        carrier_state: std.ArrayListUnmanaged(Response.Track.Carrier.State) = .empty,
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
-            .driver_infos = fd(2, .{ .repeated = .submessage }),
+            .driver_state = fd(2, .{ .repeated = .submessage }),
             .driver_errors = fd(3, .{ .repeated = .submessage }),
-            .axis_infos = fd(4, .{ .repeated = .submessage }),
+            .axis_state = fd(4, .{ .repeated = .submessage }),
             .axis_errors = fd(5, .{ .repeated = .submessage }),
-            .carrier_infos = fd(6, .{ .repeated = .submessage }),
+            .carrier_state = fd(6, .{ .repeated = .submessage }),
         };
 
         pub const Axis = struct {
             pub const _desc_table = .{};
 
-            pub const Info = struct {
+            pub const State = struct {
                 id: u32 = 0,
                 motor_active: bool = false,
                 waiting_pull: bool = false,
@@ -702,7 +698,7 @@ pub const Response = struct {
         pub const Driver = struct {
             pub const _desc_table = .{};
 
-            pub const Info = struct {
+            pub const State = struct {
                 id: u32 = 0,
                 connected: bool = false,
                 busy: bool = false,
@@ -909,14 +905,14 @@ pub const Response = struct {
         pub const Carrier = struct {
             pub const _desc_table = .{};
 
-            pub const Info = struct {
+            pub const State = struct {
                 id: u32 = 0,
                 position: f32 = 0,
                 axis_main: u32 = 0,
                 axis_auxiliary: ?u32 = null,
                 cas_disabled: bool = false,
                 cas_triggered: bool = false,
-                state: Response.Track.Carrier.Info.State = @enumFromInt(0),
+                state: Response.Track.Carrier.State.State = @enumFromInt(0),
 
                 pub const _desc_table = .{
                     .id = fd(1, .{ .scalar = .uint32 }),
@@ -934,8 +930,8 @@ pub const Response = struct {
                     CARRIER_STATE_CALIBRATE_COMPLETED = 2,
                     CARRIER_STATE_MOVING = 3,
                     CARRIER_STATE_MOVE_COMPLETED = 4,
-                    CARRIER_STATE_ISOLATING = 5,
-                    CARRIER_STATE_ISOLATE_COMPLETED = 6,
+                    CARRIER_STATE_INITIALIZING = 5,
+                    CARRIER_STATE_INITIALIZE_COMPLETED = 6,
                     CARRIER_STATE_PUSHING = 7,
                     CARRIER_STATE_PUSH_COMPLETED = 8,
                     CARRIER_STATE_PULLING = 9,

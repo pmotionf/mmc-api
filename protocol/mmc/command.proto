@@ -38,12 +38,11 @@ message Request {
     ClearErrors clear_errors = 12;
     // Cancel a running command or remove its status history.
     ClearCommand clear_command = 13;
-    // Stop any currently running operation and remove any sent command to the
-    // server.
+    // Activate emergency stop for all drivers in line(s).
     Stop stop = 14;
-    // Pause any currently running operation.
+    // Activate pause for all drivers in line(s).
     Pause pause = 15;
-    // Resume any paused operation in the PMF LMS system.
+    // Deactivate emergency stop and pause for all drivers in line(s).
     Resume resume = 16;
   }
 
@@ -270,9 +269,8 @@ message Request {
     repeated uint32 lines = 1;
   }
 
-  // Resume the lines that has been stopped or paused. If the line is not
-  // neither in paused nor emergency stop state, this command will do no
-  // operation to that line.
+  // Resume lines that have been stopped or paused. If the line is not paused
+  // or emergency stopped, this command will succeed without any effect.
   //
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Resume {
@@ -281,9 +279,7 @@ message Request {
   }
 
   enum Direction {
-    DIRECTION_UNSPECIFIED = 0;
-    DIRECTION_BACKWARD = 1;
-    DIRECTION_FORWARD = 2;
+    DIRECTION_UNSPECIFIED = 0; DIRECTION_BACKWARD = 1; DIRECTION_FORWARD = 2;
   }
 
   enum Error {

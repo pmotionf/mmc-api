@@ -1,24 +1,28 @@
 syntax = "proto3";
 package mmc.core;
 
-// Core API: Request server configuration
 message Request {
   Kind kind = 1;
 
-  // List of server configuration to be retrieved
   enum Kind {
+    // This request kind is unused, and should never be sent. It is reserved
+    // as the default request kind according to protobuf specification.
     CORE_REQUEST_KIND_UNSPECIFIED = 0;
-    // Request server's API version.
+    // Request server's API version. Use to check if API version matches
+    // client API compatibility.
     CORE_REQUEST_KIND_API_VERSION = 1;
-    // Request server's version.
+    // Request server process information. This includes the configured server
+    // name and server implementation version.
     CORE_REQUEST_KIND_SERVER_INFO = 2;
-    // Request the track information of the server.
+    // Request the configured track information of the server.
     CORE_REQUEST_KIND_TRACK_CONFIG = 3;
   }
 
   enum Error {
+    // This error code is unused, and will never be returned. It is reserved
+    // as the default error code according to protobuf specification.
     CORE_REQUEST_ERROR_UNSPECIFIED = 0;
-    // Unknown core API request.
+    // The core request kind was unspecified.
     CORE_REQUEST_ERROR_REQUEST_UNKNOWN = 1;
   }
 }
@@ -26,30 +30,32 @@ message Request {
 // Response description to the core API.
 message Response {
   oneof body {
-    // Server information.
+    // Server process information.
     Server server = 1;
     // Server's API version.
     SemanticVersion api_version = 2;
     // Track configuration.
     TrackConfig track_config = 3;
-    // Error response if the core API request is failed.
+    // Error response if the core request could not be handled.
     Request.Error request_error = 4;
   }
 
   message TrackConfig {
     message Line {
-      // Line ID.
+      // Line ID. Numeric ID, starting from 1, that is unique to each line in
+      // the track. This ID is used to address the line in other requests.
       uint32 id = 1;
-      // Line name.
+      // Configured line name. This name is otherwise unused by the API, and
+      // is provided to the client for end-user convenience.
       string name = 2;
-      // Number of axes on the line.
+      // Total number of axes in the line.
       uint32 axes = 3;
-      // Length of each axis on the line, in meters.
+      // Length of each axis in the line, in meters.
       float axis_length = 4;
-      // Supported carrier length for the line, in meters.
+      // Carrier magnet length, in meters.
       float carrier_length = 5;
     }
-    // Array of the configured lines.
+    // All configured lines in track.
     repeated Line lines = 1;
   }
 

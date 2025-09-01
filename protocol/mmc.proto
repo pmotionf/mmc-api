@@ -5,35 +5,43 @@ import "mmc/command.proto";
 import "mmc/core.proto";
 import "mmc/info.proto";
 
+// Request message. All client-to-server messages should be of this message
+// type.
 message Request {
   oneof body {
-    // Core request API. Used to retrieve information about the server or the
+    // Core request. Used to retrieve information about the server or the
     // configured track.
     mmc.core.Request core = 1;
-    // Command request API. Used to send and manage commands to the server,
+    // Command request. Used to send and manage commands to the server,
     // which will execute commands on the connected track.
     mmc.command.Request command = 2;
-    // Info request API. Used to retrieve information about track state or
+    // Info request. Used to retrieve information about track state or
     // commands processed by the server.
     mmc.info.Request info = 3;
   }
 
   enum Error {
+    // This error code is unused, and will never be returned. It is reserved
+    // as the default error code according to protobuf specification.
     MMC_REQUEST_ERROR_UNSPECIFIED = 0;
     // The request could not be decoded as a valid protobuf message.
     MMC_REQUEST_ERROR_INVALID_MESSAGE = 1;
   }
 }
 
+// Response message. All server-to-client messages will be of this message
+// type.
 message Response {
   oneof body {
-    // Core response API.
+    // Core response.
     mmc.core.Response core = 1;
-    // Command response API.
+    // Command response.
     mmc.command.Response command = 2;
-    // Info Response API.
+    // Info Response.
     mmc.info.Response info = 3;
-    // Top-level request error.
+    // Top-level request error. This error field will be returned only if the
+    // top-level request could not be handled properly. Otherwise, response
+    // kinds may contain more specific error codes.
     Request.Error request_error = 4;
   }
 }
