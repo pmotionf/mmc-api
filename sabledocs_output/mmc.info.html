@@ -155,33 +155,6 @@
     
       
       <p>
-        <a href="#message-mmc.info.Response.Track.Axis.Info">
-          <span class="tag" style="min-width: 6em">Message</span>
-          <code>Info</code> 
-        </a>
-      </p>
-      
-    
-      
-      <p>
-        <a href="#message-mmc.info.Response.Track.Driver.Info">
-          <span class="tag" style="min-width: 6em">Message</span>
-          <code>Info</code> 
-        </a>
-      </p>
-      
-    
-      
-      <p>
-        <a href="#message-mmc.info.Response.Track.Carrier.Info">
-          <span class="tag" style="min-width: 6em">Message</span>
-          <code>Info</code> 
-        </a>
-      </p>
-      
-    
-      
-      <p>
         <a href="#message-mmc.info.Request">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>Request</code> 
@@ -194,6 +167,33 @@
         <a href="#message-mmc.info.Response">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>Response</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-mmc.info.Response.Track.Axis.State">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>State</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-mmc.info.Response.Track.Driver.State">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>State</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-mmc.info.Response.Track.Carrier.State">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>State</code> 
         </a>
       </p>
       
@@ -233,7 +233,7 @@
       </p>
     
       <p>
-        <a href="#enum-mmc.info.Response.Track.Carrier.Info.State">
+        <a href="#enum-mmc.info.Response.Track.Carrier.State.State">
           <span class="tag" style="min-width: 6em">Enum</span>
           <code>State</code> 
         </a>
@@ -277,7 +277,7 @@
 </h4>
 
 <div class="block content">
-  <p>Complete axis info and error description.</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -315,7 +315,7 @@
 </h4>
 
 <div class="block content">
-  <p>Complete carrier description.</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -353,9 +353,9 @@
 </h4>
 
 <div class="block content">
-  <p>Request for a command status from the server. If no command ID is
-provided, then request for status of all commands from the server.</p>
-<p>Expected response: <code>Response.Commands</code></p>
+  <p>Request for status of specified command ID from the server. If no command
+ID is provided, then request for status of all commands from the server.</p>
+<p>Expected response: <code>mmc.Response.body.info.body.commands</code></p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -410,7 +410,7 @@ provided, then request for status of all commands from the server.</p>
 </h4>
 
 <div class="block content">
-  <p>Information regarding a command sent to the server.</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -436,7 +436,8 @@ provided, then request for status of all commands from the server.</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Command ID.</p></td>
+      <td class="content"><p>Command ID. Valid IDs begin from 1, and may be reused after command
+status is cleared from server history.</p></td>
       
     </tr>
     
@@ -470,7 +471,7 @@ provided, then request for status of all commands from the server.</p>
     </a>
         </code>
       </td>
-      <td class="content"><p>Command error response, only if the status is <code>STATUS_FAILED</code>.</p></td>
+      <td class="content"><p>Command error response, only if the status is <code>COMMAND_STATUS_FAILED</code>.</p></td>
       
     </tr>
     
@@ -553,7 +554,7 @@ provided, then request for status of all commands from the server.</p>
 </h4>
 
 <div class="block content">
-  <p>Complete driver info and error description.</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -591,7 +592,7 @@ provided, then request for status of all commands from the server.</p>
 </h4>
 
 <div class="block content">
-  <p>Axis' error description.</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -632,7 +633,8 @@ provided, then request for status of all commands from the server.</p>
           <span>bool</span>
         </code>
       </td>
-      <td class="content"><p>Motor is given too much current.</p></td>
+      <td class="content"><p>Motor overcurrent detected. Motor control released to prevent
+damage.</p></td>
       
     </tr>
     
@@ -659,7 +661,7 @@ provided, then request for status of all commands from the server.</p>
 </h4>
 
 <div class="block content">
-  <p>Driver's error description.</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -802,7 +804,7 @@ provided, then request for status of all commands from the server.</p>
 </h4>
 
 <div class="block content">
-  <p>Contains multiple ids, possibly containing only one id.</p>
+  <p>List of IDs. At least one ID must be provided.</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -845,424 +847,6 @@ provided, then request for status of all commands from the server.</p>
       <div class="block">
         
 
-<h4 class="title is-4 type-heading" id="message-mmc.info.Response.Track.Axis.Info">
-  <span>
-    <a href="#message-mmc.info.Response.Track.Axis.Info" title="mmc.info.Response.Track.Axis.Info">message Info</a>
-  
-    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.info.html#message-mmc.info.Response.Track.Axis"><span title="mmc.info.Response.Track.Axis">mmc.info.Response.Track.Axis</span>
-    </a>)</span>
-  
-  </span>
-  
-</h4>
-
-<div class="block content">
-  <p>Axis' info description.</p>
-</div>
-
-<table class="table is-fullwidth is-hoverable is-bordered">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Field</th>
-      <th>Type</th>
-      <th>Description</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    
-    <tr>
-      <td>1</td>
-      <td>
-        id
-      </td>
-      <td>
-        <code title="uint32">
-          
-          <span>uint32</span>
-        </code>
-      </td>
-      <td class="content"><p>Axis ID.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>2</td>
-      <td>
-        motor_active
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Whether the motor is controlling a carrier or not.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>3</td>
-      <td>
-        waiting_pull
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Waiting for a carrier to be pulled on the axis.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>4</td>
-      <td>
-        waiting_push
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Waiting for a carrier arriving on the axis to be automatically
-pushed.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>5</td>
-      <td>
-        carrier
-      </td>
-      <td>
-        <code title="uint32">
-          
-          <span>uint32</span>
-        </code>
-      </td>
-      <td class="content"><p>Detected initialized carrier ID on the axis.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>6</td>
-      <td>
-        hall_alarm_back
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Back hall alarm status of the axis.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>7</td>
-      <td>
-        hall_alarm_front
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Front hall alarm status of the axis.</p></td>
-      
-    </tr>
-    
-    
-  </tbody>
-</table>
- 
-      </div>
-      
-    
-      
-      <div class="block">
-        
-
-<h4 class="title is-4 type-heading" id="message-mmc.info.Response.Track.Driver.Info">
-  <span>
-    <a href="#message-mmc.info.Response.Track.Driver.Info" title="mmc.info.Response.Track.Driver.Info">message Info</a>
-  
-    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.info.html#message-mmc.info.Response.Track.Driver"><span title="mmc.info.Response.Track.Driver">mmc.info.Response.Track.Driver</span>
-    </a>)</span>
-  
-  </span>
-  
-</h4>
-
-<div class="block content">
-  <p>Driver's info description.</p>
-</div>
-
-<table class="table is-fullwidth is-hoverable is-bordered">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Field</th>
-      <th>Type</th>
-      <th>Description</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    
-    <tr>
-      <td>1</td>
-      <td>
-        id
-      </td>
-      <td>
-        <code title="uint32">
-          
-          <span>uint32</span>
-        </code>
-      </td>
-      <td class="content"><p>Driver ID.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>2</td>
-      <td>
-        connected
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Connection status between driver and CC link.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>3</td>
-      <td>
-        busy
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Whether the driver is currently executing a command.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>4</td>
-      <td>
-        motor_disabled
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Motor status.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>5</td>
-      <td>
-        stopped
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Emergency stop status.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>6</td>
-      <td>
-        paused
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Driver pause status.</p></td>
-      
-    </tr>
-    
-    
-  </tbody>
-</table>
- 
-      </div>
-      
-    
-      
-      <div class="block">
-        
-
-<h4 class="title is-4 type-heading" id="message-mmc.info.Response.Track.Carrier.Info">
-  <span>
-    <a href="#message-mmc.info.Response.Track.Carrier.Info" title="mmc.info.Response.Track.Carrier.Info">message Info</a>
-  
-    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.info.html#message-mmc.info.Response.Track.Carrier"><span title="mmc.info.Response.Track.Carrier">mmc.info.Response.Track.Carrier</span>
-    </a>)</span>
-  
-  </span>
-  
-</h4>
-
-<div class="block content">
-  <p>Carrier's info description.</p>
-</div>
-
-<table class="table is-fullwidth is-hoverable is-bordered">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Field</th>
-      <th>Type</th>
-      <th>Description</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    
-    <tr>
-      <td>1</td>
-      <td>
-        id
-      </td>
-      <td>
-        <code title="uint32">
-          
-          <span>uint32</span>
-        </code>
-      </td>
-      <td class="content"><p>Carrier ID.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>2</td>
-      <td>
-        position
-      </td>
-      <td>
-        <code title="float">
-          
-          <span>float</span>
-        </code>
-      </td>
-      <td class="content"><p>Position of the carrier in line.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>3</td>
-      <td>
-        axis_main
-      </td>
-      <td>
-        <code title="uint32">
-          
-          <span>uint32</span>
-        </code>
-      </td>
-      <td class="content"><p>Main axis ID.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>4</td>
-      <td>
-        axis_auxiliary
-      </td>
-      <td>
-        <code title="uint32">
-          
-            optional
-          
-          <span>uint32</span>
-        </code>
-      </td>
-      <td class="content"><p>Auxiliary axis ID, if carrier is on top of two axes.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>5</td>
-      <td>
-        cas_disabled
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Collision avoidance system (CAS) disabled.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>6</td>
-      <td>
-        cas_triggered
-      </td>
-      <td>
-        <code title="bool">
-          
-          <span>bool</span>
-        </code>
-      </td>
-      <td class="content"><p>Collision avoidance system (CAS) triggered.</p></td>
-      
-    </tr>
-    
-    <tr>
-      <td>7</td>
-      <td>
-        state
-      </td>
-      <td>
-        <code title="mmc.info.Response.Track.Carrier.Info.State">
-          
-          <a href="mmc.info.html#enum-mmc.info.Response.Track.Carrier.Info.State"><span title="mmc.info.Response.Track.Carrier.Info.State">mmc.info.Response.Track.Carrier.Info.State</span>
-    </a>
-        </code>
-      </td>
-      <td class="content"><p>Carrier State.</p></td>
-      
-    </tr>
-    
-    
-  </tbody>
-</table>
- 
-      </div>
-      
-    
-      
-      <div class="block">
-        
-
 <h4 class="title is-4 type-heading" id="message-mmc.info.Request">
   <span>
     <a href="#message-mmc.info.Request" title="mmc.info.Request">message Request</a>
@@ -1272,7 +856,7 @@ pushed.</p></td>
 </h4>
 
 <div class="block content">
-  <p>Info API: Request information from the PMF's MMC Server.</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1314,7 +898,8 @@ pushed.</p></td>
     </a>
             </code>
           </td>
-          <td class="content"><p>Get command(s) status.</p></td>
+          <td class="content"><p>Command information request. Get current status of command; necessary
+to determine if command is currently running, completed, or failed.</p></td>
           
         </tr>
       
@@ -1334,7 +919,7 @@ pushed.</p></td>
     </a>
             </code>
           </td>
-          <td class="content"><p>Get track information.</p></td>
+          <td class="content"><p>Track information request. Get current track state information.</p></td>
           
         </tr>
       
@@ -1358,7 +943,7 @@ pushed.</p></td>
 </h4>
 
 <div class="block content">
-  <p>Response description to the info API</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1400,7 +985,8 @@ pushed.</p></td>
     </a>
             </code>
           </td>
-          <td class="content"><p>Commands information response.</p></td>
+          <td class="content"><p>Information for requested command(s). If empty, no matching command(s)
+was found.</p></td>
           
         </tr>
       
@@ -1420,7 +1006,7 @@ pushed.</p></td>
     </a>
             </code>
           </td>
-          <td class="content"><p>Track information response.</p></td>
+          <td class="content"><p>Information for requested track state.</p></td>
           
         </tr>
       
@@ -1440,10 +1026,431 @@ pushed.</p></td>
     </a>
             </code>
           </td>
-          <td class="content"><p>Error kind if this response's request was invalid</p></td>
+          <td class="content"><p>Info request error. This error field will be returned if the provided
+info request could not be handled properly.</p></td>
           
         </tr>
       
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-mmc.info.Response.Track.Axis.State">
+  <span>
+    <a href="#message-mmc.info.Response.Track.Axis.State" title="mmc.info.Response.Track.Axis.State">message State</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.info.html#message-mmc.info.Response.Track.Axis"><span title="mmc.info.Response.Track.Axis">mmc.info.Response.Track.Axis</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        id
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Axis ID.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        motor_active
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Axis is currently controlling a carrier.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        waiting_pull
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Axis is waiting to pull carrier.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        waiting_push
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Axis is waiting to push carrier.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        carrier
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Carrier ID; non-zero if an initialized carrier is on the axis.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        hall_alarm_back
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Axis back hall alarm is active. Magnet is detected above back hall
+sensor.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>7</td>
+      <td>
+        hall_alarm_front
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Axis front hall alarm is active. Magnet is detected above front
+hall sensor.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-mmc.info.Response.Track.Driver.State">
+  <span>
+    <a href="#message-mmc.info.Response.Track.Driver.State" title="mmc.info.Response.Track.Driver.State">message State</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.info.html#message-mmc.info.Response.Track.Driver"><span title="mmc.info.Response.Track.Driver">mmc.info.Response.Track.Driver</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        id
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Driver ID.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        connected
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Connection status between driver and server.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        busy
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Driver is currently executing a command.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        motor_disabled
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Driver motor release activated. All driver motors are inactive.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        stopped
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Driver emergency stop activated.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        paused
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Driver pause activated.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-mmc.info.Response.Track.Carrier.State">
+  <span>
+    <a href="#message-mmc.info.Response.Track.Carrier.State" title="mmc.info.Response.Track.Carrier.State">message State</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.info.html#message-mmc.info.Response.Track.Carrier"><span title="mmc.info.Response.Track.Carrier">mmc.info.Response.Track.Carrier</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        id
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Carrier ID. Will always be non-zero.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        position
+      </td>
+      <td>
+        <code title="float">
+          
+          <span>float</span>
+        </code>
+      </td>
+      <td class="content"><p>Position of the carrier in line, in meters.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        axis_main
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Carrier's primary axis ID.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        axis_auxiliary
+      </td>
+      <td>
+        <code title="uint32">
+          
+            optional
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Carrier's auxiliary axis ID, if carrier is on top of two axes.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        cas_disabled
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Collision avoidance system (CAS) disabled.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        cas_triggered
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Collision avoidance system (CAS) triggered. Carrier will
+automatically resume movement when path is clear.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>7</td>
+      <td>
+        state
+      </td>
+      <td>
+        <code title="mmc.info.Response.Track.Carrier.State.State">
+          
+          <a href="mmc.info.html#enum-mmc.info.Response.Track.Carrier.State.State"><span title="mmc.info.Response.Track.Carrier.State.State">mmc.info.Response.Track.Carrier.State.State</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>Carrier state.</p></td>
+      
+    </tr>
+    
     
   </tbody>
 </table>
@@ -1467,13 +1474,11 @@ pushed.</p></td>
 </h4>
 
 <div class="block content">
-  <p>Request track status from the server. At least, either driver, axis,
-or carrier flag should be on to retrieve the desired information. If the
-filter is driver range or axis range, it will retrieve any set flag
-information from the track based on the specified range. If the filter is
-based on carrier id, it will retrieve any set flag information from the
-track based on the location of the carrier.</p>
-<p>Expected response: <code>Response.Track</code></p>
+  <p>Request track state information from server. One or more of the <code>info_</code>
+flags must be enabled to select the kind of track information desired.
+A filter may be optionally provided to limit the source of information
+from the track.</p>
+<p>Expected response: <code>mmc.Response.body.info.body.track</code></p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1499,14 +1504,14 @@ track based on the location of the carrier.</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Line ID.</p></td>
+      <td class="content"><p>Line ID. Select line from which information will be retrieved.</p></td>
       
     </tr>
     
     <tr>
       <td>2</td>
       <td>
-        driver
+        info_driver_state
       </td>
       <td>
         <code title="bool">
@@ -1514,14 +1519,14 @@ track based on the location of the carrier.</p>
           <span>bool</span>
         </code>
       </td>
-      <td class="content"><p>Enable retrieving driver information from the server.</p></td>
+      <td class="content"><p>Retrieve driver state information.</p></td>
       
     </tr>
     
     <tr>
       <td>3</td>
       <td>
-        axis
+        info_driver_errors
       </td>
       <td>
         <code title="bool">
@@ -1529,14 +1534,14 @@ track based on the location of the carrier.</p>
           <span>bool</span>
         </code>
       </td>
-      <td class="content"><p>Enable retrieving axis information from the server</p></td>
+      <td class="content"><p>Retrieve driver error information.</p></td>
       
     </tr>
     
     <tr>
       <td>4</td>
       <td>
-        carrier
+        info_axis_state
       </td>
       <td>
         <code title="bool">
@@ -1544,7 +1549,37 @@ track based on the location of the carrier.</p>
           <span>bool</span>
         </code>
       </td>
-      <td class="content"><p>Enable retrieving carrier information from the server</p></td>
+      <td class="content"><p>Retrieve axis state information.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        info_axis_errors
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Retrieve axis errors information.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        info_carrier_state
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Retrieve carrier state information.</p></td>
       
     </tr>
     
@@ -1563,30 +1598,10 @@ track based on the location of the carrier.</p>
 
         <tr>
           <td>
-            5
+            8
           </td>
           <td>
-            driver_range
-          </td>
-          <td>
-            <code title="Range">
-              
-              <a href="__default.html#message-Range"><span title="Range">Range</span>
-    </a>
-            </code>
-          </td>
-          <td class="content"><p>Retrieve the information from a driver range</p></td>
-          
-        </tr>
-      
-        
-
-        <tr>
-          <td>
-            6
-          </td>
-          <td>
-            axis_range
+            drivers
           </td>
           <td>
             <code title="Range">
@@ -1595,7 +1610,11 @@ track based on the location of the carrier.</p>
     </a>
             </code>
           </td>
-          <td class="content"><p>Retrieve the information from an axis range</p></td>
+          <td class="content"><p>Retrieve information from driver ID range. Driver information flags
+will include drivers within this range. Axis information flags will
+include every axis belonging to the drivers in this range. Carrier
+information flags will include every carrier currently controlled by
+one of the drivers in this range.</p></td>
           
         </tr>
       
@@ -1603,7 +1622,31 @@ track based on the location of the carrier.</p>
 
         <tr>
           <td>
-            7
+            9
+          </td>
+          <td>
+            axes
+          </td>
+          <td>
+            <code title="Range">
+              
+              <a href="__default.html#message-Range"><span title="Range">Range</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Retrieve information from axis ID range. Driver information flags
+will include drivers that contain one of the axes within this range.
+Axis information flags will include axes within this range. Carrier
+information flags will include every carrier currently controlled by
+one of the axes in this range.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            10
           </td>
           <td>
             carriers
@@ -1615,7 +1658,11 @@ track based on the location of the carrier.</p>
     </a>
             </code>
           </td>
-          <td class="content"><p>Retrieve the information based on the location of carrier(s)</p></td>
+          <td class="content"><p>Retrieve information from carrier IDs. Driver information flags will
+include drivers that control one of the carriers within this list.
+Axis information flags will include axes that control one of the
+carriers within this list. Carrier information flags will include
+carriers within this list.</p></td>
           
         </tr>
       
@@ -1642,8 +1689,7 @@ track based on the location of the carrier.</p>
 </h4>
 
 <div class="block content">
-  <p>Track information description. Client shall validate if the response match
-the requested information.</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1676,18 +1722,18 @@ the requested information.</p>
     <tr>
       <td>2</td>
       <td>
-        driver_infos
+        driver_state
       </td>
       <td>
-        <code title="mmc.info.Response.Track.Driver.Info">
+        <code title="mmc.info.Response.Track.Driver.State">
           
             repeated
           
-          <a href="mmc.info.html#message-mmc.info.Response.Track.Driver.Info"><span title="mmc.info.Response.Track.Driver.Info">mmc.info.Response.Track.Driver.Info</span>
+          <a href="mmc.info.html#message-mmc.info.Response.Track.Driver.State"><span title="mmc.info.Response.Track.Driver.State">mmc.info.Response.Track.Driver.State</span>
     </a>
         </code>
       </td>
-      <td class="content"><p>Array of driver's information.</p></td>
+      <td class="content"><p>Driver state information list. Empty if request flag was disabled.</p></td>
       
     </tr>
     
@@ -1705,25 +1751,25 @@ the requested information.</p>
     </a>
         </code>
       </td>
-      <td class="content"><p>Array of driver's error.</p></td>
+      <td class="content"><p>Driver error information list. Empty if request flag was disabled.</p></td>
       
     </tr>
     
     <tr>
       <td>4</td>
       <td>
-        axis_infos
+        axis_state
       </td>
       <td>
-        <code title="mmc.info.Response.Track.Axis.Info">
+        <code title="mmc.info.Response.Track.Axis.State">
           
             repeated
           
-          <a href="mmc.info.html#message-mmc.info.Response.Track.Axis.Info"><span title="mmc.info.Response.Track.Axis.Info">mmc.info.Response.Track.Axis.Info</span>
+          <a href="mmc.info.html#message-mmc.info.Response.Track.Axis.State"><span title="mmc.info.Response.Track.Axis.State">mmc.info.Response.Track.Axis.State</span>
     </a>
         </code>
       </td>
-      <td class="content"><p>Array of axis' information.</p></td>
+      <td class="content"><p>Axis state information list. Empty if request flag was disabled.</p></td>
       
     </tr>
     
@@ -1741,25 +1787,25 @@ the requested information.</p>
     </a>
         </code>
       </td>
-      <td class="content"><p>Array of axis' error.</p></td>
+      <td class="content"><p>Axis error information list. Empty if request flag was disabled.</p></td>
       
     </tr>
     
     <tr>
       <td>6</td>
       <td>
-        carrier_infos
+        carrier_state
       </td>
       <td>
-        <code title="mmc.info.Response.Track.Carrier.Info">
+        <code title="mmc.info.Response.Track.Carrier.State">
           
             repeated
           
-          <a href="mmc.info.html#message-mmc.info.Response.Track.Carrier.Info"><span title="mmc.info.Response.Track.Carrier.Info">mmc.info.Response.Track.Carrier.Info</span>
+          <a href="mmc.info.html#message-mmc.info.Response.Track.Carrier.State"><span title="mmc.info.Response.Track.Carrier.State">mmc.info.Response.Track.Carrier.State</span>
     </a>
         </code>
       </td>
-      <td class="content"><p>Array of carrier's information.</p></td>
+      <td class="content"><p>Carrier state information list. Empty if request flag was disabled.</p></td>
       
     </tr>
     
@@ -1803,50 +1849,35 @@ the requested information.</p>
     <tr>
       <td><code>INFO_REQUEST_ERROR_UNSPECIFIED</code></td>
       <td>0</td>
-      <td class="content"></td>
+      <td class="content"><p>This error code is unused, and will never be returned. It is reserved
+as the default error code according to protobuf specification.</p></td>
     </tr>
     
     <tr>
       <td><code>INFO_REQUEST_ERROR_INVALID_LINE</code></td>
       <td>1</td>
-      <td class="content"><p>Attempted to use line ID outside of the configured line.</p></td>
+      <td class="content"><p>Invalid line ID provided. Ensure that line ID exists in track
+configuration.</p></td>
     </tr>
     
     <tr>
       <td><code>INFO_REQUEST_ERROR_INVALID_AXIS</code></td>
       <td>2</td>
-      <td class="content"><p>Attempted to use axis ID outside of the configured axis.</p></td>
+      <td class="content"><p>Invalid axis ID provided. Ensure that axis ID exists in line.</p></td>
     </tr>
     
     <tr>
       <td><code>INFO_REQUEST_ERROR_INVALID_DRIVER</code></td>
       <td>3</td>
-      <td class="content"><p>Attempted to use driver ID outside of the configured driver.</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>INFO_REQUEST_ERROR_CARRIER_NOT_FOUND</code></td>
-      <td>4</td>
-      <td class="content"><p>Attempted to retrieve uninitialized carrier information.</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>INFO_REQUEST_ERROR_CC_LINK_DISCONNECTED</code></td>
-      <td>5</td>
-      <td class="content"><p>Attempted to retrieve info when the CC Link connection is not
-established.</p></td>
+      <td class="content"><p>Invalid driver ID provided. Ensure that driver ID exists in line.</p></td>
     </tr>
     
     <tr>
       <td><code>INFO_REQUEST_ERROR_MISSING_PARAMETER</code></td>
-      <td>6</td>
-      <td class="content"><p>A request missing the required parameter.</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>INFO_REQUEST_ERROR_COMMAND_NOT_FOUND</code></td>
-      <td>7</td>
-      <td class="content"><p>Attempted to request non-existing command information.</p></td>
+      <td>4</td>
+      <td class="content"><p>Request is missing a required parameter. If sending a track request,
+ensure that at least one of the information flags is selected. If using
+the <code>carriers</code> filter, ensure that at least one carrier ID is provided.</p></td>
     </tr>
     
   </tbody>
@@ -1876,63 +1907,35 @@ established.</p></td>
     <tr>
       <td><code>COMMAND_ERROR_UNSPECIFIED</code></td>
       <td>0</td>
-      <td class="content"></td>
-    </tr>
-    
-    <tr>
-      <td><code>COMMAND_ERROR_INVALID_COMMAND</code></td>
-      <td>1</td>
-      <td class="content"><p>Invalid command sent to the cc-link.</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>COMMAND_ERROR_INVALID_AXIS</code></td>
-      <td>2</td>
-      <td class="content"><p>Attempted to send a command with invalid axis ID.</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>COMMAND_ERROR_INVALID_PARAMETER</code></td>
-      <td>3</td>
-      <td class="content"><p>Invalid parameter for a command.</p></td>
+      <td class="content"><p>This error code is unused, and will never be returned. It is reserved
+as the default error code according to protobuf specification.</p></td>
     </tr>
     
     <tr>
       <td><code>COMMAND_ERROR_INVALID_SYSTEM_STATE</code></td>
+      <td>1</td>
+      <td class="content"><p>System state prevented successful command execution. Ensure that all
+preconditions are met with track info request before sending command.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_ERROR_INVALID_CARRIER_ID</code></td>
+      <td>2</td>
+      <td class="content"><p>Command target carrier ID not found, or duplicate carrier ID exists
+in line.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_ERROR_DRIVER_DISCONNECTED</code></td>
+      <td>3</td>
+      <td class="content"><p>Driver connection failed while command progressing.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_ERROR_UNEXPECTED</code></td>
       <td>4</td>
-      <td class="content"><p>Attempted to send a command without satisfying the command's
-preconditions.</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>COMMAND_ERROR_CARRIER_NOT_FOUND</code></td>
-      <td>5</td>
-      <td class="content"><p>Carrier intended for a command is not found.</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>COMMAND_ERROR_CARRIER_ALREADY_EXISTS</code></td>
-      <td>6</td>
-      <td class="content"><p>Attempted to initialize a carrier with an ID that already belongs to
-another carrier on the line.</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>COMMAND_ERROR_CC_LINK_DISCONNECTED</code></td>
-      <td>7</td>
-      <td class="content"><p>CC-link is disconnected while a command is progressing</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>COMMAND_ERROR_OUT_OF_MEMORY</code></td>
-      <td>8</td>
-      <td class="content"><p>Failed to continue a command because system is running out of memory</p></td>
-    </tr>
-    
-    <tr>
-      <td><code>COMMAND_ERROR_HOMING_FAILED</code></td>
-      <td>9</td>
-      <td class="content"><p>Deprecated.</p></td>
+      <td class="content"><p>Unexpected command execution error. This is likely an implementation
+bug; please contact PMF support for assistance.</p></td>
     </tr>
     
   </tbody>
@@ -1940,8 +1943,8 @@ another carrier on the line.</p></td>
     </div>
     
     <div class="block">
-      <h4 class="title is-4 type-heading" id="enum-mmc.info.Response.Track.Carrier.Info.State">
-  <a href="#enum-mmc.info.Response.Track.Carrier.Info.State" title="mmc.info.Response.Track.Carrier.Info.State">enum State</a>
+      <h4 class="title is-4 type-heading" id="enum-mmc.info.Response.Track.Carrier.State.State">
+  <a href="#enum-mmc.info.Response.Track.Carrier.State.State" title="mmc.info.Response.Track.Carrier.State.State">enum State</a>
   
 </h4>
 
@@ -1968,67 +1971,74 @@ another carrier on the line.</p></td>
     <tr>
       <td><code>CARRIER_STATE_CALIBRATING</code></td>
       <td>1</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier is currently operating for line calibration.</p></td>
     </tr>
     
     <tr>
       <td><code>CARRIER_STATE_CALIBRATE_COMPLETED</code></td>
       <td>2</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier has completed line calibration, and may now be used for
+normal operation.</p></td>
     </tr>
     
     <tr>
       <td><code>CARRIER_STATE_MOVING</code></td>
       <td>3</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier is currently moving towards target destination.</p></td>
     </tr>
     
     <tr>
       <td><code>CARRIER_STATE_MOVE_COMPLETED</code></td>
       <td>4</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier has arrived within threshold at target destination.</p></td>
     </tr>
     
     <tr>
-      <td><code>CARRIER_STATE_ISOLATING</code></td>
+      <td><code>CARRIER_STATE_INITIALIZING</code></td>
       <td>5</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier is initializing. Must not be used until initialization is
+completed.</p></td>
     </tr>
     
     <tr>
-      <td><code>CARRIER_STATE_ISOLATE_COMPLETED</code></td>
+      <td><code>CARRIER_STATE_INITIALIZE_COMPLETED</code></td>
       <td>6</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier initialization completed. May now be used for normal
+operation.</p></td>
     </tr>
     
     <tr>
       <td><code>CARRIER_STATE_PUSHING</code></td>
       <td>7</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier is being pushed by axis. Used to eject carrier from line.</p></td>
     </tr>
     
     <tr>
       <td><code>CARRIER_STATE_PUSH_COMPLETED</code></td>
       <td>8</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier push completed by axis. This state is not observed when
+carrier is ejected from line.</p></td>
     </tr>
     
     <tr>
       <td><code>CARRIER_STATE_PULLING</code></td>
       <td>9</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier is being pulled by axis. Must not be used until pull is
+completed.</p></td>
     </tr>
     
     <tr>
       <td><code>CARRIER_STATE_PULL_COMPLETED</code></td>
       <td>10</td>
-      <td class="content"></td>
+      <td class="content"><p>Carrier pull completed by axis. May now be used for normal
+operation.</p></td>
     </tr>
     
     <tr>
       <td><code>CARRIER_STATE_OVERCURRENT</code></td>
       <td>11</td>
-      <td class="content"></td>
+      <td class="content"><p>Overcurrent detected in carrier axis motor. Carrier movement has
+been canceled.</p></td>
     </tr>
     
   </tbody>
@@ -2056,27 +2066,29 @@ another carrier on the line.</p></td>
   <tbody>
     
     <tr>
-      <td><code>STATUS_UNSPECIFIED</code></td>
+      <td><code>COMMAND_STATUS_UNSPECIFIED</code></td>
       <td>0</td>
-      <td class="content"></td>
+      <td class="content"><p>This command status is unused, and will never be returned. It is
+reserved as the default status code according to protobuf
+specification.</p></td>
     </tr>
     
     <tr>
-      <td><code>STATUS_PROGRESSING</code></td>
+      <td><code>COMMAND_STATUS_PROGRESSING</code></td>
       <td>1</td>
-      <td class="content"><p>Command is progressing in the server.</p></td>
+      <td class="content"><p>Command currently executing.</p></td>
     </tr>
     
     <tr>
-      <td><code>STATUS_COMPLETED</code></td>
+      <td><code>COMMAND_STATUS_COMPLETED</code></td>
       <td>2</td>
-      <td class="content"><p>Command is completed.</p></td>
+      <td class="content"><p>Command completed.</p></td>
     </tr>
     
     <tr>
-      <td><code>STATUS_FAILED</code></td>
+      <td><code>COMMAND_STATUS_FAILED</code></td>
       <td>3</td>
-      <td class="content"><p>Command is failed to be executed.</p></td>
+      <td class="content"><p>Command execution failed.</p></td>
     </tr>
     
   </tbody>
