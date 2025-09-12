@@ -25,7 +25,7 @@ pub const Request = struct {
         stop_push,
         release,
         clear_errors,
-        clear_command,
+        remove_command,
         stop,
         pause,
         @"resume",
@@ -43,7 +43,7 @@ pub const Request = struct {
         stop_push: Request.StopPush,
         release: Request.Release,
         clear_errors: Request.ClearErrors,
-        clear_command: Request.ClearCommand,
+        remove_command: Request.RemoveCommand,
         stop: Request.Stop,
         pause: Request.Pause,
         @"resume": Request.Resume,
@@ -60,7 +60,7 @@ pub const Request = struct {
             .stop_push = fd(10, .submessage),
             .release = fd(11, .submessage),
             .clear_errors = fd(12, .submessage),
-            .clear_command = fd(13, .submessage),
+            .remove_command = fd(13, .submessage),
             .stop = fd(14, .submessage),
             .pause = fd(15, .submessage),
             .@"resume" = fd(16, .submessage),
@@ -1072,7 +1072,7 @@ pub const Request = struct {
         }
     };
 
-    pub const ClearCommand = struct {
+    pub const RemoveCommand = struct {
         command: ?u32 = null,
 
         pub const _desc_table = .{
@@ -1385,16 +1385,16 @@ pub const Response = struct {
 
     pub const _body_case = enum {
         id,
-        cleared_id,
+        removed_id,
         request_error,
     };
     pub const body_union = union(_body_case) {
         id: u32,
-        cleared_id: u32,
+        removed_id: u32,
         request_error: Request.Error,
         pub const _desc_table = .{
             .id = fd(1, .{ .scalar = .uint32 }),
-            .cleared_id = fd(3, .{ .scalar = .uint32 }),
+            .removed_id = fd(3, .{ .scalar = .uint32 }),
             .request_error = fd(2, .@"enum"),
         };
     };
