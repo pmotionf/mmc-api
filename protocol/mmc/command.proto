@@ -9,7 +9,7 @@ import "range.proto";
 // When a command is sent to the server, it will be queued for execution.
 // Command execution status can be polled through the Info API. The status
 // remains stored in a limited history buffer, and should be cleared with
-// `clear_command` after completion.
+// `remove_command` after completion.
 message Request {
   oneof body {
     // Calibrate a line.
@@ -37,7 +37,7 @@ message Request {
     // Clear error information.
     ClearErrors clear_errors = 12;
     // Cancel a running command or remove its status history.
-    ClearCommand clear_command = 13;
+    RemoveCommand remove_command = 13;
     // Activate emergency stop for all drivers in line(s).
     Stop stop = 14;
     // Activate pause for all drivers in line(s).
@@ -244,8 +244,8 @@ message Request {
   // command ID is specified, remove any commands received by the server. If
   // the commands are still progressing, cancel the command execution.
   //
-  // Expected response: `mmc.Response.body.command.body.cleared_id` (uint32).
-  message ClearCommand {
+  // Expected response: `mmc.Response.body.command.body.removed_id` (uint32).
+  message RemoveCommand {
     // Command ID.
     optional uint32 command = 1;
   }
@@ -313,7 +313,7 @@ message Request {
     // established.
     COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 13;
     // Server unable to receive new command caused by out of memory.
-    // Try `Command.Request.clear_command` to free the memory.
+    // Try `Command.Request.remove_command` to free the memory.
     COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 14;
     // Attempted to run more than 8 auto initialize instance.
     COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED = 15;
@@ -326,7 +326,7 @@ message Response {
     // Assigned ID for newly sent command.
     uint32 id = 1;
     // ID of cleared existing command.
-    uint32 cleared_id = 3;
+    uint32 removed_id = 3;
     // Error during command's execution.
     Request.Error request_error = 2;
   }
