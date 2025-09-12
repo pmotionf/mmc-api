@@ -1,4 +1,4 @@
-// PMF MMC API version 1.0.0.
+// PMF MMC API version 1.0.1
 
 syntax = "proto3";
 package mmc;
