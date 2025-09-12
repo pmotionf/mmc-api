@@ -199,7 +199,8 @@
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Line ID.</p></td>
+      <td class="content"><p>Line ID. Numeric ID, starting from 1, that is unique to each line in
+the track. This ID is used to address the line in other requests.</p></td>
       
     </tr>
     
@@ -214,7 +215,8 @@
           <span>string</span>
         </code>
       </td>
-      <td class="content"><p>Line name.</p></td>
+      <td class="content"><p>Configured line name. This name is otherwise unused by the API, and
+is provided to the client for end-user convenience.</p></td>
       
     </tr>
     
@@ -229,7 +231,7 @@
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Number of axes on the line.</p></td>
+      <td class="content"><p>Total number of axes in the line.</p></td>
       
     </tr>
     
@@ -244,7 +246,7 @@
           <span>float</span>
         </code>
       </td>
-      <td class="content"><p>Length of each axis on the line, in meters.</p></td>
+      <td class="content"><p>Length of each axis in the line, in meters.</p></td>
       
     </tr>
     
@@ -259,7 +261,7 @@
           <span>float</span>
         </code>
       </td>
-      <td class="content"><p>Supported carrier length for the line, in meters.</p></td>
+      <td class="content"><p>Carrier magnet length, in meters.</p></td>
       
     </tr>
     
@@ -283,7 +285,7 @@
 </h4>
 
 <div class="block content">
-  <p>Core API: Request server configuration</p>
+  
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -376,7 +378,7 @@
     </a>
             </code>
           </td>
-          <td class="content"><p>Server information.</p></td>
+          <td class="content"><p>Server process information.</p></td>
           
         </tr>
       
@@ -436,7 +438,7 @@
     </a>
             </code>
           </td>
-          <td class="content"><p>Error response if the core API request is failed.</p></td>
+          <td class="content"><p>Error response if the core request could not be handled.</p></td>
           
         </tr>
       
@@ -644,7 +646,7 @@
     </a>
         </code>
       </td>
-      <td class="content"><p>Array of the configured lines.</p></td>
+      <td class="content"><p>All configured lines in track.</p></td>
       
     </tr>
     
@@ -688,13 +690,14 @@
     <tr>
       <td><code>CORE_REQUEST_ERROR_UNSPECIFIED</code></td>
       <td>0</td>
-      <td class="content"></td>
+      <td class="content"><p>This error code is unused, and will never be returned. It is reserved
+as the default error code according to protobuf specification.</p></td>
     </tr>
     
     <tr>
       <td><code>CORE_REQUEST_ERROR_REQUEST_UNKNOWN</code></td>
       <td>1</td>
-      <td class="content"><p>Unknown core API request.</p></td>
+      <td class="content"><p>The core request kind was unspecified.</p></td>
     </tr>
     
   </tbody>
@@ -708,7 +711,7 @@
 </h4>
 
 <div class="block content">
-  <p><p>List of server configuration to be retrieved</p></p>
+  <p></p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -724,25 +727,28 @@
     <tr>
       <td><code>CORE_REQUEST_KIND_UNSPECIFIED</code></td>
       <td>0</td>
-      <td class="content"></td>
+      <td class="content"><p>This request kind is unused, and should never be sent. It is reserved
+as the default request kind according to protobuf specification.</p></td>
     </tr>
     
     <tr>
       <td><code>CORE_REQUEST_KIND_API_VERSION</code></td>
       <td>1</td>
-      <td class="content"><p>Request server's API version.</p></td>
+      <td class="content"><p>Request server's API version. Use to check if API version matches
+client API compatibility.</p></td>
     </tr>
     
     <tr>
       <td><code>CORE_REQUEST_KIND_SERVER_INFO</code></td>
       <td>2</td>
-      <td class="content"><p>Request server's version.</p></td>
+      <td class="content"><p>Request server process information. This includes the configured server
+name and server implementation version.</p></td>
     </tr>
     
     <tr>
       <td><code>CORE_REQUEST_KIND_TRACK_CONFIG</code></td>
       <td>3</td>
-      <td class="content"><p>Request the track information of the server.</p></td>
+      <td class="content"><p>Request the configured track information of the server.</p></td>
     </tr>
     
   </tbody>

@@ -92,15 +92,6 @@
     
       
       <p>
-        <a href="#message-mmc.command.Request.ClearCommand">
-          <span class="tag" style="min-width: 6em">Message</span>
-          <code>ClearCommand</code> 
-        </a>
-      </p>
-      
-    
-      
-      <p>
         <a href="#message-mmc.command.Request.ClearErrors">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>ClearErrors</code> 
@@ -146,6 +137,15 @@
     
       
       <p>
+        <a href="#message-mmc.command.Request.Pause">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>Pause</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
         <a href="#message-mmc.command.Request.Pull">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>Pull</code> 
@@ -173,6 +173,15 @@
     
       
       <p>
+        <a href="#message-mmc.command.Request.RemoveCommand">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>RemoveCommand</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
         <a href="#message-mmc.command.Request">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>Request</code> 
@@ -191,9 +200,27 @@
     
       
       <p>
+        <a href="#message-mmc.command.Request.Resume">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>Resume</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
         <a href="#message-mmc.command.Request.SetZero">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>SetZero</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-mmc.command.Request.Stop">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>Stop</code> 
         </a>
       </p>
       
@@ -273,7 +300,7 @@
 
 <div class="block content">
   <p>Automatically initialize carriers on every specified lines.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -331,7 +358,7 @@
 <div class="block content">
   <p>Calibrate a line by positioning an unitiliazed carrier on the first axis
 of the line.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -372,64 +399,6 @@ of the line.</p>
       <div class="block">
         
 
-<h4 class="title is-4 type-heading" id="message-mmc.command.Request.ClearCommand">
-  <span>
-    <a href="#message-mmc.command.Request.ClearCommand" title="mmc.command.Request.ClearCommand">message ClearCommand</a>
-  
-    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
-    </a>)</span>
-  
-  </span>
-  
-</h4>
-
-<div class="block content">
-  <p>Remove a command on the server if the command ID is specified. If no
-command ID is specified, remove any commands received by the server. If
-the commands are still progressing, cancel the command execution.</p>
-<p>Expected response: cleared command ID (uint32)</p>
-</div>
-
-<table class="table is-fullwidth is-hoverable is-bordered">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Field</th>
-      <th>Type</th>
-      <th>Description</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    
-    <tr>
-      <td>1</td>
-      <td>
-        command
-      </td>
-      <td>
-        <code title="uint32">
-          
-            optional
-          
-          <span>uint32</span>
-        </code>
-      </td>
-      <td class="content"><p>Command ID.</p></td>
-      
-    </tr>
-    
-    
-  </tbody>
-</table>
- 
-      </div>
-      
-    
-      
-      <div class="block">
-        
-
 <h4 class="title is-4 type-heading" id="message-mmc.command.Request.ClearErrors">
   <span>
     <a href="#message-mmc.command.Request.ClearErrors" title="mmc.command.Request.ClearErrors">message ClearErrors</a>
@@ -444,7 +413,7 @@ the commands are still progressing, cancel the command execution.</p>
 <div class="block content">
   <p>Clear all error information on the driver, if specified. If not, clear
 error information on every driver of the specified line ID.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -517,7 +486,7 @@ error information on every driver of the specified line ID.</p>
 <div class="block content">
   <p>Clear carrier information located on the axis, if specified. If not,
 clear all carrier information of the specified line ID</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -589,7 +558,7 @@ clear all carrier information of the specified line ID</p>
 
 <div class="block content">
   <p>Initialize a carrier.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -679,7 +648,7 @@ clear all carrier information of the specified line ID</p>
     </a>
         </code>
       </td>
-      <td class="content"><p>Linked axis ID to the specified axis from the carrier.</p></td>
+      <td class="content"><p>Linked axis direction from the specified axis.</p></td>
       
     </tr>
     
@@ -796,7 +765,7 @@ clear all carrier information of the specified line ID</p>
 
 <div class="block content">
   <p>Move a carrier to the desired position.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -984,6 +953,63 @@ distance moves the carrier backwards.</p></td>
       <div class="block">
         
 
+<h4 class="title is-4 type-heading" id="message-mmc.command.Request.Pause">
+  <span>
+    <a href="#message-mmc.command.Request.Pause" title="mmc.command.Request.Pause">message Pause</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  <p>Pause any operation in PMF LMS. Any queued commands in the server will be
+continued once the resume command is given.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        lines
+      </td>
+      <td>
+        <code title="uint32">
+          
+            repeated
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Line ID. If provided, pause operations only on the specified lines.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
 <h4 class="title is-4 type-heading" id="message-mmc.command.Request.Pull">
   <span>
     <a href="#message-mmc.command.Request.Pull" title="mmc.command.Request.Pull">message Pull</a>
@@ -997,7 +1023,7 @@ distance moves the carrier backwards.</p></td>
 
 <div class="block content">
   <p>Pull and initialize a new carrier into a line.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1145,7 +1171,7 @@ distance moves the carrier backwards.</p></td>
 
 <div class="block content">
   <p>Push an initialized carrier to the specified direction.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1281,7 +1307,7 @@ push it once the carrier arrives.</p></td>
 specified, the motor which control the specified carrier release the
 control. Otherwise, all carriers on the provided line will be released
 from control.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1339,6 +1365,64 @@ from control.</p>
       <div class="block">
         
 
+<h4 class="title is-4 type-heading" id="message-mmc.command.Request.RemoveCommand">
+  <span>
+    <a href="#message-mmc.command.Request.RemoveCommand" title="mmc.command.Request.RemoveCommand">message RemoveCommand</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  <p>Remove a command on the server if the command ID is specified. If no
+command ID is specified, remove any commands received by the server. If
+the commands are still progressing, cancel the command execution.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.removed_id</code> (uint32).</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        command
+      </td>
+      <td>
+        <code title="uint32">
+          
+            optional
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Command ID.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
 <h4 class="title is-4 type-heading" id="message-mmc.command.Request">
   <span>
     <a href="#message-mmc.command.Request" title="mmc.command.Request">message Request</a>
@@ -1352,7 +1436,7 @@ from control.</p>
 <p>When a command is sent to the server, it will be queued for execution.
 Command execution status can be polled through the Info API. The status
 remains stored in a limited history buffer, and should be cleared with
-<code>clear_command</code> after completion.</p>
+<code>remove_command</code> after completion.</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1625,16 +1709,76 @@ remains stored in a limited history buffer, and should be cleared with
             13
           </td>
           <td>
-            clear_command
+            remove_command
           </td>
           <td>
-            <code title="mmc.command.Request.ClearCommand">
+            <code title="mmc.command.Request.RemoveCommand">
               
-              <a href="mmc.command.html#message-mmc.command.Request.ClearCommand"><span title="mmc.command.Request.ClearCommand">mmc.command.Request.ClearCommand</span>
+              <a href="mmc.command.html#message-mmc.command.Request.RemoveCommand"><span title="mmc.command.Request.RemoveCommand">mmc.command.Request.RemoveCommand</span>
     </a>
             </code>
           </td>
           <td class="content"><p>Cancel a running command or remove its status history.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            14
+          </td>
+          <td>
+            stop
+          </td>
+          <td>
+            <code title="mmc.command.Request.Stop">
+              
+              <a href="mmc.command.html#message-mmc.command.Request.Stop"><span title="mmc.command.Request.Stop">mmc.command.Request.Stop</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Activate emergency stop for all drivers in line(s).</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            15
+          </td>
+          <td>
+            pause
+          </td>
+          <td>
+            <code title="mmc.command.Request.Pause">
+              
+              <a href="mmc.command.html#message-mmc.command.Request.Pause"><span title="mmc.command.Request.Pause">mmc.command.Request.Pause</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Activate pause for all drivers in line(s).</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            16
+          </td>
+          <td>
+            resume
+          </td>
+          <td>
+            <code title="mmc.command.Request.Resume">
+              
+              <a href="mmc.command.html#message-mmc.command.Request.Resume"><span title="mmc.command.Request.Resume">mmc.command.Request.Resume</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Deactivate emergency stop and pause for all drivers in line(s).</p></td>
           
         </tr>
       
@@ -1691,7 +1835,7 @@ remains stored in a limited history buffer, and should be cleared with
             1
           </td>
           <td>
-            command
+            id
           </td>
           <td>
             <code title="uint32">
@@ -1730,7 +1874,7 @@ remains stored in a limited history buffer, and should be cleared with
             3
           </td>
           <td>
-            cleared_command
+            removed_id
           </td>
           <td>
             <code title="uint32">
@@ -1742,6 +1886,63 @@ remains stored in a limited history buffer, and should be cleared with
           
         </tr>
       
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-mmc.command.Request.Resume">
+  <span>
+    <a href="#message-mmc.command.Request.Resume" title="mmc.command.Request.Resume">message Resume</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  <p>Resume lines that have been stopped or paused. If the line is not paused
+or emergency stopped, this command will succeed without any effect.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        lines
+      </td>
+      <td>
+        <code title="uint32">
+          
+            repeated
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Line ID. If provided, resume operations only to those specified lines.</p></td>
+      
+    </tr>
+    
     
   </tbody>
 </table>
@@ -1767,7 +1968,7 @@ remains stored in a limited history buffer, and should be cleared with
 <div class="block content">
   <p>Set a zero position of a line by positioning an initialized carrier on
 the first axis of the line.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1808,6 +2009,64 @@ the first axis of the line.</p>
       <div class="block">
         
 
+<h4 class="title is-4 type-heading" id="message-mmc.command.Request.Stop">
+  <span>
+    <a href="#message-mmc.command.Request.Stop" title="mmc.command.Request.Stop">message Stop</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  <p>Send an emergency stop command to stop any operation in PMF LMS. This
+command also removes all queued commands in the server.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        lines
+      </td>
+      <td>
+        <code title="uint32">
+          
+            repeated
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Line ID. If provided, stop operations only on the specified lines and
+remove all commands that targeting those lines.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
 <h4 class="title is-4 type-heading" id="message-mmc.command.Request.StopPull">
   <span>
     <a href="#message-mmc.command.Request.StopPull" title="mmc.command.Request.StopPull">message StopPull</a>
@@ -1822,7 +2081,7 @@ the first axis of the line.</p>
 <div class="block content">
   <p>Stop pulling a carrier to the specified axis. If no axis is provided,
 then all pending carrier pulls on the line will be stopped.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1895,7 +2154,7 @@ then all pending carrier pulls on the line will be stopped.</p>
 <div class="block content">
   <p>Stop pushing a carrier from the specified axis. If no axis is provided,
 then all pending carrier pushes on the line will be stopped.</p>
-<p>Expected response: command ID (uint32).</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -2252,7 +2511,7 @@ established.</p></td>
       <td><code>COMMAND_REQUEST_ERROR_OUT_OF_MEMORY</code></td>
       <td>14</td>
       <td class="content"><p>Server unable to receive new command caused by out of memory.
-Try <code>Command.Request.clear_command</code> to free the memory.</p></td>
+Try <code>Command.Request.remove_command</code> to free the memory.</p></td>
     </tr>
     
     <tr>
