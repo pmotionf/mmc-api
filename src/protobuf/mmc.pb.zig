@@ -5,11 +5,11 @@ const std = @import("std");
 const pb = @import("protobuf");
 const fd = pb.fd;
 /// import package mmc.core
-const mmc_core = @import("mmc/core.pb.zig");
+pub const core = @import("mmc/core.pb.zig");
 /// import package mmc.command
-const mmc_command = @import("mmc/command.pb.zig");
+pub const command = @import("mmc/command.pb.zig");
 /// import package mmc.info
-const mmc_info = @import("mmc/info.pb.zig");
+pub const info = @import("mmc/info.pb.zig");
 
 pub const Control = enum(i32) {
     CONTROL_UNSPECIFIED = 0,
@@ -27,9 +27,9 @@ pub const Request = struct {
         info,
     };
     pub const body_union = union(_body_case) {
-        core: mmc_core.Request,
-        command: mmc_command.Request,
-        info: mmc_info.Request,
+        core: core.Request,
+        command: command.Request,
+        info: info.Request,
         pub const _desc_table = .{
             .core = fd(1, .submessage),
             .command = fd(2, .submessage),
@@ -113,9 +113,9 @@ pub const Response = struct {
         request_error,
     };
     pub const body_union = union(_body_case) {
-        core: mmc_core.Response,
-        command: mmc_command.Response,
-        info: mmc_info.Response,
+        core: core.Response,
+        command: command.Response,
+        info: info.Response,
         request_error: Request.Error,
         pub const _desc_table = .{
             .core = fd(1, .submessage),
