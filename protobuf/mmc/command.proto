@@ -44,8 +44,8 @@ message Request {
     Pause pause = 15;
     // Deactivate emergency stop and pause for all drivers in line(s).
     Resume resume = 16;
-    // Set the carrier ID to a new one.
-    SetCarrierID set_carrier_id = 17;
+    // Change an existing carrier ID to a new unique carrier ID.
+    SetCarrierId set_carrier_id = 17;
   }
 
   // Release the control imposed by the motor to the carrier. If a carrier is
@@ -280,16 +280,16 @@ message Request {
     repeated uint32 lines = 1;
   }
 
-  // Change the carrier ID of the initialized carrier on the line. If the
-  // new carrier ID already exists on the line, return INVALID_CARRIER.
+  // Change the carrier ID of an existing initialized carrier. If the new
+  // carrier ID already exists on the line, returns INVALID_CARRIER.
   //
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
-  message SetCarrierID {
+  message SetCarrierId {
     // Line ID.
     uint32 line = 1;
-    // The carrier in which the ID to be changed.
+    // Target existing initialized carrier ID.
     uint32 carrier = 2;
-    // The new carrier ID.
+    // TNew desired carrier ID (unique in line).
     uint32 new_carrier_id = 3;
   }
 

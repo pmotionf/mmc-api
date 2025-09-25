@@ -48,7 +48,7 @@ pub const Request = struct {
         stop: Request.Stop,
         pause: Request.Pause,
         @"resume": Request.Resume,
-        set_carrier_id: Request.SetCarrierID,
+        set_carrier_id: Request.SetCarrierId,
         pub const _desc_table = .{
             .calibrate = fd(1, .submessage),
             .set_zero = fd(2, .submessage),
@@ -1327,7 +1327,7 @@ pub const Request = struct {
         }
     };
 
-    pub const SetCarrierID = struct {
+    pub const SetCarrierId = struct {
         line: u32 = 0,
         carrier: u32 = 0,
         new_carrier_id: u32 = 0,
