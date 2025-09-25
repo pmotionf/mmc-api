@@ -29,6 +29,7 @@ pub const Request = struct {
         stop,
         pause,
         @"resume",
+        set_carrier_id,
     };
     pub const body_union = union(_body_case) {
         calibrate: Request.Calibrate,
@@ -47,6 +48,7 @@ pub const Request = struct {
         stop: Request.Stop,
         pause: Request.Pause,
         @"resume": Request.Resume,
+        set_carrier_id: Request.SetCarrierID,
         pub const _desc_table = .{
             .calibrate = fd(1, .submessage),
             .set_zero = fd(2, .submessage),
@@ -64,6 +66,7 @@ pub const Request = struct {
             .stop = fd(14, .submessage),
             .pause = fd(15, .submessage),
             .@"resume" = fd(16, .submessage),
+            .set_carrier_id = fd(17, .submessage),
         };
     };
 
@@ -1266,6 +1269,73 @@ pub const Request = struct {
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .packed_repeated = .{ .scalar = .uint32 } }),
+        };
+
+        pub fn encode(
+            self: @This(),
+            writer: *std.Io.Writer,
+            allocator: std.mem.Allocator,
+        ) (std.Io.Writer.Error || std.mem.Allocator.Error)!void {
+            return pb.encode(writer, allocator, self);
+        }
+
+        pub fn decode(
+            reader: *std.Io.Reader,
+            allocator: std.mem.Allocator,
+        ) (pb.DecodingError || std.Io.Reader.Error || std.mem.Allocator.Error)!@This() {
+            return pb.decode(@This(), reader, allocator);
+        }
+
+        pub fn deinit(self: *@This(), allocator: std.mem.Allocator) void {
+            return pb.deinit(allocator, self);
+        }
+
+        pub fn dupe(self: @This(), allocator: std.mem.Allocator) std.mem.Allocator.Error!@This() {
+            return pb.dupe(@This(), self, allocator);
+        }
+
+        pub fn jsonDecode(
+            input: []const u8,
+            options: std.json.ParseOptions,
+            allocator: std.mem.Allocator,
+        ) !std.json.Parsed(@This()) {
+            return pb.json.decode(@This(), input, options, allocator);
+        }
+
+        pub fn jsonEncode(
+            self: @This(),
+            options: std.json.Stringify.Options,
+            allocator: std.mem.Allocator,
+        ) ![]const u8 {
+            return pb.json.encode(self, options, allocator);
+        }
+
+        // This method is used by std.json
+        // internally for deserialization. DO NOT RENAME!
+        pub fn jsonParse(
+            allocator: std.mem.Allocator,
+            source: anytype,
+            options: std.json.ParseOptions,
+        ) !@This() {
+            return pb.json.parse(@This(), allocator, source, options);
+        }
+
+        // This method is used by std.json
+        // internally for serialization. DO NOT RENAME!
+        pub fn jsonStringify(self: *const @This(), jws: anytype) !void {
+            return pb.json.stringify(@This(), self, jws);
+        }
+    };
+
+    pub const SetCarrierID = struct {
+        line: u32 = 0,
+        carrier: u32 = 0,
+        new_carrier_id: u32 = 0,
+
+        pub const _desc_table = .{
+            .line = fd(1, .{ .scalar = .uint32 }),
+            .carrier = fd(2, .{ .scalar = .uint32 }),
+            .new_carrier_id = fd(3, .{ .scalar = .uint32 }),
         };
 
         pub fn encode(
