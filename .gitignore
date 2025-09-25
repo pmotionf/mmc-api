@@ -20,3 +20,4 @@ zig-out/**
 zig-cache/**
 .zig-cache/**
 vendor/**
+generated_csharp/
