@@ -289,8 +289,8 @@ message Request {
     uint32 line = 1;
     // Target existing initialized carrier ID.
     uint32 carrier = 2;
-    // TNew desired carrier ID (unique in line).
-    uint32 new_carrier_id = 3;
+    // New desired carrier ID (unique in line).
+    uint32 new_carrier = 3;
   }
 
   enum Direction {

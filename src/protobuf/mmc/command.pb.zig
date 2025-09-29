@@ -1331,12 +1331,12 @@ pub const Request = struct {
     pub const SetCarrierId = struct {
         line: u32 = 0,
         carrier: u32 = 0,
-        new_carrier_id: u32 = 0,
+        new_carrier: u32 = 0,
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
             .carrier = fd(2, .{ .scalar = .uint32 }),
-            .new_carrier_id = fd(3, .{ .scalar = .uint32 }),
+            .new_carrier = fd(3, .{ .scalar = .uint32 }),
         };
 
         pub fn encode(
