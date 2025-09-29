@@ -120,15 +120,13 @@ message Response {
     }
 
     enum Error {
+      reserved 2;
       // This error code is unused, and will never be returned. It is reserved
       // as the default error code according to protobuf specification.
       COMMAND_ERROR_UNSPECIFIED = 0;
       // System state prevented successful command execution. Ensure that all
       // preconditions are met with track info request before sending command.
       COMMAND_ERROR_INVALID_SYSTEM_STATE = 1;
-      // Command target carrier ID not found, or duplicate carrier ID exists
-      // in line.
-      COMMAND_ERROR_INVALID_CARRIER_ID = 2;
       // Driver connection failed while command progressing.
       COMMAND_ERROR_DRIVER_DISCONNECTED = 3;
       // Unexpected command execution error. This is likely an implementation

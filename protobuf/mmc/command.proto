@@ -334,6 +334,9 @@ message Request {
     COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 14;
     // Attempted to run more than 8 auto initialize instance.
     COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED = 15;
+    // Attempted to assign a new carrier with an ID that is already used by
+    // other carrier on the same line
+    COMMAND_REQUEST_ERROR_CARRIER_ALREADY_EXISTS = 16;
   }
 }
 

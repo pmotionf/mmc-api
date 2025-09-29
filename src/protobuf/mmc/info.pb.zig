@@ -417,7 +417,6 @@ pub const Response = struct {
         pub const Error = enum(i32) {
             COMMAND_ERROR_UNSPECIFIED = 0,
             COMMAND_ERROR_INVALID_SYSTEM_STATE = 1,
-            COMMAND_ERROR_INVALID_CARRIER_ID = 2,
             COMMAND_ERROR_DRIVER_DISCONNECTED = 3,
             COMMAND_ERROR_UNEXPECTED = 4,
             _,
