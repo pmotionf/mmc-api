@@ -12,15 +12,23 @@ import "range.proto";
 // `remove_command` after completion.
 message Request {
   oneof body {
-    // Calibrate a line.
+    // Calibrate a line. This command only needs to be run once after hardware
+    // setup; calibrated values will remain stored in drivers even after a
+    // power cycle.
     Calibrate calibrate = 1;
-    // Set the zero position of the specified line.
+    // Set the zero position of the specified line. This command can be run
+    // optionally after calibration, upon which all drivers will store the set
+    // zero position of the line. The set zero position will remain unchanged
+    // even after a power cycle.
     SetZero set_zero = 2;
-    // Initialize a carrier.
+    // Initialize a carrier. Carriers must be initialized before they can be
+    // moved. Initialization is required after every power cycle.
     Initialize initialize = 3;
-    // Initialize all carriers of the specified line(s).
+    // Initialize all carriers of the specified line(s). If no lines are
+    // specified, initialize all carriers across all lines in the track.
     AutoInitialize auto_initialize = 4;
-    // Deinitialize a carrier.
+    // Deinitialize a carrier. This removes all carrier information, such as
+    // recognized position and carrier ID.
     Deinitialize deinitialize = 5;
     // Move an initialized carrier to the desired position.
     Move move = 6;
@@ -34,13 +42,17 @@ message Request {
     StopPush stop_push = 10;
     // Release the motor control of a carrier.
     Release release = 11;
-    // Clear error information.
+    // Clear all errors within the specified driver range.
     ClearErrors clear_errors = 12;
     // Cancel a running command or remove its status history.
     RemoveCommand remove_command = 13;
-    // Activate emergency stop for all drivers in line(s).
+    // Activate emergency stop for all drivers in line(s). Emergency stop will
+    // cause all carriers to deccelerate to rest, then reset all carriers'
+    // movement commands.
     Stop stop = 14;
-    // Activate pause for all drivers in line(s).
+    // Activate pause for all drivers in line(s). Pause will cause all
+    // carriers to deccelerate to rest. On resume, the carriers will continue
+    // their previously assigned movement commands.
     Pause pause = 15;
     // Deactivate emergency stop and pause for all drivers in line(s).
     Resume resume = 16;
@@ -128,10 +140,10 @@ message Request {
     message Line {
       // Line ID.
       uint32 line = 1;
-      // Fixed point integer from 0-60, representing 0.0-6.0 m/s.
+      // Fixed point integer from 1-60, representing 0.1-6.0 m/s.
       // (default 1 m/s)
       optional uint32 velocity = 2;
-      // Fixed point integer from 0-245, representing 0.0-24.5 m/s^2.
+      // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
       // (default 6 m/s^2)
       optional uint32 acceleration = 3;
     }
@@ -146,9 +158,9 @@ message Request {
     uint32 line = 1;
     // Carrier ID.
     uint32 carrier = 2;
-    // Fixed point integer from 0-60, representing 0.0-6.0 m/s.
+    // Fixed point integer from 1-60, representing 0.1-6.0 m/s.
     uint32 velocity = 3;
-    // Fixed point integer from 0-245, representing 0.0-24.5 m/s^2.
+    // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
     uint32 acceleration = 4;
     oneof target {
       // Move carrier to the center of the axis.
@@ -177,9 +189,9 @@ message Request {
     uint32 axis = 2;
     // Direction of carrier movement.
     Direction direction = 3;
-    // Fixed point integer from 0-60, representing 0.0-6.0 m/s.
+    // Fixed point integer from 1-60, representing 0.1-6.0 m/s.
     uint32 velocity = 4;
-    // Fixed point integer from 0-245, representing 0.0-24.5 m/s^2.
+    // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
     uint32 acceleration = 5;
     // Carrier ID. If provided, wait for the specified carrier at the axis and
     // push it once the carrier arrives.
@@ -198,9 +210,9 @@ message Request {
     uint32 carrier = 3;
     // The direction from which the incoming carrier is moving.
     Direction direction = 4;
-    // Fixed point integer from 0-60, representing 0.0-6.0 m/s.
+    // Fixed point integer from 1-60, representing 0.1-6.0 m/s.
     uint32 velocity = 5;
-    // Fixed point integer from 0-245, representing 0.0-24.5 m/s^2.
+    // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
     uint32 acceleration = 6;
     // Smoothly transition to carrier movement after pull completion.
     optional Transition transition = 7;
@@ -290,9 +302,9 @@ message Request {
     COMMAND_REQUEST_ERROR_INVALID_AXIS = 2;
     // Attempted to use driver ID outside of the configured drivers of the line.
     COMMAND_REQUEST_ERROR_INVALID_DRIVER = 3;
-    // Attempted to use acceleration value outside of 0-245.
+    // Attempted to use acceleration value outside of 1-245.
     COMMAND_REQUEST_ERROR_INVALID_ACCELERATION = 4;
-    // Attempted to use velocity value outside of 0-60.
+    // Attempted to use velocity value outside of 1-60.
     COMMAND_REQUEST_ERROR_INVALID_VELOCITY = 5;
     // Using invalid direction for the command.
     COMMAND_REQUEST_ERROR_INVALID_DIRECTION = 6;
