@@ -138,6 +138,9 @@ message Response {
       // initializing a new carrier or assigning a new ID for initialized
       // carrier.
       COMMAND_ERROR_CARRIER_ALREADY_EXISTS = 6;
+      // Target driver is stopped while command progressing. Consider resume
+      // the driver before sending further command.
+      COMMAND_ERROR_DRIVER_STOPPED = 7;
     }
   }
 

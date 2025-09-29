@@ -421,6 +421,7 @@ pub const Response = struct {
             COMMAND_ERROR_UNEXPECTED = 4,
             COMMAND_ERROR_CARRIER_NOT_FOUND = 5,
             COMMAND_ERROR_CARRIER_ALREADY_EXISTS = 6,
+            COMMAND_ERROR_DRIVER_STOPPED = 7,
             _,
         };
 
