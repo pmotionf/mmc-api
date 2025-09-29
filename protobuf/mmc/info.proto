@@ -132,6 +132,12 @@ message Response {
       // Unexpected command execution error. This is likely an implementation
       // bug; please contact PMF support for assistance.
       COMMAND_ERROR_UNEXPECTED = 4;
+      // Target carrier is removed while command progressing.
+      COMMAND_ERROR_CARRIER_NOT_FOUND = 5;
+      // Other carrier is initialized with the same ID on the same line while
+      // initializing a new carrier or assigning a new ID for initialized
+      // carrier.
+      COMMAND_ERROR_CARRIER_ALREADY_EXISTS = 6;
     }
   }
 

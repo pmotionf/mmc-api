@@ -419,6 +419,8 @@ pub const Response = struct {
             COMMAND_ERROR_INVALID_SYSTEM_STATE = 1,
             COMMAND_ERROR_DRIVER_DISCONNECTED = 3,
             COMMAND_ERROR_UNEXPECTED = 4,
+            COMMAND_ERROR_CARRIER_NOT_FOUND = 5,
+            COMMAND_ERROR_CARRIER_ALREADY_EXISTS = 6,
             _,
         };
 
