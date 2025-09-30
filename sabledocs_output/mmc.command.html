@@ -209,6 +209,15 @@
     
       
       <p>
+        <a href="#message-mmc.command.Request.SetCarrierId">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>SetCarrierId</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
         <a href="#message-mmc.command.Request.SetZero">
           <span class="tag" style="min-width: 6em">Message</span>
           <code>SetZero</code> 
@@ -718,7 +727,7 @@ clear all carrier information of the specified line ID</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 0-60, representing 0.0-6.0 m/s.
+      <td class="content"><p>Fixed point integer from 1-60, representing 0.1-6.0 m/s.
 (default 1 m/s)</p></td>
       
     </tr>
@@ -736,7 +745,7 @@ clear all carrier information of the specified line ID</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 0-245, representing 0.0-24.5 m/s^2.
+      <td class="content"><p>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
 (default 6 m/s^2)</p></td>
       
     </tr>
@@ -821,7 +830,7 @@ clear all carrier information of the specified line ID</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 0-60, representing 0.0-6.0 m/s.</p></td>
+      <td class="content"><p>Fixed point integer from 1-60, representing 0.1-6.0 m/s.</p></td>
       
     </tr>
     
@@ -836,7 +845,7 @@ clear all carrier information of the specified line ID</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 0-245, representing 0.0-24.5 m/s^2.</p></td>
+      <td class="content"><p>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</p></td>
       
     </tr>
     
@@ -1110,7 +1119,7 @@ continued once the resume command is given.</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 0-60, representing 0.0-6.0 m/s.</p></td>
+      <td class="content"><p>Fixed point integer from 1-60, representing 0.1-6.0 m/s.</p></td>
       
     </tr>
     
@@ -1125,7 +1134,7 @@ continued once the resume command is given.</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 0-245, representing 0.0-24.5 m/s^2.</p></td>
+      <td class="content"><p>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</p></td>
       
     </tr>
     
@@ -1243,7 +1252,7 @@ continued once the resume command is given.</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 0-60, representing 0.0-6.0 m/s.</p></td>
+      <td class="content"><p>Fixed point integer from 1-60, representing 0.1-6.0 m/s.</p></td>
       
     </tr>
     
@@ -1258,7 +1267,7 @@ continued once the resume command is given.</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 0-245, representing 0.0-24.5 m/s^2.</p></td>
+      <td class="content"><p>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</p></td>
       
     </tr>
     
@@ -1478,7 +1487,9 @@ remains stored in a limited history buffer, and should be cleared with
     </a>
             </code>
           </td>
-          <td class="content"><p>Calibrate a line.</p></td>
+          <td class="content"><p>Calibrate a line. This command only needs to be run once after hardware
+setup; calibrated values will remain stored in drivers even after a
+power cycle.</p></td>
           
         </tr>
       
@@ -1498,7 +1509,10 @@ remains stored in a limited history buffer, and should be cleared with
     </a>
             </code>
           </td>
-          <td class="content"><p>Set the zero position of the specified line.</p></td>
+          <td class="content"><p>Set the zero position of the specified line. This command can be run
+optionally after calibration, upon which all drivers will store the set
+zero position of the line. The set zero position will remain unchanged
+even after a power cycle.</p></td>
           
         </tr>
       
@@ -1518,7 +1532,8 @@ remains stored in a limited history buffer, and should be cleared with
     </a>
             </code>
           </td>
-          <td class="content"><p>Initialize a carrier.</p></td>
+          <td class="content"><p>Initialize a carrier. Carriers must be initialized before they can be
+moved. Initialization is required after every power cycle.</p></td>
           
         </tr>
       
@@ -1538,7 +1553,8 @@ remains stored in a limited history buffer, and should be cleared with
     </a>
             </code>
           </td>
-          <td class="content"><p>Initialize all carriers of the specified line(s).</p></td>
+          <td class="content"><p>Initialize all carriers of the specified line(s). If no lines are
+specified, initialize all carriers across all lines in the track.</p></td>
           
         </tr>
       
@@ -1558,7 +1574,8 @@ remains stored in a limited history buffer, and should be cleared with
     </a>
             </code>
           </td>
-          <td class="content"><p>Deinitialize a carrier.</p></td>
+          <td class="content"><p>Deinitialize a carrier. This removes all carrier information, such as
+recognized position and carrier ID.</p></td>
           
         </tr>
       
@@ -1698,7 +1715,7 @@ remains stored in a limited history buffer, and should be cleared with
     </a>
             </code>
           </td>
-          <td class="content"><p>Clear error information.</p></td>
+          <td class="content"><p>Clear all errors within the specified driver range.</p></td>
           
         </tr>
       
@@ -1738,7 +1755,9 @@ remains stored in a limited history buffer, and should be cleared with
     </a>
             </code>
           </td>
-          <td class="content"><p>Activate emergency stop for all drivers in line(s).</p></td>
+          <td class="content"><p>Activate emergency stop for all drivers in line(s). Emergency stop will
+cause all carriers to deccelerate to rest, then reset all carriers'
+movement commands.</p></td>
           
         </tr>
       
@@ -1758,7 +1777,9 @@ remains stored in a limited history buffer, and should be cleared with
     </a>
             </code>
           </td>
-          <td class="content"><p>Activate pause for all drivers in line(s).</p></td>
+          <td class="content"><p>Activate pause for all drivers in line(s). Pause will cause all
+carriers to deccelerate to rest. On resume, the carriers will continue
+their previously assigned movement commands.</p></td>
           
         </tr>
       
@@ -1779,6 +1800,26 @@ remains stored in a limited history buffer, and should be cleared with
             </code>
           </td>
           <td class="content"><p>Deactivate emergency stop and pause for all drivers in line(s).</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            17
+          </td>
+          <td>
+            set_carrier_id
+          </td>
+          <td>
+            <code title="mmc.command.Request.SetCarrierId">
+              
+              <a href="mmc.command.html#message-mmc.command.Request.SetCarrierId"><span title="mmc.command.Request.SetCarrierId">mmc.command.Request.SetCarrierId</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Change an existing carrier ID to a new unique carrier ID.</p></td>
           
         </tr>
       
@@ -1940,6 +1981,91 @@ or emergency stopped, this command will succeed without any effect.</p>
         </code>
       </td>
       <td class="content"><p>Line ID. If provided, resume operations only to those specified lines.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-mmc.command.Request.SetCarrierId">
+  <span>
+    <a href="#message-mmc.command.Request.SetCarrierId" title="mmc.command.Request.SetCarrierId">message SetCarrierId</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="mmc.command.html#message-mmc.command.Request"><span title="mmc.command.Request">mmc.command.Request</span>
+    </a>)</span>
+  
+  </span>
+  
+</h4>
+
+<div class="block content">
+  <p>Change the carrier ID of an existing initialized carrier. If the new
+carrier ID already exists on the line, returns INVALID_CARRIER.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        line
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Line ID.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        carrier
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Target existing initialized carrier ID.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        new_carrier
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>New desired carrier ID (unique in line).</p></td>
       
     </tr>
     
@@ -2448,13 +2574,13 @@ Negative distance moves the carrier backwards.</p></td>
     <tr>
       <td><code>COMMAND_REQUEST_ERROR_INVALID_ACCELERATION</code></td>
       <td>4</td>
-      <td class="content"><p>Attempted to use acceleration value outside of 0-245.</p></td>
+      <td class="content"><p>Attempted to use acceleration value outside of 1-245.</p></td>
     </tr>
     
     <tr>
       <td><code>COMMAND_REQUEST_ERROR_INVALID_VELOCITY</code></td>
       <td>5</td>
-      <td class="content"><p>Attempted to use velocity value outside of 0-60.</p></td>
+      <td class="content"><p>Attempted to use velocity value outside of 1-60.</p></td>
     </tr>
     
     <tr>
@@ -2466,14 +2592,15 @@ Negative distance moves the carrier backwards.</p></td>
     <tr>
       <td><code>COMMAND_REQUEST_ERROR_INVALID_LOCATION</code></td>
       <td>7</td>
-      <td class="content"><p>Attempted to send a carrier to a location outside of the configured line.</p></td>
+      <td class="content"><p>Deprecated. Check <code>COMMAND_ERROR_INVALID_CARRIER_TARGET</code> on
+<code>Info.Response.Command.Error</code>.</p></td>
     </tr>
     
     <tr>
       <td><code>COMMAND_REQUEST_ERROR_INVALID_DISTANCE</code></td>
       <td>8</td>
-      <td class="content"><p>Attempted to send a carrier exceeding the location range of the
-configured line.</p></td>
+      <td class="content"><p>Deprecated. Check <code>COMMAND_ERROR_INVALID_CARRIER_TARGET</code> on
+<code>Info.Response.Command.Error</code>.</p></td>
     </tr>
     
     <tr>
@@ -2503,8 +2630,8 @@ configured line.</p></td>
     <tr>
       <td><code>COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED</code></td>
       <td>13</td>
-      <td class="content"><p>Attempted to send a command when the CC Link connection is not
-established.</p></td>
+      <td class="content"><p>Deprecated. Check <code>COMMAND_ERROR_DRIVER_DISCONNECTED</code> on
+<code>Info.Response.Command.Error</code>.</p></td>
     </tr>
     
     <tr>
@@ -2518,6 +2645,13 @@ Try <code>Command.Request.remove_command</code> to free the memory.</p></td>
       <td><code>COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED</code></td>
       <td>15</td>
       <td class="content"><p>Attempted to run more than 8 auto initialize instance.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID</code></td>
+      <td>16</td>
+      <td class="content"><p>Attempted to assign a new carrier with an ID that is already used by
+other carrier on the same line</p></td>
     </tr>
     
   </tbody>

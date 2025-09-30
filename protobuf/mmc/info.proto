@@ -125,8 +125,8 @@ message Response {
       // System state prevented successful command execution. Ensure that all
       // preconditions are met with track info request before sending command.
       COMMAND_ERROR_INVALID_SYSTEM_STATE = 1;
-      // Command target carrier ID not found, or duplicate carrier ID exists
-      // in line.
+      // Deprecated. Check `COMMAND_REQUEST_ERROR_INVALID_CARRIER` on
+      // `Command.Request.Error`.
       COMMAND_ERROR_INVALID_CARRIER_ID = 2 [ deprecated = true ];
       // Driver connection failed while command progressing.
       COMMAND_ERROR_DRIVER_DISCONNECTED = 3;
