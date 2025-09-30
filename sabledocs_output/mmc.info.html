@@ -1875,9 +1875,8 @@ configuration.</p></td>
     <tr>
       <td><code>INFO_REQUEST_ERROR_MISSING_PARAMETER</code></td>
       <td>4</td>
-      <td class="content"><p>Request is missing a required parameter. If sending a track request,
-ensure that at least one of the information flags is selected. If using
-the <code>carriers</code> filter, ensure that at least one carrier ID is provided.</p></td>
+      <td class="content"><p>Request is missing a required parameter. Ensure that at least one of the
+information flag is selected when requesting track information.</p></td>
     </tr>
     
   </tbody>
@@ -1921,8 +1920,8 @@ preconditions are met with track info request before sending command.</p></td>
     <tr>
       <td><code>COMMAND_ERROR_INVALID_CARRIER_ID</code></td>
       <td>2</td>
-      <td class="content"><p>Command target carrier ID not found, or duplicate carrier ID exists
-in line.</p></td>
+      <td class="content"><p>Deprecated. Check <code>COMMAND_REQUEST_ERROR_INVALID_CARRIER</code> on
+<code>Command.Request.Error</code>.</p></td>
     </tr>
     
     <tr>
@@ -1936,6 +1935,38 @@ in line.</p></td>
       <td>4</td>
       <td class="content"><p>Unexpected command execution error. This is likely an implementation
 bug; please contact PMF support for assistance.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_ERROR_CARRIER_NOT_FOUND</code></td>
+      <td>5</td>
+      <td class="content"><p>Target carrier is removed while command progressing.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_ERROR_CARRIER_ALREADY_INITIALIZED</code></td>
+      <td>6</td>
+      <td class="content"><p>Attempted to initialize an initialized carrier.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_ERROR_DRIVER_STOPPED</code></td>
+      <td>7</td>
+      <td class="content"><p>Target driver is stopped while command progressing. Consider resume
+the driver before sending further command.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_ERROR_INVALID_CARRIER_TARGET</code></td>
+      <td>8</td>
+      <td class="content"><p>Carrier targetting a location outside of the configured track.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>COMMAND_ERROR_CONFLICTING_CARRIER_ID</code></td>
+      <td>9</td>
+      <td class="content"><p>Attempted to assign a new carrier with an ID that is already used by
+other carrier on the same line</p></td>
     </tr>
     
   </tbody>
