@@ -127,7 +127,7 @@ message Response {
       COMMAND_ERROR_INVALID_SYSTEM_STATE = 1;
       // Command target carrier ID not found, or duplicate carrier ID exists
       // in line.
-      COMMAND_ERROR_INVALID_CARRIER_ID = 2;
+      COMMAND_ERROR_INVALID_CARRIER_ID = 2 [ deprecated = true ];
       // Driver connection failed while command progressing.
       COMMAND_ERROR_DRIVER_DISCONNECTED = 3;
       // Unexpected command execution error. This is likely an implementation
