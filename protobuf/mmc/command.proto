@@ -73,7 +73,7 @@ message Request {
       // Axis ID range.
       Range axes = 3;
       // Driver ID range.
-      Range driver = 4;
+      Range drivers = 4;
     }
   }
 
@@ -160,12 +160,15 @@ message Request {
     message Line {
       // Line ID.
       uint32 line = 1;
-      // Fixed point integer from 1-60, representing 0.1-6.0 m/s.
-      // (default 1 m/s)
+      // If `velocity_mode` field is set to `normal`, the integer range is
+      // 1-100 representing 0.1-10 m/s.
+      // If `velocity_mode` field is set to `low`, the integer range is
+      // 1-1000 representing 0.1-100 mm/s.
       optional uint32 velocity = 2;
       // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
       // (default 6 m/s^2)
       optional uint32 acceleration = 3;
+      VelocityMode velocity_mode = 4;
     }
     repeated Line lines = 1;
   }
@@ -178,7 +181,10 @@ message Request {
     uint32 line = 1;
     // Carrier ID.
     uint32 carrier = 2;
-    // Fixed point integer from 1-60, representing 0.1-6.0 m/s.
+    // If `velocity_mode` field is set to `normal`, the integer range is 1-100
+    // representing 0.1-10 m/s.
+    // If `velocity_mode` field is set to `low`, the integer range is
+    // representing 0.1-100 mm/s.
     uint32 velocity = 3;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
     uint32 acceleration = 4;
@@ -197,6 +203,7 @@ message Request {
     mmc.Control control = 8;
     // Disable the carrier's collision avoidance system (CAS).
     bool disable_cas = 9;
+    VelocityMode velocity_mode = 10;
   }
 
   // Push an initialized carrier to the specified direction.
@@ -209,13 +216,17 @@ message Request {
     uint32 axis = 2;
     // Direction of carrier movement.
     Direction direction = 3;
-    // Fixed point integer from 1-60, representing 0.1-6.0 m/s.
+    // If `velocity_mode` field is set to `normal`, the integer range is 1-100
+    // representing 0.1-10 m/s.
+    // If `velocity_mode` field is set to `low`, the integer range is
+    // representing 0.1-100 mm/s.
     uint32 velocity = 4;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
     uint32 acceleration = 5;
     // Carrier ID. If provided, wait for the specified carrier at the axis and
     // push it once the carrier arrives.
     optional uint32 carrier = 6;
+    VelocityMode velocity_mode = 7;
   }
 
   // Pull and initialize a new carrier into a line.
@@ -230,12 +241,17 @@ message Request {
     uint32 carrier = 3;
     // The direction from which the incoming carrier is moving.
     Direction direction = 4;
-    // Fixed point integer from 1-60, representing 0.1-6.0 m/s.
+    // Fixed point integer.
+    // If `velocity_mode` field is set to `normal`, the integer range is 1-100
+    // representing 0.1-10 m/s.
+    // If `velocity_mode` field is set to `low`, the integer range is 1-1000
+    // representing 0.1-100 mm/s.
     uint32 velocity = 5;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
     uint32 acceleration = 6;
     // Smoothly transition to carrier movement after pull completion.
     optional Transition transition = 7;
+    VelocityMode velocity_mode = 8;
 
     message Transition {
       // Control method for moving carrier.
@@ -327,6 +343,13 @@ message Request {
     DIRECTION_UNSPECIFIED = 0;
     DIRECTION_BACKWARD = 1;
     DIRECTION_FORWARD = 2;
+  }
+
+  enum VelocityMode {
+    // Representing 0.1-10 m/s.
+    VELOCITY_MODE_NORMAL = 0;
+    // Representing 0.1-100 mm/s.
+    VELOCITY_MODE_LOW = 1;
   }
 
   enum Error {
