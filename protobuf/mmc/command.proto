@@ -60,17 +60,21 @@ message Request {
     SetCarrierId set_carrier_id = 17;
   }
 
-  // Release the control imposed by the motor to the carrier. If a carrier is
-  // specified, the motor which control the specified carrier release the
-  // control. Otherwise, all carriers on the provided line will be released
-  // from control.
-  //
+  // Release the control imposed by the motor to the carrier. If a target is
+  // specified, the motor which is located on the target release the control.
+  // Otherwise, all carriers on the provided line will be released from control.
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Release {
     // Line ID.
     uint32 line = 1;
-    // Carrier ID.
-    optional uint32 carrier = 2;
+    oneof target {
+      // Carrier ID.
+      uint32 carrier = 2;
+      // Axis ID range.
+      Range axes = 3;
+      // Driver ID range.
+      Range driver = 4;
+    }
   }
 
   // Stop pulling a carrier to the specified axis. If no axis is provided,
@@ -95,26 +99,40 @@ message Request {
     optional Range axes = 2;
   }
 
-  // Clear all error information on the driver, if specified. If not, clear
-  // error information on every driver of the specified line ID.
+  // Clear all error information on the driver. If a target is specified,
+  // clear error information of drivers which is located on the target. If not,
+  // clear error information on every driver of the specified line ID.
   //
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message ClearErrors {
     // Line ID.
     uint32 line = 1;
-    // Driver ID range.
-    optional Range drivers = 2;
+    oneof target {
+      // Driver ID range.
+      Range drivers = 2;
+      // Axis ID range.
+      Range axes = 3;
+      // Carrier ID.
+      uint32 carrier = 4;
+    }
   }
 
-  // Clear carrier information located on the axis, if specified. If not,
+  // Clear carrier information located on the axis. If a target is specified,
+  // clear information of carriers which is located on the target. If not,
   // clear all carrier information of the specified line ID
   //
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Deinitialize {
     // Line ID.
     uint32 line = 1;
-    // Axis ID range.
-    optional Range axes = 2;
+    oneof target {
+      // Axis ID range.
+      Range axes = 2;
+      // Driver ID range.
+      Range drivers = 3;
+      // Carrier ID.
+      uint32 carrier = 4;
+    }
   }
 
   // Calibrate a line by positioning an unitiliazed carrier on the first axis
