@@ -104,11 +104,27 @@ pub const Request = struct {
 
     pub const Release = struct {
         line: u32 = 0,
-        carrier: ?u32 = null,
+        target: ?target_union = null,
+
+        pub const _target_case = enum {
+            carrier,
+            axes,
+            driver,
+        };
+        pub const target_union = union(_target_case) {
+            carrier: u32,
+            axes: protobuf.Range,
+            driver: protobuf.Range,
+            pub const _desc_table = .{
+                .carrier = fd(2, .{ .scalar = .uint32 }),
+                .axes = fd(3, .submessage),
+                .driver = fd(4, .submessage),
+            };
+        };
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
-            .carrier = fd(2, .{ .scalar = .uint32 }),
+            .target = fd(null, .{ .oneof = target_union }),
         };
 
         pub fn encode(
@@ -299,11 +315,27 @@ pub const Request = struct {
 
     pub const ClearErrors = struct {
         line: u32 = 0,
-        drivers: ?protobuf.Range = null,
+        target: ?target_union = null,
+
+        pub const _target_case = enum {
+            drivers,
+            axes,
+            carrier,
+        };
+        pub const target_union = union(_target_case) {
+            drivers: protobuf.Range,
+            axes: protobuf.Range,
+            carrier: u32,
+            pub const _desc_table = .{
+                .drivers = fd(2, .submessage),
+                .axes = fd(3, .submessage),
+                .carrier = fd(4, .{ .scalar = .uint32 }),
+            };
+        };
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
-            .drivers = fd(2, .submessage),
+            .target = fd(null, .{ .oneof = target_union }),
         };
 
         pub fn encode(
@@ -364,11 +396,27 @@ pub const Request = struct {
 
     pub const Deinitialize = struct {
         line: u32 = 0,
-        axes: ?protobuf.Range = null,
+        target: ?target_union = null,
+
+        pub const _target_case = enum {
+            axes,
+            drivers,
+            carrier,
+        };
+        pub const target_union = union(_target_case) {
+            axes: protobuf.Range,
+            drivers: protobuf.Range,
+            carrier: u32,
+            pub const _desc_table = .{
+                .axes = fd(2, .submessage),
+                .drivers = fd(3, .submessage),
+                .carrier = fd(4, .{ .scalar = .uint32 }),
+            };
+        };
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
-            .axes = fd(2, .submessage),
+            .target = fd(null, .{ .oneof = target_union }),
         };
 
         pub fn encode(
