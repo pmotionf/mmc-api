@@ -277,6 +277,13 @@
         </a>
       </p>
     
+      <p>
+        <a href="#enum-mmc.command.Request.VelocityMode">
+          <span class="tag" style="min-width: 6em">Enum</span>
+          <code>VelocityMode</code> 
+        </a>
+      </p>
+    
   </div>
 
   <div class="block">
@@ -420,8 +427,9 @@ of the line.</p>
 </h4>
 
 <div class="block content">
-  <p>Clear all error information on the driver, if specified. If not, clear
-error information on every driver of the specified line ID.</p>
+  <p>Clear all error information on the driver. If a target is specified,
+clear error information of drivers which is located on the target. If not,
+clear error information on every driver of the specified line ID.</p>
 <p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
@@ -452,24 +460,76 @@ error information on every driver of the specified line ID.</p>
       
     </tr>
     
-    <tr>
-      <td>2</td>
-      <td>
-        drivers
-      </td>
-      <td>
-        <code title="Range">
-          
-            optional
-          
-          <a href="__default.html#message-Range"><span title="Range">Range</span>
-    </a>
-        </code>
-      </td>
-      <td class="content"><p>Driver ID range.</p></td>
-      
-    </tr>
     
+      
+        
+          <tr class="nohover"><td style="border: 0px"></td></tr>
+          <tr class="nohover">
+            <td class="oneof-heading" colspan="4">
+              <div class="oneof-heading">
+                <strong>oneof target</strong>
+              </div>
+            </td>
+          </tr>
+        
+
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            drivers
+          </td>
+          <td>
+            <code title="Range">
+              
+              <a href="__default.html#message-Range"><span title="Range">Range</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Driver ID range.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            3
+          </td>
+          <td>
+            axes
+          </td>
+          <td>
+            <code title="Range">
+              
+              <a href="__default.html#message-Range"><span title="Range">Range</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Axis ID range.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            4
+          </td>
+          <td>
+            carrier
+          </td>
+          <td>
+            <code title="uint32">
+              
+              <span>uint32</span>
+            </code>
+          </td>
+          <td class="content"><p>Carrier ID.</p></td>
+          
+        </tr>
+      
     
   </tbody>
 </table>
@@ -493,7 +553,8 @@ error information on every driver of the specified line ID.</p>
 </h4>
 
 <div class="block content">
-  <p>Clear carrier information located on the axis, if specified. If not,
+  <p>Clear carrier information located on the axis. If a target is specified,
+clear information of carriers which is located on the target. If not,
 clear all carrier information of the specified line ID</p>
 <p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
@@ -525,24 +586,76 @@ clear all carrier information of the specified line ID</p>
       
     </tr>
     
-    <tr>
-      <td>2</td>
-      <td>
-        axes
-      </td>
-      <td>
-        <code title="Range">
-          
-            optional
-          
-          <a href="__default.html#message-Range"><span title="Range">Range</span>
-    </a>
-        </code>
-      </td>
-      <td class="content"><p>Axis ID range.</p></td>
-      
-    </tr>
     
+      
+        
+          <tr class="nohover"><td style="border: 0px"></td></tr>
+          <tr class="nohover">
+            <td class="oneof-heading" colspan="4">
+              <div class="oneof-heading">
+                <strong>oneof target</strong>
+              </div>
+            </td>
+          </tr>
+        
+
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            axes
+          </td>
+          <td>
+            <code title="Range">
+              
+              <a href="__default.html#message-Range"><span title="Range">Range</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Axis ID range.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            3
+          </td>
+          <td>
+            drivers
+          </td>
+          <td>
+            <code title="Range">
+              
+              <a href="__default.html#message-Range"><span title="Range">Range</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Driver ID range.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            4
+          </td>
+          <td>
+            carrier
+          </td>
+          <td>
+            <code title="uint32">
+              
+              <span>uint32</span>
+            </code>
+          </td>
+          <td class="content"><p>Carrier ID.</p></td>
+          
+        </tr>
+      
     
   </tbody>
 </table>
@@ -727,8 +840,10 @@ clear all carrier information of the specified line ID</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 1-60, representing 0.1-6.0 m/s.
-(default 1 m/s)</p></td>
+      <td class="content"><p>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is
+1-100 representing 0.1-10 m/s.
+If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is
+1-1000 representing 0.1-100 mm/s.</p></td>
       
     </tr>
     
@@ -747,6 +862,22 @@ clear all carrier information of the specified line ID</p>
       </td>
       <td class="content"><p>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
 (default 6 m/s^2)</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        velocity_mode
+      </td>
+      <td>
+        <code title="mmc.command.Request.VelocityMode">
+          
+          <a href="mmc.command.html#enum-mmc.command.Request.VelocityMode"><span title="mmc.command.Request.VelocityMode">mmc.command.Request.VelocityMode</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>Specify the unit of the <code>velocity</code> value.</p></td>
       
     </tr>
     
@@ -830,7 +961,10 @@ clear all carrier information of the specified line ID</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 1-60, representing 0.1-6.0 m/s.</p></td>
+      <td class="content"><p>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100
+representing 0.1-10 m/s.
+If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000
+representing 0.1-100 mm/s.</p></td>
       
     </tr>
     
@@ -877,6 +1011,22 @@ clear all carrier information of the specified line ID</p>
         </code>
       </td>
       <td class="content"><p>Disable the carrier's collision avoidance system (CAS).</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>10</td>
+      <td>
+        velocity_mode
+      </td>
+      <td>
+        <code title="mmc.command.Request.VelocityMode">
+          
+          <a href="mmc.command.html#enum-mmc.command.Request.VelocityMode"><span title="mmc.command.Request.VelocityMode">mmc.command.Request.VelocityMode</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>Specify the unit of the <code>velocity</code> value.</p></td>
       
     </tr>
     
@@ -1119,7 +1269,11 @@ continued once the resume command is given.</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 1-60, representing 0.1-6.0 m/s.</p></td>
+      <td class="content"><p>Fixed point integer.
+If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100
+representing 0.1-10 m/s.
+If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000
+representing 0.1-100 mm/s.</p></td>
       
     </tr>
     
@@ -1153,6 +1307,22 @@ continued once the resume command is given.</p>
         </code>
       </td>
       <td class="content"><p>Smoothly transition to carrier movement after pull completion.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>8</td>
+      <td>
+        velocity_mode
+      </td>
+      <td>
+        <code title="mmc.command.Request.VelocityMode">
+          
+          <a href="mmc.command.html#enum-mmc.command.Request.VelocityMode"><span title="mmc.command.Request.VelocityMode">mmc.command.Request.VelocityMode</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>Specify the unit of the <code>velocity</code> value.</p></td>
       
     </tr>
     
@@ -1252,7 +1422,10 @@ continued once the resume command is given.</p>
           <span>uint32</span>
         </code>
       </td>
-      <td class="content"><p>Fixed point integer from 1-60, representing 0.1-6.0 m/s.</p></td>
+      <td class="content"><p>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100
+representing 0.1-10 m/s.
+If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000
+representing 0.1-100 mm/s.</p></td>
       
     </tr>
     
@@ -1289,6 +1462,22 @@ push it once the carrier arrives.</p></td>
       
     </tr>
     
+    <tr>
+      <td>7</td>
+      <td>
+        velocity_mode
+      </td>
+      <td>
+        <code title="mmc.command.Request.VelocityMode">
+          
+          <a href="mmc.command.html#enum-mmc.command.Request.VelocityMode"><span title="mmc.command.Request.VelocityMode">mmc.command.Request.VelocityMode</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>Specify the unit of the <code>velocity</code> value.</p></td>
+      
+    </tr>
+    
     
   </tbody>
 </table>
@@ -1312,11 +1501,10 @@ push it once the carrier arrives.</p></td>
 </h4>
 
 <div class="block content">
-  <p>Release the control imposed by the motor to the carrier. If a carrier is
-specified, the motor which control the specified carrier release the
-control. Otherwise, all carriers on the provided line will be released
-from control.</p>
-<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+  <p>Release the control imposed by the motor to the carrier. If a target is
+specified, the motor which is located on the target release the control.
+Otherwise, all carriers on the provided line will be released from control.
+Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </div>
 
 <table class="table is-fullwidth is-hoverable is-bordered">
@@ -1346,23 +1534,76 @@ from control.</p>
       
     </tr>
     
-    <tr>
-      <td>2</td>
-      <td>
-        carrier
-      </td>
-      <td>
-        <code title="uint32">
-          
-            optional
-          
-          <span>uint32</span>
-        </code>
-      </td>
-      <td class="content"><p>Carrier ID.</p></td>
-      
-    </tr>
     
+      
+        
+          <tr class="nohover"><td style="border: 0px"></td></tr>
+          <tr class="nohover">
+            <td class="oneof-heading" colspan="4">
+              <div class="oneof-heading">
+                <strong>oneof target</strong>
+              </div>
+            </td>
+          </tr>
+        
+
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            carrier
+          </td>
+          <td>
+            <code title="uint32">
+              
+              <span>uint32</span>
+            </code>
+          </td>
+          <td class="content"><p>Carrier ID.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            3
+          </td>
+          <td>
+            axes
+          </td>
+          <td>
+            <code title="Range">
+              
+              <a href="__default.html#message-Range"><span title="Range">Range</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Axis ID range.</p></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            4
+          </td>
+          <td>
+            drivers
+          </td>
+          <td>
+            <code title="Range">
+              
+              <a href="__default.html#message-Range"><span title="Range">Range</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"><p>Driver ID range.</p></td>
+          
+        </tr>
+      
     
   </tbody>
 </table>
@@ -2652,6 +2893,42 @@ Try <code>Command.Request.remove_command</code> to free the memory.</p></td>
       <td>16</td>
       <td class="content"><p>Attempted to assign a new carrier with an ID that is already used by
 other carrier on the same line</p></td>
+    </tr>
+    
+  </tbody>
+</table> 
+    </div>
+    
+    <div class="block">
+      <h4 class="title is-4 type-heading" id="enum-mmc.command.Request.VelocityMode">
+  <a href="#enum-mmc.command.Request.VelocityMode" title="mmc.command.Request.VelocityMode">enum VelocityMode</a>
+  
+</h4>
+
+<div class="block content">
+  <p></p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td><code>VELOCITY_MODE_NORMAL</code></td>
+      <td>0</td>
+      <td class="content"><p>Representing 0.1-10 m/s.</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>VELOCITY_MODE_LOW</code></td>
+      <td>1</td>
+      <td class="content"><p>Representing 0.1-100 mm/s.</p></td>
     </tr>
     
   </tbody>

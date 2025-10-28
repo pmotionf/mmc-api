@@ -168,6 +168,7 @@ message Request {
       // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
       // (default 6 m/s^2)
       optional uint32 acceleration = 3;
+      // Specify the unit of the `velocity` value.
       VelocityMode velocity_mode = 4;
     }
     repeated Line lines = 1;
@@ -183,7 +184,7 @@ message Request {
     uint32 carrier = 2;
     // If `velocity_mode` field is set to `normal`, the integer range is 1-100
     // representing 0.1-10 m/s.
-    // If `velocity_mode` field is set to `low`, the integer range is
+    // If `velocity_mode` field is set to `low`, the integer range is 1-1000
     // representing 0.1-100 mm/s.
     uint32 velocity = 3;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
@@ -203,6 +204,7 @@ message Request {
     mmc.Control control = 8;
     // Disable the carrier's collision avoidance system (CAS).
     bool disable_cas = 9;
+    // Specify the unit of the `velocity` value.
     VelocityMode velocity_mode = 10;
   }
 
@@ -218,7 +220,7 @@ message Request {
     Direction direction = 3;
     // If `velocity_mode` field is set to `normal`, the integer range is 1-100
     // representing 0.1-10 m/s.
-    // If `velocity_mode` field is set to `low`, the integer range is
+    // If `velocity_mode` field is set to `low`, the integer range is 1-1000
     // representing 0.1-100 mm/s.
     uint32 velocity = 4;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
@@ -226,6 +228,7 @@ message Request {
     // Carrier ID. If provided, wait for the specified carrier at the axis and
     // push it once the carrier arrives.
     optional uint32 carrier = 6;
+    // Specify the unit of the `velocity` value.
     VelocityMode velocity_mode = 7;
   }
 
@@ -251,6 +254,7 @@ message Request {
     uint32 acceleration = 6;
     // Smoothly transition to carrier movement after pull completion.
     optional Transition transition = 7;
+    // Specify the unit of the `velocity` value.
     VelocityMode velocity_mode = 8;
 
     message Transition {
