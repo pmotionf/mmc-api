@@ -32,8 +32,12 @@ pub const Ww = packed struct(u256) {
     pub const Command = enum(i16) {
         none = 0x0,
 
-        /// Find and set zero offset of axis's hall sensor angles.
-        set_sensors_zero = 0x1,
+        /// Calibrate sensor positions throughout line. Does not affect
+        /// sensor angle offset. Must be activated when an initialized
+        /// carrier is on the first axis of the line.
+        /// No other parameters need be set (carrier ID, target, control
+        /// kind, etc.).
+        calibrate = 0x1,
         /// Set zero point of line at current carrier position.
         set_line_zero = 0x2,
 
@@ -47,6 +51,18 @@ pub const Ww = packed struct(u256) {
         release = 0x7,
         /// Deinitialize carrier, releasing control and erasing stored info.
         deinitialize = 0x8,
+
+        /// Set angle offset of line. Must be run only when an
+        /// uninitialized carrier is on the first axis of the line.
+        /// Must specify a non-zero carrier ID.
+        warmup = 0xA,
+        /// Update angle offset of line. Must be run only when an
+        /// uninitialized carrier is on the first axis of the line. The
+        /// angle offset found from this command invocation will be
+        /// averaged with the existing angle offset in driver
+        /// configuration.
+        /// Must specify a non-zero carrier ID.
+        warmup_average = 0xB,
 
         /// Absolute location movement.
         move_abs = 0x10,
