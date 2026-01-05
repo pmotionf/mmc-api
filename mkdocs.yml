@@ -1,0 +1,17 @@
+site_name: PMF Motor Motion Control Documentation
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.tabs.link
+    - content.code.copy
+    - content.tooltips
+
+plugins:
+  - offline
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
