@@ -189,6 +189,7 @@ message Request {
     uint32 velocity = 3;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
     uint32 acceleration = 4;
+    // [Required] Specify carrier target movement.
     oneof target {
       // Move carrier to the center of the axis.
       uint32 axis = 5;
@@ -372,10 +373,10 @@ message Request {
     COMMAND_REQUEST_ERROR_INVALID_DIRECTION = 6;
     // Deprecated. Check `COMMAND_ERROR_INVALID_CARRIER_TARGET` on
     // `Info.Response.Command.Error`.
-    COMMAND_REQUEST_ERROR_INVALID_LOCATION = 7 [ deprecated = true ];
+    COMMAND_REQUEST_ERROR_INVALID_LOCATION = 7 [deprecated = true];
     // Deprecated. Check `COMMAND_ERROR_INVALID_CARRIER_TARGET` on
     // `Info.Response.Command.Error`.
-    COMMAND_REQUEST_ERROR_INVALID_DISTANCE = 8 [ deprecated = true ];
+    COMMAND_REQUEST_ERROR_INVALID_DISTANCE = 8 [deprecated = true];
     // Attempted to send a command to carrier outside of 1-2048.
     COMMAND_REQUEST_ERROR_INVALID_CARRIER = 9;
     // A command missing the required parameter.
@@ -386,7 +387,7 @@ message Request {
     COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND = 12;
     // Deprecated. Check `COMMAND_ERROR_DRIVER_DISCONNECTED` on
     // `Info.Response.Command.Error`.
-    COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 13 [ deprecated = true ];
+    COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 13 [deprecated = true];
     // Server unable to receive new command caused by out of memory.
     // Try `Command.Request.remove_command` to free the memory.
     COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 14;
