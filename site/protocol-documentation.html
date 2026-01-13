@@ -1,0 +1,4236 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="mmc-api.html">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Protocol Documentation - PMF Motor Motion Control Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#protocol-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="PMF Motor Motion Control Documentation" class="md-header__button md-logo" aria-label="PMF Motor Motion Control Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PMF Motor Motion Control Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Protocol Documentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="PMF Motor Motion Control Documentation" class="md-nav__button md-logo" aria-label="PMF Motor Motion Control Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PMF Motor Motion Control Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PMF MMC system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="mmc-api.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MMC-API Guidelines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protocol Documentation
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="protocol-documentation.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protocol Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mmcproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rangeproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        range.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="range.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Range
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mmccommandproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc/command.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc/command.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestautoinitialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.AutoInitialize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestautoinitializeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.AutoInitialize.Line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestcalibrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Calibrate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestclearerrors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.ClearErrors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestdeinitialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Deinitialize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestinitialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Initialize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestmove" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestpause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Pause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestpull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Pull
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestpulltransition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Pull.Transition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestpush" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Push
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestrelease" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestremovecommand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.RemoveCommand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestresume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Resume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestsetcarrierid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.SetCarrierId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestsetzero" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.SetZero
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requeststop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requeststoppull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.StopPull
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requeststoppush" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.StopPush
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestdirection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesterror_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestvelocitymode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.VelocityMode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mmccontrolproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc/control.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc/control.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mmccoreproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc/core.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc/core.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsesemanticversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.SemanticVersion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responseserver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.TrackConfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackconfigline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.TrackConfig.Line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesterror_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestkind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Kind
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mmcinfoproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc/info.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc/info.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestcommand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesttrack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Track
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesttrackids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Track.Ids
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsecommand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsecommands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackaxis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Axis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackaxiserror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Axis.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackaxisstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Axis.State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackcarrier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Carrier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackcarrierstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Carrier.State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackdriver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackdrivererror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Driver.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackdriverstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Driver.State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesterror_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsecommanderror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Command.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsecommandstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Command.Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackcarrierstatestate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Carrier.State.State
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scalar-value-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scalar Value Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mmcproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rangeproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        range.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="range.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Range
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mmccommandproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc/command.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc/command.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestautoinitialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.AutoInitialize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestautoinitializeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.AutoInitialize.Line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestcalibrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Calibrate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestclearerrors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.ClearErrors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestdeinitialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Deinitialize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestinitialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Initialize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestmove" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Move
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestpause" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Pause
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestpull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Pull
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestpulltransition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Pull.Transition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestpush" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Push
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestrelease" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestremovecommand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.RemoveCommand
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestresume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Resume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestsetcarrierid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.SetCarrierId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestsetzero" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.SetZero
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requeststop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Stop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requeststoppull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.StopPull
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requeststoppush" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.StopPush
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestdirection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesterror_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestvelocitymode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.VelocityMode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mmccontrolproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc/control.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc/control.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mmccoreproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc/core.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc/core.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsesemanticversion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.SemanticVersion
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responseserver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.TrackConfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackconfigline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.TrackConfig.Line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesterror_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestkind" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Kind
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mmcinfoproto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mmc/info.proto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mmc/info.proto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#request_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestcommand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesttrack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Track
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesttrackids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Track.Ids
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsecommand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsecommands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackaxis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Axis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackaxiserror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Axis.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackaxisstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Axis.State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackcarrier" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Carrier
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackcarrierstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Carrier.State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackdriver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackdrivererror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Driver.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackdriverstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Driver.State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requesterror_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsecommanderror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Command.Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsecommandstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Command.Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsetrackcarrierstatestate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response.Track.Carrier.State.State
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scalar-value-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scalar Value Types
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="protocol-documentation">Protocol Documentation</h1>
+<p><a name="mmc-proto"></a></p>
+<h2 id="mmcproto">mmc.proto</h2>
+<p><a name="mmc-Request"></a></p>
+<h3 id="request">Request</h3>
+<p>Request message. All client-to-server messages should be of this message
+type.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>core</td>
+<td><a href="#mmc-core-Request">core.Request</a></td>
+<td></td>
+<td>Core request. Used to retrieve information about the server or the configure</td>
+</tr>
+<tr>
+<td>command</td>
+<td><a href="#mmc-command-Request">command.Request</a></td>
+<td></td>
+<td>Command request. Used to send and manage commands to the server, which will execute commands on the connected track.</td>
+</tr>
+<tr>
+<td>info</td>
+<td><a href="#mmc-info-Request">info.Request</a></td>
+<td></td>
+<td>Info request. Used to retrieve information about track state or commands processed by the server.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-Response"></a></p>
+<h3 id="response">Response</h3>
+<p>Response message. All server-to-client messages will be of this message
+type.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>core</td>
+<td><a href="#mmc-core-Response">core.Response</a></td>
+<td></td>
+<td>Core response.</td>
+</tr>
+<tr>
+<td>command</td>
+<td><a href="#mmc-command-Response">command.Response</a></td>
+<td></td>
+<td>Command response.</td>
+</tr>
+<tr>
+<td>info</td>
+<td><a href="#mmc-info-Response">info.Response</a></td>
+<td></td>
+<td>Info Response.</td>
+</tr>
+<tr>
+<td>request_error</td>
+<td><a href="#mmc-Request-Error">Request.Error</a></td>
+<td></td>
+<td>Top-level request error. This error field will be returned only if the top-level request could not be handled properly. Otherwise, response kinds may contain more specific error codes.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-Request-Error"></a></p>
+<h3 id="requesterror">Request.Error</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MMC_REQUEST_ERROR_UNSPECIFIED</td>
+<td>0</td>
+<td>This error code is unused, and will never be returned. It is reserved as the default error code according to protobuf specification.</td>
+</tr>
+<tr>
+<td>MMC_REQUEST_ERROR_INVALID_MESSAGE</td>
+<td>1</td>
+<td>The request could not be decoded as a valid protobuf message.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="range-proto"></a></p>
+<h2 id="rangeproto">range.proto</h2>
+<p><a name="-Range"></a></p>
+<h3 id="range">Range</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>start</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Start of range, inclusive.</td>
+</tr>
+<tr>
+<td>end</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>End of range, inclusive.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc_command-proto"></a></p>
+<h2 id="mmccommandproto">mmc/command.proto</h2>
+<p><a name="mmc-command-Request"></a></p>
+<h3 id="request_1">Request</h3>
+<p>Command API: List of commands to operate the PMF&#39;s motion system.</p>
+<p>When a command is sent to the server, it will be queued for execution.
+Command execution status can be polled through the Info API. The status
+remains stored in a limited history buffer, and should be cleared with
+<code>remove_command</code> after completion.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>calibrate</td>
+<td><a href="#mmc-command-Request-Calibrate">Request.Calibrate</a></td>
+<td></td>
+<td>Calibrate a line. This command only needs to be run once after hardware setup; calibrated values will remain stored in drivers even after a power cycle.</td>
+</tr>
+<tr>
+<td>set_zero</td>
+<td><a href="#mmc-command-Request-SetZero">Request.SetZero</a></td>
+<td></td>
+<td>Set the zero position of the specified line. This command can be run optionally after calibration, upon which all drivers will store the set zero position of the line. The set zero position will remain unchanged even after a power cycle.</td>
+</tr>
+<tr>
+<td>initialize</td>
+<td><a href="#mmc-command-Request-Initialize">Request.Initialize</a></td>
+<td></td>
+<td>Initialize a carrier. Carriers must be initialized before they can be moved. Initialization is required after every power cycle.</td>
+</tr>
+<tr>
+<td>auto_initialize</td>
+<td><a href="#mmc-command-Request-AutoInitialize">Request.AutoInitialize</a></td>
+<td></td>
+<td>Initialize all carriers of the specified line(s). If no lines are specified, initialize all carriers across all lines in the track.</td>
+</tr>
+<tr>
+<td>deinitialize</td>
+<td><a href="#mmc-command-Request-Deinitialize">Request.Deinitialize</a></td>
+<td></td>
+<td>Deinitialize a carrier. This removes all carrier information, such as recognized position and carrier ID.</td>
+</tr>
+<tr>
+<td>move</td>
+<td><a href="#mmc-command-Request-Move">Request.Move</a></td>
+<td></td>
+<td>Move an initialized carrier to the desired position.</td>
+</tr>
+<tr>
+<td>pull</td>
+<td><a href="#mmc-command-Request-Pull">Request.Pull</a></td>
+<td></td>
+<td>Pull and initialize a new carrier into a line.</td>
+</tr>
+<tr>
+<td>push</td>
+<td><a href="#mmc-command-Request-Push">Request.Push</a></td>
+<td></td>
+<td>Push an initialized carrier to the specified direction.</td>
+</tr>
+<tr>
+<td>stop_pull</td>
+<td><a href="#mmc-command-Request-StopPull">Request.StopPull</a></td>
+<td></td>
+<td>Stop waiting to pull a new carrier at an axis.</td>
+</tr>
+<tr>
+<td>stop_push</td>
+<td><a href="#mmc-command-Request-StopPush">Request.StopPush</a></td>
+<td></td>
+<td>Stop waiting to push an initialized carrier at an axis.</td>
+</tr>
+<tr>
+<td>release</td>
+<td><a href="#mmc-command-Request-Release">Request.Release</a></td>
+<td></td>
+<td>Release the motor control of a carrier.</td>
+</tr>
+<tr>
+<td>clear_errors</td>
+<td><a href="#mmc-command-Request-ClearErrors">Request.ClearErrors</a></td>
+<td></td>
+<td>Clear all errors within the specified driver range.</td>
+</tr>
+<tr>
+<td>remove_command</td>
+<td><a href="#mmc-command-Request-RemoveCommand">Request.RemoveCommand</a></td>
+<td></td>
+<td>Cancel a running command or remove its status history.</td>
+</tr>
+<tr>
+<td>stop</td>
+<td><a href="#mmc-command-Request-Stop">Request.Stop</a></td>
+<td></td>
+<td>Activate emergency stop for all drivers in line(s). Emergency stop will cause all carriers to deccelerate to rest, then reset all carriers&#39; movement commands.</td>
+</tr>
+<tr>
+<td>pause</td>
+<td><a href="#mmc-command-Request-Pause">Request.Pause</a></td>
+<td></td>
+<td>Activate pause for all drivers in line(s). Pause will cause all carriers to deccelerate to rest. On resume, the carriers will continue their previously assigned movement commands.</td>
+</tr>
+<tr>
+<td>resume</td>
+<td><a href="#mmc-command-Request-Resume">Request.Resume</a></td>
+<td></td>
+<td>Deactivate emergency stop and pause for all drivers in line(s).</td>
+</tr>
+<tr>
+<td>set_carrier_id</td>
+<td><a href="#mmc-command-Request-SetCarrierId">Request.SetCarrierId</a></td>
+<td></td>
+<td>Change an existing carrier ID to a new unique carrier ID.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-AutoInitialize"></a></p>
+<h3 id="requestautoinitialize">Request.AutoInitialize</h3>
+<p>Automatically initialize carriers on every specified lines.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lines</td>
+<td><a href="#mmc-command-Request-AutoInitialize-Line">Request.AutoInitialize.Line</a></td>
+<td>repeated</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-AutoInitialize-Line"></a></p>
+<h3 id="requestautoinitializeline">Request.AutoInitialize.Line</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>velocity</td>
+<td><a href="#uint32">uint32</a></td>
+<td>optional</td>
+<td>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100 representing 0.1-10 m/s. If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000 representing 0.1-100 mm/s.</td>
+</tr>
+<tr>
+<td>acceleration</td>
+<td><a href="#uint32">uint32</a></td>
+<td>optional</td>
+<td>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2. (default 6 m/s^2)</td>
+</tr>
+<tr>
+<td>velocity_mode</td>
+<td><a href="#mmc-command-Request-VelocityMode">Request.VelocityMode</a></td>
+<td></td>
+<td>Specify the unit of the <code>velocity</code> value.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Calibrate"></a></p>
+<h3 id="requestcalibrate">Request.Calibrate</h3>
+<p>Calibrate a line by positioning an unitiliazed carrier on the first axis
+of the line.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-ClearErrors"></a></p>
+<h3 id="requestclearerrors">Request.ClearErrors</h3>
+<p>Clear all error information on the driver. If a target is specified,
+clear error information of drivers which is located on the target. If not,
+clear error information on every driver of the specified line ID.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>drivers</td>
+<td><a href="#range">Range</a></td>
+<td></td>
+<td>Driver ID range.</td>
+</tr>
+<tr>
+<td>axes</td>
+<td><a href="#range">Range</a></td>
+<td></td>
+<td>Axis ID range.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Carrier ID.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Deinitialize"></a></p>
+<h3 id="requestdeinitialize">Request.Deinitialize</h3>
+<p>Clear carrier information located on the axis. If a target is specified,
+clear information of carriers which is located on the target. If not,
+clear all carrier information of the specified line ID</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>axes</td>
+<td><a href="#range">Range</a></td>
+<td></td>
+<td>Axis ID range.</td>
+</tr>
+<tr>
+<td>drivers</td>
+<td><a href="#range">Range</a></td>
+<td></td>
+<td>Driver ID range.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Carrier ID.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Initialize"></a></p>
+<h3 id="requestinitialize">Request.Initialize</h3>
+<p>Initialize a carrier.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>axis</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Axis ID.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>ID for the new carrier.</td>
+</tr>
+<tr>
+<td>direction</td>
+<td><a href="#mmc-command-Request-Direction">Request.Direction</a></td>
+<td></td>
+<td>Initialization direction for the new carrier.</td>
+</tr>
+<tr>
+<td>link_axis</td>
+<td><a href="#mmc-command-Request-Direction">Request.Direction</a></td>
+<td>optional</td>
+<td>Linked axis direction from the specified axis.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Move"></a></p>
+<h3 id="requestmove">Request.Move</h3>
+<p>Move a carrier to the desired position.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Carrier ID.</td>
+</tr>
+<tr>
+<td>velocity</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100 representing 0.1-10 m/s. If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000 representing 0.1-100 mm/s.</td>
+</tr>
+<tr>
+<td>acceleration</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</td>
+</tr>
+<tr>
+<td>axis</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Move carrier to the center of the axis.</td>
+</tr>
+<tr>
+<td>location</td>
+<td><a href="#float">float</a></td>
+<td></td>
+<td>Move carrier to relative location to the zero-point of the line, which is set by default at the center of the line&#39;s first axis after calibration, but can also be set with the <code>SetZero</code> command.</td>
+</tr>
+<tr>
+<td>distance</td>
+<td><a href="#float">float</a></td>
+<td></td>
+<td>Move carrier to relative distance to current carrier position. Negative distance moves the carrier backwards.</td>
+</tr>
+<tr>
+<td>control</td>
+<td><a href="#mmc-Control">mmc.Control</a></td>
+<td></td>
+<td>Control method for moving carrier.</td>
+</tr>
+<tr>
+<td>disable_cas</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Disable the carrier&#39;s collision avoidance system (CAS).</td>
+</tr>
+<tr>
+<td>velocity_mode</td>
+<td><a href="#mmc-command-Request-VelocityMode">Request.VelocityMode</a></td>
+<td></td>
+<td>Specify the unit of the <code>velocity</code> value.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Pause"></a></p>
+<h3 id="requestpause">Request.Pause</h3>
+<p>Pause any operation in PMF LMS. Any queued commands in the server will be
+continued once the resume command is given.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lines</td>
+<td><a href="#uint32">uint32</a></td>
+<td>repeated</td>
+<td>Line ID. If provided, pause operations only on the specified lines.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Pull"></a></p>
+<h3 id="requestpull">Request.Pull</h3>
+<p>Pull and initialize a new carrier into a line.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>axis</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Axis ID.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>ID for the incoming carrier.</td>
+</tr>
+<tr>
+<td>direction</td>
+<td><a href="#mmc-command-Request-Direction">Request.Direction</a></td>
+<td></td>
+<td>The direction from which the incoming carrier is moving.</td>
+</tr>
+<tr>
+<td>velocity</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Fixed point integer. If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100 representing 0.1-10 m/s. If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000 representing 0.1-100 mm/s.</td>
+</tr>
+<tr>
+<td>acceleration</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</td>
+</tr>
+<tr>
+<td>transition</td>
+<td><a href="#mmc-command-Request-Pull-Transition">Request.Pull.Transition</a></td>
+<td>optional</td>
+<td>Smoothly transition to carrier movement after pull completion.</td>
+</tr>
+<tr>
+<td>velocity_mode</td>
+<td><a href="#mmc-command-Request-VelocityMode">Request.VelocityMode</a></td>
+<td></td>
+<td>Specify the unit of the <code>velocity</code> value.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Pull-Transition"></a></p>
+<h3 id="requestpulltransition">Request.Pull.Transition</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>control</td>
+<td><a href="#mmc-Control">mmc.Control</a></td>
+<td></td>
+<td>Control method for moving carrier.</td>
+</tr>
+<tr>
+<td>disable_cas</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Disabling the carrier&#39;s collision avoidance system (CAS).</td>
+</tr>
+<tr>
+<td>axis</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Move carrier to the center of the axis.</td>
+</tr>
+<tr>
+<td>location</td>
+<td><a href="#float">float</a></td>
+<td></td>
+<td>Move carrier to relative location to the zero-point of the line, which is set by default at the center of the line&#39;s first axis after calibration, but can also be set with the <code>SetZero</code> command.</td>
+</tr>
+<tr>
+<td>distance</td>
+<td><a href="#float">float</a></td>
+<td></td>
+<td>Move carrier to relative distance to current carrier position. Negative distance moves the carrier backwards.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Push"></a></p>
+<h3 id="requestpush">Request.Push</h3>
+<p>Push an initialized carrier to the specified direction.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>axis</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Axis ID.</td>
+</tr>
+<tr>
+<td>direction</td>
+<td><a href="#mmc-command-Request-Direction">Request.Direction</a></td>
+<td></td>
+<td>Direction of carrier movement.</td>
+</tr>
+<tr>
+<td>velocity</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100 representing 0.1-10 m/s. If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000 representing 0.1-100 mm/s.</td>
+</tr>
+<tr>
+<td>acceleration</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td>optional</td>
+<td>Carrier ID. If provided, wait for the specified carrier at the axis and push it once the carrier arrives.</td>
+</tr>
+<tr>
+<td>velocity_mode</td>
+<td><a href="#mmc-command-Request-VelocityMode">Request.VelocityMode</a></td>
+<td></td>
+<td>Specify the unit of the <code>velocity</code> value.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Release"></a></p>
+<h3 id="requestrelease">Request.Release</h3>
+<p>Release the control imposed by the motor to the carrier. If a target is
+specified, the motor which is located on the target release the control.
+Otherwise, all carriers on the provided line will be released from control.
+Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Carrier ID.</td>
+</tr>
+<tr>
+<td>axes</td>
+<td><a href="#range">Range</a></td>
+<td></td>
+<td>Axis ID range.</td>
+</tr>
+<tr>
+<td>drivers</td>
+<td><a href="#range">Range</a></td>
+<td></td>
+<td>Driver ID range.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-RemoveCommand"></a></p>
+<h3 id="requestremovecommand">Request.RemoveCommand</h3>
+<p>Remove a command on the server if the command ID is specified. If no
+command ID is specified, remove any commands received by the server. If
+the commands are still progressing, cancel the command execution.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.removed_id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>command</td>
+<td><a href="#uint32">uint32</a></td>
+<td>optional</td>
+<td>Command ID.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Resume"></a></p>
+<h3 id="requestresume">Request.Resume</h3>
+<p>Resume lines that have been stopped or paused. If the line is not paused
+or emergency stopped, this command will succeed without any effect.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lines</td>
+<td><a href="#uint32">uint32</a></td>
+<td>repeated</td>
+<td>Line ID. If provided, resume operations only to those specified lines.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-SetCarrierId"></a></p>
+<h3 id="requestsetcarrierid">Request.SetCarrierId</h3>
+<p>Change the carrier ID of an existing initialized carrier. If the new
+carrier ID already exists on the line, returns INVALID_CARRIER.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Target existing initialized carrier ID.</td>
+</tr>
+<tr>
+<td>new_carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>New desired carrier ID (unique in line).</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-SetZero"></a></p>
+<h3 id="requestsetzero">Request.SetZero</h3>
+<p>Set a zero position of a line by positioning an initialized carrier on
+the first axis of the line.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Stop"></a></p>
+<h3 id="requeststop">Request.Stop</h3>
+<p>Send an emergency stop command to stop any operation in PMF LMS. This
+command also removes all queued commands in the server.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lines</td>
+<td><a href="#uint32">uint32</a></td>
+<td>repeated</td>
+<td>Line ID. If provided, stop operations only on the specified lines and remove all commands that targeting those lines.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-StopPull"></a></p>
+<h3 id="requeststoppull">Request.StopPull</h3>
+<p>Stop pulling a carrier to the specified axis. If no axis is provided,
+then all pending carrier pulls on the line will be stopped.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>axes</td>
+<td><a href="#range">Range</a></td>
+<td>optional</td>
+<td>Axis ID range.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-StopPush"></a></p>
+<h3 id="requeststoppush">Request.StopPush</h3>
+<p>Stop pushing a carrier from the specified axis. If no axis is provided,
+then all pending carrier pushes on the line will be stopped.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>axes</td>
+<td><a href="#range">Range</a></td>
+<td>optional</td>
+<td>Axis ID range.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Response"></a></p>
+<h3 id="response_1">Response</h3>
+<p>Response description to the command API.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Assigned ID for newly sent command.</td>
+</tr>
+<tr>
+<td>removed_id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>ID of cleared existing command.</td>
+</tr>
+<tr>
+<td>request_error</td>
+<td><a href="#mmc-command-Request-Error">Request.Error</a></td>
+<td></td>
+<td>Error during command&#39;s execution.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Direction"></a></p>
+<h3 id="requestdirection">Request.Direction</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DIRECTION_UNSPECIFIED</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>DIRECTION_BACKWARD</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>DIRECTION_FORWARD</td>
+<td>2</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-Error"></a></p>
+<h3 id="requesterror_1">Request.Error</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COMMAND_REQUEST_ERROR_UNSPECIFIED</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_LINE</td>
+<td>1</td>
+<td>Attempted to use line ID outside of the configured lines.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_AXIS</td>
+<td>2</td>
+<td>Attempted to use axis ID outside of the configured axes of the line.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_DRIVER</td>
+<td>3</td>
+<td>Attempted to use driver ID outside of the configured drivers of the line.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_ACCELERATION</td>
+<td>4</td>
+<td>Attempted to use acceleration value outside of 1-245.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_VELOCITY</td>
+<td>5</td>
+<td>Attempted to use velocity value outside of 1-60.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_DIRECTION</td>
+<td>6</td>
+<td>Using invalid direction for the command.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_LOCATION</td>
+<td>7</td>
+<td>Deprecated. Check <code>COMMAND_ERROR_INVALID_CARRIER_TARGET</code> on <code>Info.Response.Command.Error</code>.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_DISTANCE</td>
+<td>8</td>
+<td>Deprecated. Check <code>COMMAND_ERROR_INVALID_CARRIER_TARGET</code> on <code>Info.Response.Command.Error</code>.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_CARRIER</td>
+<td>9</td>
+<td>Attempted to send a command to carrier outside of 1-2048.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_MISSING_PARAMETER</td>
+<td>10</td>
+<td>A command missing the required parameter.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_COMMAND_NOT_FOUND</td>
+<td>11</td>
+<td>Attempted to remove or cancel a non-existing command.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND</td>
+<td>12</td>
+<td>Attempted to send command to uninitialized carrier.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED</td>
+<td>13</td>
+<td>Deprecated. Check <code>COMMAND_ERROR_DRIVER_DISCONNECTED</code> on <code>Info.Response.Command.Error</code>.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_OUT_OF_MEMORY</td>
+<td>14</td>
+<td>Server unable to receive new command caused by out of memory. Try <code>Command.Request.remove_command</code> to free the memory.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED</td>
+<td>15</td>
+<td>Attempted to run more than 8 auto initialize instance.</td>
+</tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID</td>
+<td>16</td>
+<td>Attempted to assign a new carrier with an ID that is already used by other carrier on the same line</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-VelocityMode"></a></p>
+<h3 id="requestvelocitymode">Request.VelocityMode</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VELOCITY_MODE_NORMAL</td>
+<td>0</td>
+<td>Representing 0.1-10 m/s.</td>
+</tr>
+<tr>
+<td>VELOCITY_MODE_LOW</td>
+<td>1</td>
+<td>Representing 0.1-100 mm/s.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc_control-proto"></a></p>
+<h2 id="mmccontrolproto">mmc/control.proto</h2>
+<p><a name="mmc-Control"></a></p>
+<h3 id="control">Control</h3>
+<p>Carrier motor control kind.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CONTROL_UNSPECIFIED</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>CONTROL_POSITION</td>
+<td>1</td>
+<td>Carrier controlled with position priority.</td>
+</tr>
+<tr>
+<td>CONTROL_VELOCITY</td>
+<td>2</td>
+<td>Carrier controlled with velocity priority.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc_core-proto"></a></p>
+<h2 id="mmccoreproto">mmc/core.proto</h2>
+<p><a name="mmc-core-Request"></a></p>
+<h3 id="request_2">Request</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kind</td>
+<td><a href="#mmc-core-Request-Kind">Request.Kind</a></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-core-Response"></a></p>
+<h3 id="response_2">Response</h3>
+<p>Response description to the core API.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>server</td>
+<td><a href="#mmc-core-Response-Server">Response.Server</a></td>
+<td></td>
+<td>Server process information.</td>
+</tr>
+<tr>
+<td>api_version</td>
+<td><a href="#mmc-core-Response-SemanticVersion">Response.SemanticVersion</a></td>
+<td></td>
+<td>Server&#39;s API version.</td>
+</tr>
+<tr>
+<td>track_config</td>
+<td><a href="#mmc-core-Response-TrackConfig">Response.TrackConfig</a></td>
+<td></td>
+<td>Track configuration.</td>
+</tr>
+<tr>
+<td>request_error</td>
+<td><a href="#mmc-core-Request-Error">Request.Error</a></td>
+<td></td>
+<td>Error response if the core request could not be handled.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-core-Response-SemanticVersion"></a></p>
+<h3 id="responsesemanticversion">Response.SemanticVersion</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>major</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>minor</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>patch</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-core-Response-Server"></a></p>
+<h3 id="responseserver">Response.Server</h3>
+<p>Server version and name.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td><a href="#string">string</a></td>
+<td></td>
+<td>Server name.</td>
+</tr>
+<tr>
+<td>version</td>
+<td><a href="#mmc-core-Response-SemanticVersion">Response.SemanticVersion</a></td>
+<td></td>
+<td>Server implementation version.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-core-Response-TrackConfig"></a></p>
+<h3 id="responsetrackconfig">Response.TrackConfig</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lines</td>
+<td><a href="#mmc-core-Response-TrackConfig-Line">Response.TrackConfig.Line</a></td>
+<td>repeated</td>
+<td>All configured lines in track.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-core-Response-TrackConfig-Line"></a></p>
+<h3 id="responsetrackconfigline">Response.TrackConfig.Line</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID. Numeric ID, starting from 1, that is unique to each line in the track. This ID is used to address the line in other requests.</td>
+</tr>
+<tr>
+<td>name</td>
+<td><a href="#string">string</a></td>
+<td></td>
+<td>Configured line name. This name is otherwise unused by the API, and is provided to the client for end-user convenience.</td>
+</tr>
+<tr>
+<td>axes</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Total number of axes in the line.</td>
+</tr>
+<tr>
+<td>axis_length</td>
+<td><a href="#float">float</a></td>
+<td></td>
+<td>Length of each axis in the line, in meters.</td>
+</tr>
+<tr>
+<td>carrier_length</td>
+<td><a href="#float">float</a></td>
+<td></td>
+<td>Carrier magnet length, in meters.</td>
+</tr>
+<tr>
+<td>drivers</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Total number of drivers in the line.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-core-Request-Error"></a></p>
+<h3 id="requesterror_2">Request.Error</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CORE_REQUEST_ERROR_UNSPECIFIED</td>
+<td>0</td>
+<td>This error code is unused, and will never be returned. It is reserved as the default error code according to protobuf specification.</td>
+</tr>
+<tr>
+<td>CORE_REQUEST_ERROR_REQUEST_UNKNOWN</td>
+<td>1</td>
+<td>The core request kind was unspecified.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-core-Request-Kind"></a></p>
+<h3 id="requestkind">Request.Kind</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CORE_REQUEST_KIND_UNSPECIFIED</td>
+<td>0</td>
+<td>This request kind is unused, and should never be sent. It is reserved as the default request kind according to protobuf specification.</td>
+</tr>
+<tr>
+<td>CORE_REQUEST_KIND_API_VERSION</td>
+<td>1</td>
+<td>Request server&#39;s API version. Use to check if API version matches client API compatibility.</td>
+</tr>
+<tr>
+<td>CORE_REQUEST_KIND_SERVER_INFO</td>
+<td>2</td>
+<td>Request server process information. This includes the configured server name and server implementation version.</td>
+</tr>
+<tr>
+<td>CORE_REQUEST_KIND_TRACK_CONFIG</td>
+<td>3</td>
+<td>Request the configured track information of the server.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc_info-proto"></a></p>
+<h2 id="mmcinfoproto">mmc/info.proto</h2>
+<p><a name="mmc-info-Request"></a></p>
+<h3 id="request_3">Request</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>command</td>
+<td><a href="#mmc-info-Request-Command">Request.Command</a></td>
+<td></td>
+<td>Command information request. Get current status of command; necessary to determine if command is currently running, completed, or failed.</td>
+</tr>
+<tr>
+<td>track</td>
+<td><a href="#mmc-info-Request-Track">Request.Track</a></td>
+<td></td>
+<td>Track information request. Get current track state information.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Request-Command"></a></p>
+<h3 id="requestcommand">Request.Command</h3>
+<p>Request for status of specified command ID from the server. If no command
+ID is provided, then request for status of all commands from the server.</p>
+<p>Expected response: <code>mmc.Response.body.info.body.commands</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td>optional</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Request-Track"></a></p>
+<h3 id="requesttrack">Request.Track</h3>
+<p>Request track state information from server. One or more of the <code>info_</code>
+flags must be enabled to select the kind of track information desired.
+A filter may be optionally provided to limit the source of information
+from the track.</p>
+<p>Expected response: <code>mmc.Response.body.info.body.track</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID. Select line from which information will be retrieved.</td>
+</tr>
+<tr>
+<td>info_driver_state</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Retrieve driver state information.</td>
+</tr>
+<tr>
+<td>info_driver_errors</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Retrieve driver error information.</td>
+</tr>
+<tr>
+<td>info_axis_state</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Retrieve axis state information.</td>
+</tr>
+<tr>
+<td>info_axis_errors</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Retrieve axis errors information.</td>
+</tr>
+<tr>
+<td>info_carrier_state</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Retrieve carrier state information.</td>
+</tr>
+<tr>
+<td>drivers</td>
+<td><a href="#range">Range</a></td>
+<td></td>
+<td>Retrieve information from driver ID range. Driver information flags will include drivers within this range. Axis information flags will include every axis belonging to the drivers in this range. Carrier information flags will include every carrier currently controlled by one of the drivers in this range.</td>
+</tr>
+<tr>
+<td>axes</td>
+<td><a href="#range">Range</a></td>
+<td></td>
+<td>Retrieve information from axis ID range. Driver information flags will include drivers that contain one of the axes within this range. Axis information flags will include axes within this range. Carrier information flags will include every carrier currently controlled by one of the axes in this range.</td>
+</tr>
+<tr>
+<td>carriers</td>
+<td><a href="#mmc-info-Request-Track-Ids">Request.Track.Ids</a></td>
+<td></td>
+<td>Retrieve information from carrier IDs. Driver information flags will include drivers that control one of the carriers within this list. Axis information flags will include axes that control one of the carriers within this list. Carrier information flags will include carriers within this list.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Request-Track-Ids"></a></p>
+<h3 id="requesttrackids">Request.Track.Ids</h3>
+<p>List of IDs. At least one ID must be provided.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ids</td>
+<td><a href="#uint32">uint32</a></td>
+<td>repeated</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response"></a></p>
+<h3 id="response_3">Response</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>command</td>
+<td><a href="#mmc-info-Response-Commands">Response.Commands</a></td>
+<td></td>
+<td>Information for requested command(s). If empty, no matching command(s) was found.</td>
+</tr>
+<tr>
+<td>track</td>
+<td><a href="#mmc-info-Response-Track">Response.Track</a></td>
+<td></td>
+<td>Information for requested track state.</td>
+</tr>
+<tr>
+<td>request_error</td>
+<td><a href="#mmc-info-Request-Error">Request.Error</a></td>
+<td></td>
+<td>Info request error. This error field will be returned if the provided info request could not be handled properly.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Command"></a></p>
+<h3 id="responsecommand">Response.Command</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Command ID. Valid IDs begin from 1, and may be reused after command status is cleared from server history.</td>
+</tr>
+<tr>
+<td>status</td>
+<td><a href="#mmc-info-Response-Command-Status">Response.Command.Status</a></td>
+<td></td>
+<td>Command status.</td>
+</tr>
+<tr>
+<td>error</td>
+<td><a href="#mmc-info-Response-Command-Error">Response.Command.Error</a></td>
+<td>optional</td>
+<td>Command error response, only if the status is <code>COMMAND_STATUS_FAILED</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Commands"></a></p>
+<h3 id="responsecommands">Response.Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>items</td>
+<td><a href="#mmc-info-Response-Command">Response.Command</a></td>
+<td>repeated</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Track"></a></p>
+<h3 id="responsetrack">Response.Track</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>driver_state</td>
+<td><a href="#mmc-info-Response-Track-Driver-State">Response.Track.Driver.State</a></td>
+<td>repeated</td>
+<td>Driver state information list. Empty if request flag was disabled.</td>
+</tr>
+<tr>
+<td>driver_errors</td>
+<td><a href="#mmc-info-Response-Track-Driver-Error">Response.Track.Driver.Error</a></td>
+<td>repeated</td>
+<td>Driver error information list. Empty if request flag was disabled.</td>
+</tr>
+<tr>
+<td>axis_state</td>
+<td><a href="#mmc-info-Response-Track-Axis-State">Response.Track.Axis.State</a></td>
+<td>repeated</td>
+<td>Axis state information list. Empty if request flag was disabled.</td>
+</tr>
+<tr>
+<td>axis_errors</td>
+<td><a href="#mmc-info-Response-Track-Axis-Error">Response.Track.Axis.Error</a></td>
+<td>repeated</td>
+<td>Axis error information list. Empty if request flag was disabled.</td>
+</tr>
+<tr>
+<td>carrier_state</td>
+<td><a href="#mmc-info-Response-Track-Carrier-State">Response.Track.Carrier.State</a></td>
+<td>repeated</td>
+<td>Carrier state information list. Empty if request flag was disabled.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Track-Axis"></a></p>
+<h3 id="responsetrackaxis">Response.Track.Axis</h3>
+<p><a name="mmc-info-Response-Track-Axis-Error"></a></p>
+<h3 id="responsetrackaxiserror">Response.Track.Axis.Error</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Axis ID.</td>
+</tr>
+<tr>
+<td>overcurrent</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Motor overcurrent detected. Motor control released to prevent damage.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Track-Axis-State"></a></p>
+<h3 id="responsetrackaxisstate">Response.Track.Axis.State</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Axis ID.</td>
+</tr>
+<tr>
+<td>motor_active</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Axis is currently controlling a carrier.</td>
+</tr>
+<tr>
+<td>waiting_pull</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Axis is waiting to pull carrier.</td>
+</tr>
+<tr>
+<td>waiting_push</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Axis is waiting to push carrier.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Carrier ID; non-zero if an initialized carrier is on the axis.</td>
+</tr>
+<tr>
+<td>hall_alarm_back</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Axis back hall alarm is active. Magnet is detected above back hall sensor.</td>
+</tr>
+<tr>
+<td>hall_alarm_front</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Axis front hall alarm is active. Magnet is detected above front hall sensor.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Track-Carrier"></a></p>
+<h3 id="responsetrackcarrier">Response.Track.Carrier</h3>
+<p><a name="mmc-info-Response-Track-Carrier-State"></a></p>
+<h3 id="responsetrackcarrierstate">Response.Track.Carrier.State</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Carrier ID. Will always be non-zero.</td>
+</tr>
+<tr>
+<td>position</td>
+<td><a href="#float">float</a></td>
+<td></td>
+<td>Position of the carrier in line, in meters.</td>
+</tr>
+<tr>
+<td>axis_main</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Carrier&#39;s primary axis ID.</td>
+</tr>
+<tr>
+<td>axis_auxiliary</td>
+<td><a href="#uint32">uint32</a></td>
+<td>optional</td>
+<td>Carrier&#39;s auxiliary axis ID, if carrier is on top of two axes.</td>
+</tr>
+<tr>
+<td>cas_disabled</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Collision avoidance system (CAS) disabled.</td>
+</tr>
+<tr>
+<td>cas_triggered</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Collision avoidance system (CAS) triggered. Carrier will automatically resume movement when path is clear.</td>
+</tr>
+<tr>
+<td>state</td>
+<td><a href="#mmc-info-Response-Track-Carrier-State-State">Response.Track.Carrier.State.State</a></td>
+<td></td>
+<td>Carrier state.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Track-Driver"></a></p>
+<h3 id="responsetrackdriver">Response.Track.Driver</h3>
+<p><a name="mmc-info-Response-Track-Driver-Error"></a></p>
+<h3 id="responsetrackdrivererror">Response.Track.Driver.Error</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Driver ID.</td>
+</tr>
+<tr>
+<td>control_loop_time_exceeded</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Control loop exceeded maximum loop time.</td>
+</tr>
+<tr>
+<td>inverter_overheat</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Inverter is overheated.</td>
+</tr>
+<tr>
+<td>undervoltage</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Driver voltage supply too low.</td>
+</tr>
+<tr>
+<td>overvoltage</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Driver voltage supply too high.</td>
+</tr>
+<tr>
+<td>comm_error_prev</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Communication error with previous driver in line.</td>
+</tr>
+<tr>
+<td>comm_error_next</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Communication error with next driver in line.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Track-Driver-State"></a></p>
+<h3 id="responsetrackdriverstate">Response.Track.Driver.State</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Driver ID.</td>
+</tr>
+<tr>
+<td>connected</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Connection status between driver and server.</td>
+</tr>
+<tr>
+<td>busy</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Driver is currently executing a command.</td>
+</tr>
+<tr>
+<td>motor_disabled</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Driver motor release activated. All driver motors are inactive.</td>
+</tr>
+<tr>
+<td>stopped</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Driver emergency stop activated.</td>
+</tr>
+<tr>
+<td>paused</td>
+<td><a href="#bool">bool</a></td>
+<td></td>
+<td>Driver pause activated.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Request-Error"></a></p>
+<h3 id="requesterror_3">Request.Error</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INFO_REQUEST_ERROR_UNSPECIFIED</td>
+<td>0</td>
+<td>This error code is unused, and will never be returned. It is reserved as the default error code according to protobuf specification.</td>
+</tr>
+<tr>
+<td>INFO_REQUEST_ERROR_INVALID_LINE</td>
+<td>1</td>
+<td>Invalid line ID provided. Ensure that line ID exists in track configuration.</td>
+</tr>
+<tr>
+<td>INFO_REQUEST_ERROR_INVALID_AXIS</td>
+<td>2</td>
+<td>Invalid axis ID provided. Ensure that axis ID exists in line.</td>
+</tr>
+<tr>
+<td>INFO_REQUEST_ERROR_INVALID_DRIVER</td>
+<td>3</td>
+<td>Invalid driver ID provided. Ensure that driver ID exists in line.</td>
+</tr>
+<tr>
+<td>INFO_REQUEST_ERROR_MISSING_PARAMETER</td>
+<td>4</td>
+<td>Request is missing a required parameter. Ensure that at least one of the information flag is selected when requesting track information.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Command-Error"></a></p>
+<h3 id="responsecommanderror">Response.Command.Error</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COMMAND_ERROR_UNSPECIFIED</td>
+<td>0</td>
+<td>This error code is unused, and will never be returned. It is reserved as the default error code according to protobuf specification.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_INVALID_SYSTEM_STATE</td>
+<td>1</td>
+<td>System state prevented successful command execution. Ensure that all preconditions are met with track info request before sending command.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_INVALID_CARRIER_ID</td>
+<td>2</td>
+<td>Deprecated. Check <code>COMMAND_REQUEST_ERROR_INVALID_CARRIER</code> on <code>Command.Request.Error</code>.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_DRIVER_DISCONNECTED</td>
+<td>3</td>
+<td>Driver connection failed while command progressing.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_UNEXPECTED</td>
+<td>4</td>
+<td>Unexpected command execution error. This is likely an implementation bug; please contact PMF support for assistance.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_CARRIER_NOT_FOUND</td>
+<td>5</td>
+<td>Target carrier is removed while command progressing.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_CARRIER_ALREADY_INITIALIZED</td>
+<td>6</td>
+<td>Attempted to initialize an initialized carrier.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_DRIVER_STOPPED</td>
+<td>7</td>
+<td>Target driver is stopped while command progressing. Consider resume the driver before sending further command.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_INVALID_CARRIER_TARGET</td>
+<td>8</td>
+<td>Carrier targetting a location outside of the configured track.</td>
+</tr>
+<tr>
+<td>COMMAND_ERROR_CONFLICTING_CARRIER_ID</td>
+<td>9</td>
+<td>Attempted to assign a new carrier with an ID that is already used by other carrier on the same line</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Command-Status"></a></p>
+<h3 id="responsecommandstatus">Response.Command.Status</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>COMMAND_STATUS_UNSPECIFIED</td>
+<td>0</td>
+<td>This command status is unused, and will never be returned. It is reserved as the default status code according to protobuf specification.</td>
+</tr>
+<tr>
+<td>COMMAND_STATUS_PROGRESSING</td>
+<td>1</td>
+<td>Command currently executing.</td>
+</tr>
+<tr>
+<td>COMMAND_STATUS_COMPLETED</td>
+<td>2</td>
+<td>Command completed.</td>
+</tr>
+<tr>
+<td>COMMAND_STATUS_FAILED</td>
+<td>3</td>
+<td>Command execution failed.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-info-Response-Track-Carrier-State-State"></a></p>
+<h3 id="responsetrackcarrierstatestate">Response.Track.Carrier.State.State</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Number</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CARRIER_STATE_NONE</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>CARRIER_STATE_CALIBRATING</td>
+<td>1</td>
+<td>Carrier is currently operating for line calibration.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_CALIBRATE_COMPLETED</td>
+<td>2</td>
+<td>Carrier has completed line calibration, and may now be used for normal operation.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_MOVING</td>
+<td>3</td>
+<td>Carrier is currently moving towards target destination.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_MOVE_COMPLETED</td>
+<td>4</td>
+<td>Carrier has arrived within threshold at target destination.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_INITIALIZING</td>
+<td>5</td>
+<td>Carrier is initializing. Must not be used until initialization is completed.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_INITIALIZE_COMPLETED</td>
+<td>6</td>
+<td>Carrier initialization completed. May now be used for normal operation.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_PUSHING</td>
+<td>7</td>
+<td>Carrier is being pushed by axis. Used to eject carrier from line.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_PUSH_COMPLETED</td>
+<td>8</td>
+<td>Carrier push completed by axis. This state is not observed when carrier is ejected from line.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_PULLING</td>
+<td>9</td>
+<td>Carrier is being pulled by axis. Must not be used until pull is completed.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_PULL_COMPLETED</td>
+<td>10</td>
+<td>Carrier pull completed by axis. May now be used for normal operation.</td>
+</tr>
+<tr>
+<td>CARRIER_STATE_OVERCURRENT</td>
+<td>11</td>
+<td>Overcurrent detected in carrier axis motor. Carrier movement has been canceled.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="scalar-value-types">Scalar Value Types</h2>
+<table>
+<thead>
+<tr>
+<th>.proto Type</th>
+<th>Notes</th>
+<th>C++</th>
+<th>Java</th>
+<th>Python</th>
+<th>Go</th>
+<th>C#</th>
+<th>PHP</th>
+<th>Ruby</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a name="double" /> double</td>
+<td></td>
+<td>double</td>
+<td>double</td>
+<td>float</td>
+<td>float64</td>
+<td>double</td>
+<td>float</td>
+<td>Float</td>
+</tr>
+<tr>
+<td><a name="float" /> float</td>
+<td></td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td>float32</td>
+<td>float</td>
+<td>float</td>
+<td>Float</td>
+</tr>
+<tr>
+<td><a name="int32" /> int32</td>
+<td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>int</td>
+<td>integer</td>
+<td>Bignum or Fixnum (as required)</td>
+</tr>
+<tr>
+<td><a name="int64" /> int64</td>
+<td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long</td>
+<td>int64</td>
+<td>long</td>
+<td>integer/string</td>
+<td>Bignum</td>
+</tr>
+<tr>
+<td><a name="uint32" /> uint32</td>
+<td>Uses variable-length encoding.</td>
+<td>uint32</td>
+<td>int</td>
+<td>int/long</td>
+<td>uint32</td>
+<td>uint</td>
+<td>integer</td>
+<td>Bignum or Fixnum (as required)</td>
+</tr>
+<tr>
+<td><a name="uint64" /> uint64</td>
+<td>Uses variable-length encoding.</td>
+<td>uint64</td>
+<td>long</td>
+<td>int/long</td>
+<td>uint64</td>
+<td>ulong</td>
+<td>integer/string</td>
+<td>Bignum or Fixnum (as required)</td>
+</tr>
+<tr>
+<td><a name="sint32" /> sint32</td>
+<td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>int</td>
+<td>integer</td>
+<td>Bignum or Fixnum (as required)</td>
+</tr>
+<tr>
+<td><a name="sint64" /> sint64</td>
+<td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long</td>
+<td>int64</td>
+<td>long</td>
+<td>integer/string</td>
+<td>Bignum</td>
+</tr>
+<tr>
+<td><a name="fixed32" /> fixed32</td>
+<td>Always four bytes. More efficient than uint32 if values are often greater than 2^28.</td>
+<td>uint32</td>
+<td>int</td>
+<td>int</td>
+<td>uint32</td>
+<td>uint</td>
+<td>integer</td>
+<td>Bignum or Fixnum (as required)</td>
+</tr>
+<tr>
+<td><a name="fixed64" /> fixed64</td>
+<td>Always eight bytes. More efficient than uint64 if values are often greater than 2^56.</td>
+<td>uint64</td>
+<td>long</td>
+<td>int/long</td>
+<td>uint64</td>
+<td>ulong</td>
+<td>integer/string</td>
+<td>Bignum</td>
+</tr>
+<tr>
+<td><a name="sfixed32" /> sfixed32</td>
+<td>Always four bytes.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>int</td>
+<td>integer</td>
+<td>Bignum or Fixnum (as required)</td>
+</tr>
+<tr>
+<td><a name="sfixed64" /> sfixed64</td>
+<td>Always eight bytes.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long</td>
+<td>int64</td>
+<td>long</td>
+<td>integer/string</td>
+<td>Bignum</td>
+</tr>
+<tr>
+<td><a name="bool" /> bool</td>
+<td></td>
+<td>bool</td>
+<td>boolean</td>
+<td>boolean</td>
+<td>bool</td>
+<td>bool</td>
+<td>boolean</td>
+<td>TrueClass/FalseClass</td>
+</tr>
+<tr>
+<td><a name="string" /> string</td>
+<td>A string must always contain UTF-8 encoded or 7-bit ASCII text.</td>
+<td>string</td>
+<td>String</td>
+<td>str/unicode</td>
+<td>string</td>
+<td>string</td>
+<td>string</td>
+<td>String (UTF-8)</td>
+</tr>
+<tr>
+<td><a name="bytes" /> bytes</td>
+<td>May contain any arbitrary sequence of bytes.</td>
+<td>string</td>
+<td>ByteString</td>
+<td>str</td>
+<td>[]byte</td>
+<td>ByteString</td>
+<td>string</td>
+<td>String (ASCII-8BIT)</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["content.code.copy", "content.tabs.link", "content.code.copy", "content.tooltips"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
