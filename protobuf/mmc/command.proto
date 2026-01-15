@@ -167,7 +167,7 @@ message Request {
       optional float velocity = 2;
       // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
       // (default 6 m/s^2)
-      optional uint32 acceleration = 3;
+      optional float acceleration = 3;
       // Specify the unit of the `velocity` value.
       VelocityMode velocity_mode = 4;
     }
@@ -188,7 +188,7 @@ message Request {
     // representing 0.1-100 mm/s.
     float velocity = 3;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
-    uint32 acceleration = 4;
+    float acceleration = 4;
     oneof target {
       // Move carrier to the center of the axis.
       uint32 axis = 5;
@@ -224,7 +224,7 @@ message Request {
     // representing 0.1-100 mm/s.
     float velocity = 4;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
-    uint32 acceleration = 5;
+    float acceleration = 5;
     // Carrier ID. If provided, wait for the specified carrier at the axis and
     // push it once the carrier arrives.
     optional uint32 carrier = 6;
@@ -251,7 +251,7 @@ message Request {
     // representing 0.1-100 mm/s.
     float velocity = 5;
     // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
-    uint32 acceleration = 6;
+    float acceleration = 6;
     // Smoothly transition to carrier movement after pull completion.
     optional Transition transition = 7;
     // Specify the unit of the `velocity` value.
