@@ -616,13 +616,13 @@ pub const Request = struct {
 
         pub const Line = struct {
             line: u32 = 0,
-            velocity: ?u32 = null,
+            velocity: ?f32 = null,
             acceleration: ?u32 = null,
             velocity_mode: Request.VelocityMode = @enumFromInt(0),
 
             pub const _desc_table = .{
                 .line = fd(1, .{ .scalar = .uint32 }),
-                .velocity = fd(2, .{ .scalar = .uint32 }),
+                .velocity = fd(2, .{ .scalar = .float }),
                 .acceleration = fd(3, .{ .scalar = .uint32 }),
                 .velocity_mode = fd(4, .@"enum"),
             };
@@ -742,7 +742,7 @@ pub const Request = struct {
     pub const Move = struct {
         line: u32 = 0,
         carrier: u32 = 0,
-        velocity: u32 = 0,
+        velocity: f32 = 0,
         acceleration: u32 = 0,
         control: mmc.Control = @enumFromInt(0),
         disable_cas: bool = false,
@@ -768,7 +768,7 @@ pub const Request = struct {
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
             .carrier = fd(2, .{ .scalar = .uint32 }),
-            .velocity = fd(3, .{ .scalar = .uint32 }),
+            .velocity = fd(3, .{ .scalar = .float }),
             .acceleration = fd(4, .{ .scalar = .uint32 }),
             .control = fd(8, .@"enum"),
             .disable_cas = fd(9, .{ .scalar = .bool }),
@@ -836,7 +836,7 @@ pub const Request = struct {
         line: u32 = 0,
         axis: u32 = 0,
         direction: Request.Direction = @enumFromInt(0),
-        velocity: u32 = 0,
+        velocity: f32 = 0,
         acceleration: u32 = 0,
         carrier: ?u32 = null,
         velocity_mode: Request.VelocityMode = @enumFromInt(0),
@@ -845,7 +845,7 @@ pub const Request = struct {
             .line = fd(1, .{ .scalar = .uint32 }),
             .axis = fd(2, .{ .scalar = .uint32 }),
             .direction = fd(3, .@"enum"),
-            .velocity = fd(4, .{ .scalar = .uint32 }),
+            .velocity = fd(4, .{ .scalar = .float }),
             .acceleration = fd(5, .{ .scalar = .uint32 }),
             .carrier = fd(6, .{ .scalar = .uint32 }),
             .velocity_mode = fd(7, .@"enum"),
@@ -912,7 +912,7 @@ pub const Request = struct {
         axis: u32 = 0,
         carrier: u32 = 0,
         direction: Request.Direction = @enumFromInt(0),
-        velocity: u32 = 0,
+        velocity: f32 = 0,
         acceleration: u32 = 0,
         transition: ?Request.Pull.Transition = null,
         velocity_mode: Request.VelocityMode = @enumFromInt(0),
@@ -922,7 +922,7 @@ pub const Request = struct {
             .axis = fd(2, .{ .scalar = .uint32 }),
             .carrier = fd(3, .{ .scalar = .uint32 }),
             .direction = fd(4, .@"enum"),
-            .velocity = fd(5, .{ .scalar = .uint32 }),
+            .velocity = fd(5, .{ .scalar = .float }),
             .acceleration = fd(6, .{ .scalar = .uint32 }),
             .transition = fd(7, .submessage),
             .velocity_mode = fd(8, .@"enum"),
