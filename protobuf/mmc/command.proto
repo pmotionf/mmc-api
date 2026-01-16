@@ -335,13 +335,6 @@ message Request {
     DIRECTION_FORWARD = 2;
   }
 
-  // enum VelocityMode {
-  //   // Representing 0.1-10 m/s.
-  //   VELOCITY_MODE_NORMAL = 0;
-  //   // Representing 0.1-100 mm/s.
-  //   VELOCITY_MODE_LOW = 1;
-  // }
-
   enum Error {
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
     // Attempted to use line ID outside of the configured lines.
