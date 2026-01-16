@@ -160,16 +160,12 @@ message Request {
     message Line {
       // Line ID.
       uint32 line = 1;
-      // If `velocity_mode` field is set to `normal`, the integer range is
-      // 1-100 representing 0.1-10 m/s.
-      // If `velocity_mode` field is set to `low`, the integer range is
-      // 1-1000 representing 0.1-100 mm/s.
+
+      // Velocity of carrier movement.
       optional float velocity = 2;
-      // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
-      // (default 6 m/s^2)
+      // Acceleration of carrier movement. `acceleration = 1` corresponds to 100
+      // mm/s^s (default 6000 mm/s^2)
       optional float acceleration = 3;
-      // Specify the unit of the `velocity` value.
-      VelocityMode velocity_mode = 4;
     }
     repeated Line lines = 1;
   }
@@ -182,12 +178,11 @@ message Request {
     uint32 line = 1;
     // Carrier ID.
     uint32 carrier = 2;
-    // If `velocity_mode` field is set to `normal`, the integer range is 1-100
-    // representing 0.1-10 m/s.
-    // If `velocity_mode` field is set to `low`, the integer range is 1-1000
-    // representing 0.1-100 mm/s.
+
+    // Velocity of carrier movement.
     float velocity = 3;
-    // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
+    // Acceleration of carrier movement. `acceleration = 1` corresponds to 100
+    // mm/s^s
     float acceleration = 4;
     oneof target {
       // Move carrier to the center of the axis.
@@ -204,8 +199,6 @@ message Request {
     mmc.Control control = 8;
     // Disable the carrier's collision avoidance system (CAS).
     bool disable_cas = 9;
-    // Specify the unit of the `velocity` value.
-    VelocityMode velocity_mode = 10;
   }
 
   // Push an initialized carrier to the specified direction.
@@ -218,18 +211,15 @@ message Request {
     uint32 axis = 2;
     // Direction of carrier movement.
     Direction direction = 3;
-    // If `velocity_mode` field is set to `normal`, the integer range is 1-100
-    // representing 0.1-10 m/s.
-    // If `velocity_mode` field is set to `low`, the integer range is 1-1000
-    // representing 0.1-100 mm/s.
+
+    // Velocity of carrier movement.
     float velocity = 4;
-    // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
+    // Acceleration of carrier movement. `acceleration = 1` corresponds to 100
+    // mm/s^s
     float acceleration = 5;
     // Carrier ID. If provided, wait for the specified carrier at the axis and
     // push it once the carrier arrives.
     optional uint32 carrier = 6;
-    // Specify the unit of the `velocity` value.
-    VelocityMode velocity_mode = 7;
   }
 
   // Pull and initialize a new carrier into a line.
@@ -244,18 +234,14 @@ message Request {
     uint32 carrier = 3;
     // The direction from which the incoming carrier is moving.
     Direction direction = 4;
-    // Fixed point integer.
-    // If `velocity_mode` field is set to `normal`, the integer range is 1-100
-    // representing 0.1-10 m/s.
-    // If `velocity_mode` field is set to `low`, the integer range is 1-1000
-    // representing 0.1-100 mm/s.
+
+    // Velocity of carrier movement.
     float velocity = 5;
-    // Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.
+    // Acceleration of carrier movement. `acceleration = 1` corresponds to 100
+    // mm/s^s
     float acceleration = 6;
     // Smoothly transition to carrier movement after pull completion.
     optional Transition transition = 7;
-    // Specify the unit of the `velocity` value.
-    VelocityMode velocity_mode = 8;
 
     message Transition {
       // Control method for moving carrier.
@@ -349,12 +335,12 @@ message Request {
     DIRECTION_FORWARD = 2;
   }
 
-  enum VelocityMode {
-    // Representing 0.1-10 m/s.
-    VELOCITY_MODE_NORMAL = 0;
-    // Representing 0.1-100 mm/s.
-    VELOCITY_MODE_LOW = 1;
-  }
+  // enum VelocityMode {
+  //   // Representing 0.1-10 m/s.
+  //   VELOCITY_MODE_NORMAL = 0;
+  //   // Representing 0.1-100 mm/s.
+  //   VELOCITY_MODE_LOW = 1;
+  // }
 
   enum Error {
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;

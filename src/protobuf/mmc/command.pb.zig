@@ -81,12 +81,6 @@ pub const Request = struct {
         _,
     };
 
-    pub const VelocityMode = enum(i32) {
-        VELOCITY_MODE_NORMAL = 0,
-        VELOCITY_MODE_LOW = 1,
-        _,
-    };
-
     pub const Error = enum(i32) {
         COMMAND_REQUEST_ERROR_UNSPECIFIED = 0,
         COMMAND_REQUEST_ERROR_INVALID_LINE = 1,
@@ -618,13 +612,11 @@ pub const Request = struct {
             line: u32 = 0,
             velocity: ?f32 = null,
             acceleration: ?f32 = null,
-            velocity_mode: Request.VelocityMode = @enumFromInt(0),
 
             pub const _desc_table = .{
                 .line = fd(1, .{ .scalar = .uint32 }),
                 .velocity = fd(2, .{ .scalar = .float }),
                 .acceleration = fd(3, .{ .scalar = .float }),
-                .velocity_mode = fd(4, .@"enum"),
             };
 
             pub fn encode(
@@ -746,7 +738,6 @@ pub const Request = struct {
         acceleration: f32 = 0,
         control: mmc.Control = @enumFromInt(0),
         disable_cas: bool = false,
-        velocity_mode: Request.VelocityMode = @enumFromInt(0),
         target: ?target_union = null,
 
         pub const _target_case = enum {
@@ -772,7 +763,6 @@ pub const Request = struct {
             .acceleration = fd(4, .{ .scalar = .float }),
             .control = fd(8, .@"enum"),
             .disable_cas = fd(9, .{ .scalar = .bool }),
-            .velocity_mode = fd(10, .@"enum"),
             .target = fd(null, .{ .oneof = target_union }),
         };
 
@@ -839,7 +829,6 @@ pub const Request = struct {
         velocity: f32 = 0,
         acceleration: f32 = 0,
         carrier: ?u32 = null,
-        velocity_mode: Request.VelocityMode = @enumFromInt(0),
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
@@ -848,7 +837,6 @@ pub const Request = struct {
             .velocity = fd(4, .{ .scalar = .float }),
             .acceleration = fd(5, .{ .scalar = .float }),
             .carrier = fd(6, .{ .scalar = .uint32 }),
-            .velocity_mode = fd(7, .@"enum"),
         };
 
         pub fn encode(
@@ -915,7 +903,6 @@ pub const Request = struct {
         velocity: f32 = 0,
         acceleration: f32 = 0,
         transition: ?Request.Pull.Transition = null,
-        velocity_mode: Request.VelocityMode = @enumFromInt(0),
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
@@ -925,7 +912,6 @@ pub const Request = struct {
             .velocity = fd(5, .{ .scalar = .float }),
             .acceleration = fd(6, .{ .scalar = .float }),
             .transition = fd(7, .submessage),
-            .velocity_mode = fd(8, .@"enum"),
         };
 
         pub const Transition = struct {
