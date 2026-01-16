@@ -41,13 +41,12 @@ pub fn build(b: *std.Build) !void {
     );
 
     const protoc_step = protobuf.RunProtocStep.create(
-        b,
         protobuf_dep.builder,
         target,
         .{
             .destination_directory = b.path("src/protobuf"),
-            .source_files = &.{"mmc.proto"},
-            .include_directories = &.{"protobuf"},
+            .source_files = &.{b.path("protobuf/mmc.proto")},
+            .include_directories = &.{b.path("protobuf")},
         },
     );
 

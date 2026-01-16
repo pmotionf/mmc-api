@@ -1,4 +1,5 @@
 syntax = "proto3";
+package mmc;
 
 message Range {
   // Start of range, inclusive.
