@@ -14,7 +14,7 @@ type.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| core | [core.Request](#mmc-core-Request) |  | Core request. Used to retrieve information about the server or the configure
+| core | [core.Request](#mmc-core-Request) |  | Core request. Used to retrieve information about the server or the configured track. |
 | command | [command.Request](#mmc-command-Request) |  | Command request. Used to send and manage commands to the server, which will execute commands on the connected track. |
 | info | [info.Request](#mmc-info-Request) |  | Info request. Used to retrieve information about track state or commands processed by the server. |
 
@@ -94,6 +94,7 @@ type.
 
 
 <a name="mmc_command-proto"></a>
+
 ## mmc/command.proto
 
 
@@ -593,6 +594,7 @@ Response description to the command API.
 
 
 <a name="mmc_control-proto"></a>
+
 ## mmc/control.proto
 
 
@@ -620,6 +622,7 @@ Carrier motor control kind.
 
 
 <a name="mmc_core-proto"></a>
+
 ## mmc/core.proto
 
 
@@ -761,6 +764,7 @@ Server version and name.
 
 
 <a name="mmc_info-proto"></a>
+
 ## mmc/info.proto
 
 
