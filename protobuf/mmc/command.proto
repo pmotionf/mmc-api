@@ -238,7 +238,8 @@ message Request {
     // Velocity of carrier movement.
     float velocity = 5;
     // Acceleration of carrier movement. `acceleration = 1` corresponds to 100
-    // mm/s^s
+    // mm/s^s. Range of 'acceleration' is 1 to 245, corresponding to 100 - 24500
+    // mm/s^2.
     float acceleration = 6;
     // Smoothly transition to carrier movement after pull completion.
     optional Transition transition = 7;
