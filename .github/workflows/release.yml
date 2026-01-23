@@ -62,7 +62,7 @@ jobs:
         if: ${{ steps.check-version-protobuf.outputs.EXISTS == '' }}
         run: |
           zip -r "${NAME}-${VERSION}.zip" -- \
-            "./protobuf" "./sabledocs_output"
+            "./protobuf" "./site"
           gh release create --generate-notes "${NAME}-${VERSION}" \
             "${NAME}-${VERSION}.zip"
         env:
