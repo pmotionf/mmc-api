@@ -310,6 +310,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mmcproto" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -646,17 +657,6 @@
     <span class="md-ellipsis">
       
         Request.Error
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#requestvelocitymode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request.VelocityMode
       
     </span>
   </a>
@@ -1084,6 +1084,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mmcproto" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1420,17 +1431,6 @@
     <span class="md-ellipsis">
       
         Request.Error
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#requestvelocitymode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request.VelocityMode
       
     </span>
   </a>
@@ -1841,7 +1841,118 @@
 
 
 <h1 id="protocol-documentation">Protocol Documentation</h1>
+<p><a name="top"></a></p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li>
+<p><a href="#mmc-proto">mmc.proto</a></p>
+<ul>
+<li><a href="#mmc-Request">Request</a></li>
+<li>
+<p><a href="#mmc-Response">Response</a></p>
+</li>
+<li>
+<p><a href="#mmc-Request-Error">Request.Error</a></p>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="#range-proto">range.proto</a></p>
+<ul>
+<li><a href="#-Range">Range</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#mmc_command-proto">mmc/command.proto</a></p>
+<ul>
+<li><a href="#mmc-command-Request">Request</a></li>
+<li><a href="#mmc-command-Request-AutoInitialize">Request.AutoInitialize</a></li>
+<li><a href="#mmc-command-Request-AutoInitialize-Line">Request.AutoInitialize.Line</a></li>
+<li><a href="#mmc-command-Request-Calibrate">Request.Calibrate</a></li>
+<li><a href="#mmc-command-Request-ClearErrors">Request.ClearErrors</a></li>
+<li><a href="#mmc-command-Request-Deinitialize">Request.Deinitialize</a></li>
+<li><a href="#mmc-command-Request-Initialize">Request.Initialize</a></li>
+<li><a href="#mmc-command-Request-Move">Request.Move</a></li>
+<li><a href="#mmc-command-Request-Pause">Request.Pause</a></li>
+<li><a href="#mmc-command-Request-Pull">Request.Pull</a></li>
+<li><a href="#mmc-command-Request-Pull-Transition">Request.Pull.Transition</a></li>
+<li><a href="#mmc-command-Request-Push">Request.Push</a></li>
+<li><a href="#mmc-command-Request-Release">Request.Release</a></li>
+<li><a href="#mmc-command-Request-RemoveCommand">Request.RemoveCommand</a></li>
+<li><a href="#mmc-command-Request-Resume">Request.Resume</a></li>
+<li><a href="#mmc-command-Request-SetCarrierId">Request.SetCarrierId</a></li>
+<li><a href="#mmc-command-Request-SetZero">Request.SetZero</a></li>
+<li><a href="#mmc-command-Request-Stop">Request.Stop</a></li>
+<li><a href="#mmc-command-Request-StopPull">Request.StopPull</a></li>
+<li><a href="#mmc-command-Request-StopPush">Request.StopPush</a></li>
+<li>
+<p><a href="#mmc-command-Response">Response</a></p>
+</li>
+<li>
+<p><a href="#mmc-command-Request-Direction">Request.Direction</a></p>
+</li>
+<li><a href="#mmc-command-Request-Error">Request.Error</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#mmc_control-proto">mmc/control.proto</a></p>
+<ul>
+<li><a href="#mmc-Control">Control</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#mmc_core-proto">mmc/core.proto</a></p>
+<ul>
+<li><a href="#mmc-core-Request">Request</a></li>
+<li><a href="#mmc-core-Response">Response</a></li>
+<li><a href="#mmc-core-Response-SemanticVersion">Response.SemanticVersion</a></li>
+<li><a href="#mmc-core-Response-Server">Response.Server</a></li>
+<li><a href="#mmc-core-Response-TrackConfig">Response.TrackConfig</a></li>
+<li>
+<p><a href="#mmc-core-Response-TrackConfig-Line">Response.TrackConfig.Line</a></p>
+</li>
+<li>
+<p><a href="#mmc-core-Request-Error">Request.Error</a></p>
+</li>
+<li><a href="#mmc-core-Request-Kind">Request.Kind</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#mmc_info-proto">mmc/info.proto</a></p>
+<ul>
+<li><a href="#mmc-info-Request">Request</a></li>
+<li><a href="#mmc-info-Request-Command">Request.Command</a></li>
+<li><a href="#mmc-info-Request-Track">Request.Track</a></li>
+<li><a href="#mmc-info-Request-Track-Ids">Request.Track.Ids</a></li>
+<li><a href="#mmc-info-Response">Response</a></li>
+<li><a href="#mmc-info-Response-Command">Response.Command</a></li>
+<li><a href="#mmc-info-Response-Commands">Response.Commands</a></li>
+<li><a href="#mmc-info-Response-Track">Response.Track</a></li>
+<li><a href="#mmc-info-Response-Track-Axis">Response.Track.Axis</a></li>
+<li><a href="#mmc-info-Response-Track-Axis-Error">Response.Track.Axis.Error</a></li>
+<li><a href="#mmc-info-Response-Track-Axis-State">Response.Track.Axis.State</a></li>
+<li><a href="#mmc-info-Response-Track-Carrier">Response.Track.Carrier</a></li>
+<li><a href="#mmc-info-Response-Track-Carrier-State">Response.Track.Carrier.State</a></li>
+<li><a href="#mmc-info-Response-Track-Driver">Response.Track.Driver</a></li>
+<li><a href="#mmc-info-Response-Track-Driver-Error">Response.Track.Driver.Error</a></li>
+<li>
+<p><a href="#mmc-info-Response-Track-Driver-State">Response.Track.Driver.State</a></p>
+</li>
+<li>
+<p><a href="#mmc-info-Request-Error">Request.Error</a></p>
+</li>
+<li><a href="#mmc-info-Response-Command-Error">Response.Command.Error</a></li>
+<li><a href="#mmc-info-Response-Command-Status">Response.Command.Status</a></li>
+<li><a href="#mmc-info-Response-Track-Carrier-State-State">Response.Track.Carrier.State.State</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#scalar-value-types">Scalar Value Types</a></p>
+</li>
+</ul>
 <p><a name="mmc-proto"></a></p>
+<p align="right"><a href="#top">Top</a></p>
+
 <h2 id="mmcproto">mmc.proto</h2>
 <p><a name="mmc-Request"></a></p>
 <h3 id="request">Request</h3>
@@ -1941,6 +2052,8 @@ type.</p>
 </tbody>
 </table>
 <p><a name="range-proto"></a></p>
+<p align="right"><a href="#top">Top</a></p>
+
 <h2 id="rangeproto">range.proto</h2>
 <p><a name="-Range"></a></p>
 <h3 id="range">Range</h3>
@@ -1969,6 +2082,8 @@ type.</p>
 </tbody>
 </table>
 <p><a name="mmc_command-proto"></a></p>
+<p align="right"><a href="#top">Top</a></p>
+
 <h2 id="mmccommandproto">mmc/command.proto</h2>
 <p><a name="mmc-command-Request"></a></p>
 <h3 id="request_1">Request</h3>
@@ -2133,21 +2248,15 @@ remains stored in a limited history buffer, and should be cleared with
 </tr>
 <tr>
 <td>velocity</td>
-<td><a href="#uint32">uint32</a></td>
+<td><a href="#float">float</a></td>
 <td>optional</td>
-<td>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100 representing 0.1-10 m/s. If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000 representing 0.1-100 mm/s.</td>
+<td>Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s (default 600 mm/s).</td>
 </tr>
 <tr>
 <td>acceleration</td>
-<td><a href="#uint32">uint32</a></td>
+<td><a href="#float">float</a></td>
 <td>optional</td>
-<td>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2. (default 6 m/s^2)</td>
-</tr>
-<tr>
-<td>velocity_mode</td>
-<td><a href="#mmc-command-Request-VelocityMode">Request.VelocityMode</a></td>
-<td></td>
-<td>Specify the unit of the <code>velocity</code> value.</td>
+<td>Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2 (default 6000 mm/s^2).</td>
 </tr>
 </tbody>
 </table>
@@ -2198,13 +2307,13 @@ clear error information on every driver of the specified line ID.</p>
 </tr>
 <tr>
 <td>drivers</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td></td>
 <td>Driver ID range.</td>
 </tr>
 <tr>
 <td>axes</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td></td>
 <td>Axis ID range.</td>
 </tr>
@@ -2240,13 +2349,13 @@ clear all carrier information of the specified line ID</p>
 </tr>
 <tr>
 <td>axes</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td></td>
 <td>Axis ID range.</td>
 </tr>
 <tr>
 <td>drivers</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td></td>
 <td>Driver ID range.</td>
 </tr>
@@ -2332,15 +2441,15 @@ clear all carrier information of the specified line ID</p>
 </tr>
 <tr>
 <td>velocity</td>
-<td><a href="#uint32">uint32</a></td>
+<td><a href="#float">float</a></td>
 <td></td>
-<td>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100 representing 0.1-10 m/s. If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000 representing 0.1-100 mm/s.</td>
+<td>Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s.</td>
 </tr>
 <tr>
 <td>acceleration</td>
-<td><a href="#uint32">uint32</a></td>
+<td><a href="#float">float</a></td>
 <td></td>
-<td>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</td>
+<td>Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2.</td>
 </tr>
 <tr>
 <td>axis</td>
@@ -2371,12 +2480,6 @@ clear all carrier information of the specified line ID</p>
 <td><a href="#bool">bool</a></td>
 <td></td>
 <td>Disable the carrier&#39;s collision avoidance system (CAS).</td>
-</tr>
-<tr>
-<td>velocity_mode</td>
-<td><a href="#mmc-command-Request-VelocityMode">Request.VelocityMode</a></td>
-<td></td>
-<td>Specify the unit of the <code>velocity</code> value.</td>
 </tr>
 </tbody>
 </table>
@@ -2443,27 +2546,21 @@ continued once the resume command is given.</p>
 </tr>
 <tr>
 <td>velocity</td>
-<td><a href="#uint32">uint32</a></td>
+<td><a href="#float">float</a></td>
 <td></td>
-<td>Fixed point integer. If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100 representing 0.1-10 m/s. If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000 representing 0.1-100 mm/s.</td>
+<td>Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s. When the transition location target is set to <code>NaN</code>, the velocity must be 0.</td>
 </tr>
 <tr>
 <td>acceleration</td>
-<td><a href="#uint32">uint32</a></td>
+<td><a href="#float">float</a></td>
 <td></td>
-<td>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</td>
+<td>Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2. When the transition location target is set to <code>NaN</code>, the acceleration must be 0.</td>
 </tr>
 <tr>
 <td>transition</td>
 <td><a href="#mmc-command-Request-Pull-Transition">Request.Pull.Transition</a></td>
 <td>optional</td>
 <td>Smoothly transition to carrier movement after pull completion.</td>
-</tr>
-<tr>
-<td>velocity_mode</td>
-<td><a href="#mmc-command-Request-VelocityMode">Request.VelocityMode</a></td>
-<td></td>
-<td>Specify the unit of the <code>velocity</code> value.</td>
 </tr>
 </tbody>
 </table>
@@ -2545,27 +2642,21 @@ continued once the resume command is given.</p>
 </tr>
 <tr>
 <td>velocity</td>
-<td><a href="#uint32">uint32</a></td>
+<td><a href="#float">float</a></td>
 <td></td>
-<td>If <code>velocity_mode</code> field is set to <code>normal</code>, the integer range is 1-100 representing 0.1-10 m/s. If <code>velocity_mode</code> field is set to <code>low</code>, the integer range is 1-1000 representing 0.1-100 mm/s.</td>
+<td>Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s.</td>
 </tr>
 <tr>
 <td>acceleration</td>
-<td><a href="#uint32">uint32</a></td>
+<td><a href="#float">float</a></td>
 <td></td>
-<td>Fixed point integer from 1-245, representing 0.1-24.5 m/s^2.</td>
+<td>Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2.</td>
 </tr>
 <tr>
 <td>carrier</td>
 <td><a href="#uint32">uint32</a></td>
 <td>optional</td>
 <td>Carrier ID. If provided, wait for the specified carrier at the axis and push it once the carrier arrives.</td>
-</tr>
-<tr>
-<td>velocity_mode</td>
-<td><a href="#mmc-command-Request-VelocityMode">Request.VelocityMode</a></td>
-<td></td>
-<td>Specify the unit of the <code>velocity</code> value.</td>
 </tr>
 </tbody>
 </table>
@@ -2599,13 +2690,13 @@ Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 </tr>
 <tr>
 <td>axes</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td></td>
 <td>Axis ID range.</td>
 </tr>
 <tr>
 <td>drivers</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td></td>
 <td>Driver ID range.</td>
 </tr>
@@ -2762,7 +2853,7 @@ then all pending carrier pulls on the line will be stopped.</p>
 </tr>
 <tr>
 <td>axes</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td>optional</td>
 <td>Axis ID range.</td>
 </tr>
@@ -2791,7 +2882,7 @@ then all pending carrier pushes on the line will be stopped.</p>
 </tr>
 <tr>
 <td>axes</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td>optional</td>
 <td>Axis ID range.</td>
 </tr>
@@ -2956,30 +3047,9 @@ then all pending carrier pushes on the line will be stopped.</p>
 </tr>
 </tbody>
 </table>
-<p><a name="mmc-command-Request-VelocityMode"></a></p>
-<h3 id="requestvelocitymode">Request.VelocityMode</h3>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Number</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>VELOCITY_MODE_NORMAL</td>
-<td>0</td>
-<td>Representing 0.1-10 m/s.</td>
-</tr>
-<tr>
-<td>VELOCITY_MODE_LOW</td>
-<td>1</td>
-<td>Representing 0.1-100 mm/s.</td>
-</tr>
-</tbody>
-</table>
 <p><a name="mmc_control-proto"></a></p>
+<p align="right"><a href="#top">Top</a></p>
+
 <h2 id="mmccontrolproto">mmc/control.proto</h2>
 <p><a name="mmc-Control"></a></p>
 <h3 id="control">Control</h3>
@@ -3011,6 +3081,8 @@ then all pending carrier pushes on the line will be stopped.</p>
 </tbody>
 </table>
 <p><a name="mmc_core-proto"></a></p>
+<p align="right"><a href="#top">Top</a></p>
+
 <h2 id="mmccoreproto">mmc/core.proto</h2>
 <p><a name="mmc-core-Request"></a></p>
 <h3 id="request_2">Request</h3>
@@ -3257,6 +3329,8 @@ then all pending carrier pushes on the line will be stopped.</p>
 </tbody>
 </table>
 <p><a name="mmc_info-proto"></a></p>
+<p align="right"><a href="#top">Top</a></p>
+
 <h2 id="mmcinfoproto">mmc/info.proto</h2>
 <p><a name="mmc-info-Request"></a></p>
 <h3 id="request_3">Request</h3>
@@ -3362,13 +3436,13 @@ from the track.</p>
 </tr>
 <tr>
 <td>drivers</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td></td>
 <td>Retrieve information from driver ID range. Driver information flags will include drivers within this range. Axis information flags will include every axis belonging to the drivers in this range. Carrier information flags will include every carrier currently controlled by one of the drivers in this range.</td>
 </tr>
 <tr>
 <td>axes</td>
-<td><a href="#range">Range</a></td>
+<td><a href="#Range">Range</a></td>
 <td></td>
 <td>Retrieve information from axis ID range. Driver information flags will include drivers that contain one of the axes within this range. Axis information flags will include axes within this range. Carrier information flags will include every carrier currently controlled by one of the axes in this range.</td>
 </tr>
