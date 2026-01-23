@@ -1,6 +1,87 @@
 # Protocol Documentation
+<a name="top"></a>
+
+## Table of Contents
+
+- [mmc.proto](#mmc-proto)
+    - [Request](#mmc-Request)
+    - [Response](#mmc-Response)
+  
+    - [Request.Error](#mmc-Request-Error)
+  
+- [range.proto](#range-proto)
+    - [Range](#-Range)
+  
+- [mmc/command.proto](#mmc_command-proto)
+    - [Request](#mmc-command-Request)
+    - [Request.AutoInitialize](#mmc-command-Request-AutoInitialize)
+    - [Request.AutoInitialize.Line](#mmc-command-Request-AutoInitialize-Line)
+    - [Request.Calibrate](#mmc-command-Request-Calibrate)
+    - [Request.ClearErrors](#mmc-command-Request-ClearErrors)
+    - [Request.Deinitialize](#mmc-command-Request-Deinitialize)
+    - [Request.Initialize](#mmc-command-Request-Initialize)
+    - [Request.Move](#mmc-command-Request-Move)
+    - [Request.Pause](#mmc-command-Request-Pause)
+    - [Request.Pull](#mmc-command-Request-Pull)
+    - [Request.Pull.Transition](#mmc-command-Request-Pull-Transition)
+    - [Request.Push](#mmc-command-Request-Push)
+    - [Request.Release](#mmc-command-Request-Release)
+    - [Request.RemoveCommand](#mmc-command-Request-RemoveCommand)
+    - [Request.Resume](#mmc-command-Request-Resume)
+    - [Request.SetCarrierId](#mmc-command-Request-SetCarrierId)
+    - [Request.SetZero](#mmc-command-Request-SetZero)
+    - [Request.Stop](#mmc-command-Request-Stop)
+    - [Request.StopPull](#mmc-command-Request-StopPull)
+    - [Request.StopPush](#mmc-command-Request-StopPush)
+    - [Response](#mmc-command-Response)
+  
+    - [Request.Direction](#mmc-command-Request-Direction)
+    - [Request.Error](#mmc-command-Request-Error)
+  
+- [mmc/control.proto](#mmc_control-proto)
+    - [Control](#mmc-Control)
+  
+- [mmc/core.proto](#mmc_core-proto)
+    - [Request](#mmc-core-Request)
+    - [Response](#mmc-core-Response)
+    - [Response.SemanticVersion](#mmc-core-Response-SemanticVersion)
+    - [Response.Server](#mmc-core-Response-Server)
+    - [Response.TrackConfig](#mmc-core-Response-TrackConfig)
+    - [Response.TrackConfig.Line](#mmc-core-Response-TrackConfig-Line)
+  
+    - [Request.Error](#mmc-core-Request-Error)
+    - [Request.Kind](#mmc-core-Request-Kind)
+  
+- [mmc/info.proto](#mmc_info-proto)
+    - [Request](#mmc-info-Request)
+    - [Request.Command](#mmc-info-Request-Command)
+    - [Request.Track](#mmc-info-Request-Track)
+    - [Request.Track.Ids](#mmc-info-Request-Track-Ids)
+    - [Response](#mmc-info-Response)
+    - [Response.Command](#mmc-info-Response-Command)
+    - [Response.Commands](#mmc-info-Response-Commands)
+    - [Response.Track](#mmc-info-Response-Track)
+    - [Response.Track.Axis](#mmc-info-Response-Track-Axis)
+    - [Response.Track.Axis.Error](#mmc-info-Response-Track-Axis-Error)
+    - [Response.Track.Axis.State](#mmc-info-Response-Track-Axis-State)
+    - [Response.Track.Carrier](#mmc-info-Response-Track-Carrier)
+    - [Response.Track.Carrier.State](#mmc-info-Response-Track-Carrier-State)
+    - [Response.Track.Driver](#mmc-info-Response-Track-Driver)
+    - [Response.Track.Driver.Error](#mmc-info-Response-Track-Driver-Error)
+    - [Response.Track.Driver.State](#mmc-info-Response-Track-Driver-State)
+  
+    - [Request.Error](#mmc-info-Request-Error)
+    - [Response.Command.Error](#mmc-info-Response-Command-Error)
+    - [Response.Command.Status](#mmc-info-Response-Command-Status)
+    - [Response.Track.Carrier.State.State](#mmc-info-Response-Track-Carrier-State-State)
+  
+- [Scalar Value Types](#scalar-value-types)
+
+
 
 <a name="mmc-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
 ## mmc.proto
 
 
@@ -64,6 +145,8 @@ type.
 
 
 <a name="range-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
 ## range.proto
 
 
@@ -94,6 +177,7 @@ type.
 
 
 <a name="mmc_command-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
 
 ## mmc/command.proto
 
@@ -161,9 +245,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| velocity | [uint32](#uint32) | optional | If `velocity_mode` field is set to `normal`, the integer range is 1-100 representing 0.1-10 m/s. If `velocity_mode` field is set to `low`, the integer range is 1-1000 representing 0.1-100 mm/s. |
-| acceleration | [uint32](#uint32) | optional | Fixed point integer from 1-245, representing 0.1-24.5 m/s^2. (default 6 m/s^2) |
-| velocity_mode | [Request.VelocityMode](#mmc-command-Request-VelocityMode) |  | Specify the unit of the `velocity` value. |
+| velocity | [float](#float) | optional | Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s (default 600 mm/s). |
+| acceleration | [float](#float) | optional | Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2 (default 6000 mm/s^2). |
 
 
 
@@ -201,8 +284,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| drivers | [Range](#range) |  | Driver ID range. |
-| axes | [Range](#range) |  | Axis ID range. |
+| drivers | [Range](#Range) |  | Driver ID range. |
+| axes | [Range](#Range) |  | Axis ID range. |
 | carrier | [uint32](#uint32) |  | Carrier ID. |
 
 
@@ -223,8 +306,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| axes | [Range](#range) |  | Axis ID range. |
-| drivers | [Range](#range) |  | Driver ID range. |
+| axes | [Range](#Range) |  | Axis ID range. |
+| drivers | [Range](#Range) |  | Driver ID range. |
 | carrier | [uint32](#uint32) |  | Carrier ID. |
 
 
@@ -265,14 +348,13 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
 | carrier | [uint32](#uint32) |  | Carrier ID. |
-| velocity | [uint32](#uint32) |  | If `velocity_mode` field is set to `normal`, the integer range is 1-100 representing 0.1-10 m/s. If `velocity_mode` field is set to `low`, the integer range is 1-1000 representing 0.1-100 mm/s. |
-| acceleration | [uint32](#uint32) |  | Fixed point integer from 1-245, representing 0.1-24.5 m/s^2. |
+| velocity | [float](#float) |  | Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s. |
+| acceleration | [float](#float) |  | Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2. |
 | axis | [uint32](#uint32) |  | Move carrier to the center of the axis. |
 | location | [float](#float) |  | Move carrier to relative location to the zero-point of the line, which is set by default at the center of the line&#39;s first axis after calibration, but can also be set with the `SetZero` command. |
 | distance | [float](#float) |  | Move carrier to relative distance to current carrier position. Negative distance moves the carrier backwards. |
 | control | [mmc.Control](#mmc-Control) |  | Control method for moving carrier. |
 | disable_cas | [bool](#bool) |  | Disable the carrier&#39;s collision avoidance system (CAS). |
-| velocity_mode | [Request.VelocityMode](#mmc-command-Request-VelocityMode) |  | Specify the unit of the `velocity` value. |
 
 
 
@@ -311,10 +393,9 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | axis | [uint32](#uint32) |  | Axis ID. |
 | carrier | [uint32](#uint32) |  | ID for the incoming carrier. |
 | direction | [Request.Direction](#mmc-command-Request-Direction) |  | The direction from which the incoming carrier is moving. |
-| velocity | [uint32](#uint32) |  | Fixed point integer. If `velocity_mode` field is set to `normal`, the integer range is 1-100 representing 0.1-10 m/s. If `velocity_mode` field is set to `low`, the integer range is 1-1000 representing 0.1-100 mm/s. |
-| acceleration | [uint32](#uint32) |  | Fixed point integer from 1-245, representing 0.1-24.5 m/s^2. |
+| velocity | [float](#float) |  | Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s. When the transition location target is set to `NaN`, the velocity must be 0. |
+| acceleration | [float](#float) |  | Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2. When the transition location target is set to `NaN`, the acceleration must be 0. |
 | transition | [Request.Pull.Transition](#mmc-command-Request-Pull-Transition) | optional | Smoothly transition to carrier movement after pull completion. |
-| velocity_mode | [Request.VelocityMode](#mmc-command-Request-VelocityMode) |  | Specify the unit of the `velocity` value. |
 
 
 
@@ -353,10 +434,9 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | line | [uint32](#uint32) |  | Line ID. |
 | axis | [uint32](#uint32) |  | Axis ID. |
 | direction | [Request.Direction](#mmc-command-Request-Direction) |  | Direction of carrier movement. |
-| velocity | [uint32](#uint32) |  | If `velocity_mode` field is set to `normal`, the integer range is 1-100 representing 0.1-10 m/s. If `velocity_mode` field is set to `low`, the integer range is 1-1000 representing 0.1-100 mm/s. |
-| acceleration | [uint32](#uint32) |  | Fixed point integer from 1-245, representing 0.1-24.5 m/s^2. |
+| velocity | [float](#float) |  | Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s. |
+| acceleration | [float](#float) |  | Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2. |
 | carrier | [uint32](#uint32) | optional | Carrier ID. If provided, wait for the specified carrier at the axis and push it once the carrier arrives. |
-| velocity_mode | [Request.VelocityMode](#mmc-command-Request-VelocityMode) |  | Specify the unit of the `velocity` value. |
 
 
 
@@ -376,8 +456,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
 | carrier | [uint32](#uint32) |  | Carrier ID. |
-| axes | [Range](#range) |  | Axis ID range. |
-| drivers | [Range](#range) |  | Driver ID range. |
+| axes | [Range](#Range) |  | Axis ID range. |
+| drivers | [Range](#Range) |  | Driver ID range. |
 
 
 
@@ -489,7 +569,7 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| axes | [Range](#range) | optional | Axis ID range. |
+| axes | [Range](#Range) | optional | Axis ID range. |
 
 
 
@@ -508,7 +588,7 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| axes | [Range](#range) | optional | Axis ID range. |
+| axes | [Range](#Range) | optional | Axis ID range. |
 
 
 
@@ -573,18 +653,6 @@ Response description to the command API.
 | COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID | 16 | Attempted to assign a new carrier with an ID that is already used by other carrier on the same line |
 
 
-
-<a name="mmc-command-Request-VelocityMode"></a>
-
-### Request.VelocityMode
-
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| VELOCITY_MODE_NORMAL | 0 | Representing 0.1-10 m/s. |
-| VELOCITY_MODE_LOW | 1 | Representing 0.1-100 mm/s. |
-
-
  
 
  
@@ -594,6 +662,7 @@ Response description to the command API.
 
 
 <a name="mmc_control-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
 
 ## mmc/control.proto
 
@@ -622,6 +691,7 @@ Carrier motor control kind.
 
 
 <a name="mmc_core-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
 
 ## mmc/core.proto
 
@@ -764,6 +834,7 @@ Server version and name.
 
 
 <a name="mmc_info-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
 
 ## mmc/info.proto
 
@@ -822,8 +893,8 @@ Expected response: `mmc.Response.body.info.body.track`
 | info_axis_state | [bool](#bool) |  | Retrieve axis state information. |
 | info_axis_errors | [bool](#bool) |  | Retrieve axis errors information. |
 | info_carrier_state | [bool](#bool) |  | Retrieve carrier state information. |
-| drivers | [Range](#range) |  | Retrieve information from driver ID range. Driver information flags will include drivers within this range. Axis information flags will include every axis belonging to the drivers in this range. Carrier information flags will include every carrier currently controlled by one of the drivers in this range. |
-| axes | [Range](#range) |  | Retrieve information from axis ID range. Driver information flags will include drivers that contain one of the axes within this range. Axis information flags will include axes within this range. Carrier information flags will include every carrier currently controlled by one of the axes in this range. |
+| drivers | [Range](#Range) |  | Retrieve information from driver ID range. Driver information flags will include drivers within this range. Axis information flags will include every axis belonging to the drivers in this range. Carrier information flags will include every carrier currently controlled by one of the drivers in this range. |
+| axes | [Range](#Range) |  | Retrieve information from axis ID range. Driver information flags will include drivers that contain one of the axes within this range. Axis information flags will include axes within this range. Carrier information flags will include every carrier currently controlled by one of the axes in this range. |
 | carriers | [Request.Track.Ids](#mmc-info-Request-Track-Ids) |  | Retrieve information from carrier IDs. Driver information flags will include drivers that control one of the carriers within this list. Axis information flags will include axes that control one of the carriers within this list. Carrier information flags will include carriers within this list. |
 
 
@@ -1143,3 +1214,4 @@ List of IDs. At least one ID must be provided.
 | <a name="bool" /> bool |  | bool | boolean | boolean | bool | bool | boolean | TrueClass/FalseClass |
 | <a name="string" /> string | A string must always contain UTF-8 encoded or 7-bit ASCII text. | string | String | str/unicode | string | string | string | String (UTF-8) |
 | <a name="bytes" /> bytes | May contain any arbitrary sequence of bytes. | string | ByteString | str | []byte | ByteString | string | String (ASCII-8BIT) |
+
