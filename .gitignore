@@ -5,6 +5,7 @@
 
 # Whitelist
 !*.md
+!*.yml
 !LICENSE-MIT
 !.gitignore
 !assets/**
@@ -14,6 +15,7 @@
 !protobuf/**
 !*.zig
 !sabledocs_output/**
+!site/**
 
 # Blacklist (overrides Whitelist)
 zig-out/**
