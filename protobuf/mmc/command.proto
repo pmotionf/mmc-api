@@ -162,10 +162,10 @@ message Request {
       uint32 line = 1;
 
       // Velocity of carrier movement. Floating point with range 0.1 - 6,000
-      // mm/s (default to 600 mm/s).
+      // mm/s (default 600 mm/s).
       optional float velocity = 2;
       // Acceleration of carrier movement. Floating point with range 100 -
-      // 24,500 mm/s^2 (default 6000 mm/s^2)
+      // 24,500 mm/s^2 (default 6000 mm/s^2).
       optional float acceleration = 3;
     }
     repeated Line lines = 1;
@@ -181,10 +181,10 @@ message Request {
     uint32 carrier = 2;
 
     // Velocity of carrier movement. Floating point with range 0.1 - 6,000
-    // mm/s (default to 600 mm/s).
+    // mm/s.
     float velocity = 3;
     // Acceleration of carrier movement. Floating point with range 100 -
-    // 24,500 mm/s^2 (default 6000 mm/s^2)
+    // 24,500 mm/s^2.
     float acceleration = 4;
     oneof target {
       // Move carrier to the center of the axis.
@@ -214,11 +214,10 @@ message Request {
     // Direction of carrier movement.
     Direction direction = 3;
 
-    // Velocity of carrier movement. Floating point with range 0.1 - 6,000
-    // mm/s (default to 600 mm/s).
+    // Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s.
     float velocity = 4;
     // Acceleration of carrier movement. Floating point with range 100 -
-    // 24,500 mm/s^2 (default 6000 mm/s^2)
+    // 24,500 mm/s^2.
     float acceleration = 5;
     // Carrier ID. If provided, wait for the specified carrier at the axis and
     // push it once the carrier arrives.
