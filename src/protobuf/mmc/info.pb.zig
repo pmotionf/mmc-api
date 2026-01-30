@@ -319,7 +319,7 @@ pub const Response = struct {
     };
     pub const body_union = union(_body_case) {
         command: Response.Commands,
-        track: Response.LineList,
+        track: Response.Track,
         request_error: Request.Error,
         pub const _desc_table = .{
             .command = fd(1, .submessage),
@@ -332,8 +332,8 @@ pub const Response = struct {
         .body = fd(null, .{ .oneof = body_union }),
     };
 
-    pub const LineList = struct {
-        lines: std.ArrayListUnmanaged(Response.Track) = .empty,
+    pub const Track = struct {
+        lines: std.ArrayListUnmanaged(Response.Line) = .empty,
 
         pub const _desc_table = .{
             .lines = fd(1, .{ .repeated = .submessage }),
@@ -547,16 +547,16 @@ pub const Response = struct {
         }
     };
 
-    pub const Track = struct {
-        line: u32 = 0,
-        driver_state: std.ArrayListUnmanaged(Response.Track.Driver.State) = .empty,
-        driver_errors: std.ArrayListUnmanaged(Response.Track.Driver.Error) = .empty,
-        axis_state: std.ArrayListUnmanaged(Response.Track.Axis.State) = .empty,
-        axis_errors: std.ArrayListUnmanaged(Response.Track.Axis.Error) = .empty,
-        carrier_state: std.ArrayListUnmanaged(Response.Track.Carrier.State) = .empty,
+    pub const Line = struct {
+        id: u32 = 0,
+        driver_state: std.ArrayListUnmanaged(Response.Line.Driver.State) = .empty,
+        driver_errors: std.ArrayListUnmanaged(Response.Line.Driver.Error) = .empty,
+        axis_state: std.ArrayListUnmanaged(Response.Line.Axis.State) = .empty,
+        axis_errors: std.ArrayListUnmanaged(Response.Line.Axis.Error) = .empty,
+        carrier_state: std.ArrayListUnmanaged(Response.Line.Carrier.State) = .empty,
 
         pub const _desc_table = .{
-            .line = fd(1, .{ .scalar = .uint32 }),
+            .id = fd(1, .{ .scalar = .uint32 }),
             .driver_state = fd(2, .{ .repeated = .submessage }),
             .driver_errors = fd(3, .{ .repeated = .submessage }),
             .axis_state = fd(4, .{ .repeated = .submessage }),
@@ -980,7 +980,7 @@ pub const Response = struct {
                 axis_auxiliary: ?u32 = null,
                 cas_disabled: bool = false,
                 cas_triggered: bool = false,
-                state: Response.Track.Carrier.State.State = @enumFromInt(0),
+                state: Response.Line.Carrier.State.State = @enumFromInt(0),
 
                 pub const _desc_table = .{
                     .id = fd(1, .{ .scalar = .uint32 }),

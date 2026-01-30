@@ -92,14 +92,14 @@ message Response {
     // was found.
     Commands command = 1;
     // Information for requested track state.
-    LineList track = 2;
+    Track track = 2;
     // Info request error. This error field will be returned if the provided
     // info request could not be handled properly.
     Request.Error request_error = 3;
   }
 
-  message LineList {
-    repeated Track lines = 1;
+  message Track {
+    repeated Line lines = 1;
   }
 
   message Commands {
@@ -158,9 +158,9 @@ message Response {
     }
   }
 
-  message Track {
+  message Line {
     // Line ID.
-    uint32 line = 1;
+    uint32 id = 1;
     // Driver state information list. Empty if request flag was disabled.
     repeated Driver.State driver_state = 2;
     // Driver error information list. Empty if request flag was disabled.
