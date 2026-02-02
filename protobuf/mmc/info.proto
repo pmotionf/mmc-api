@@ -15,7 +15,9 @@ message Request {
   // ID is provided, then request for status of all commands from the server.
   //
   // Expected response: `mmc.Response.body.info.body.commands`
-  message Command { optional uint32 id = 1; }
+  message Command {
+    optional uint32 id = 1;
+  }
 
   // Request track state information from server. One or more of the `info_`
   // flags must be enabled to select the kind of track information desired.
@@ -24,8 +26,8 @@ message Request {
   //
   // Expected response: `mmc.Response.body.info.body.track`
   message Track {
-    // Line ID. Select line from which information will be retrieved.
-    uint32 line = 1;
+    // Line ID(s). Select line(s) from which information will be retrieved.
+    repeated uint32 lines = 1;
 
     // Retrieve driver state information.
     bool info_driver_state = 2;
@@ -62,7 +64,9 @@ message Request {
     }
 
     // List of IDs. At least one ID must be provided.
-    message Ids { repeated uint32 ids = 1; }
+    message Ids {
+      repeated uint32 ids = 1;
+    }
   }
 
   enum Error {
@@ -94,7 +98,13 @@ message Response {
     Request.Error request_error = 3;
   }
 
-  message Commands { repeated Command items = 1; }
+  message Track {
+    repeated Line lines = 1;
+  }
+
+  message Commands {
+    repeated Command items = 1;
+  }
 
   message Command {
     // Command ID. Valid IDs begin from 1, and may be reused after command
@@ -127,7 +137,7 @@ message Response {
       COMMAND_ERROR_INVALID_SYSTEM_STATE = 1;
       // Deprecated. Check `COMMAND_REQUEST_ERROR_INVALID_CARRIER` on
       // `Command.Request.Error`.
-      COMMAND_ERROR_INVALID_CARRIER_ID = 2 [ deprecated = true ];
+      COMMAND_ERROR_INVALID_CARRIER_ID = 2 [deprecated = true];
       // Driver connection failed while command progressing.
       COMMAND_ERROR_DRIVER_DISCONNECTED = 3;
       // Unexpected command execution error. This is likely an implementation
@@ -148,9 +158,9 @@ message Response {
     }
   }
 
-  message Track {
+  message Line {
     // Line ID.
-    uint32 line = 1;
+    uint32 id = 1;
     // Driver state information list. Empty if request flag was disabled.
     repeated Driver.State driver_state = 2;
     // Driver error information list. Empty if request flag was disabled.
