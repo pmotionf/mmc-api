@@ -917,28 +917,75 @@ pub const Request = struct {
         pub const Transition = struct {
             control: mmc.Control = @enumFromInt(0),
             disable_cas: bool = false,
-            target: ?target_union = null,
-
-            pub const _target_case = enum {
-                axis,
-                location,
-                distance,
-            };
-            pub const target_union = union(_target_case) {
-                axis: u32,
-                location: f32,
-                distance: f32,
-                pub const _desc_table = .{
-                    .axis = fd(3, .{ .scalar = .uint32 }),
-                    .location = fd(4, .{ .scalar = .float }),
-                    .distance = fd(5, .{ .scalar = .float }),
-                };
-            };
+            target: ?Request.Pull.Transition.Target = null,
 
             pub const _desc_table = .{
                 .control = fd(1, .@"enum"),
                 .disable_cas = fd(2, .{ .scalar = .bool }),
-                .target = fd(null, .{ .oneof = target_union }),
+                .target = fd(3, .submessage),
+            };
+
+            pub const Target = struct {
+                location: f32 = 0,
+
+                pub const _desc_table = .{
+                    .location = fd(1, .{ .scalar = .float }),
+                };
+
+                pub fn encode(
+                    self: @This(),
+                    writer: *std.Io.Writer,
+                    allocator: std.mem.Allocator,
+                ) (std.Io.Writer.Error || std.mem.Allocator.Error)!void {
+                    return pb.encode(writer, allocator, self);
+                }
+
+                pub fn decode(
+                    reader: *std.Io.Reader,
+                    allocator: std.mem.Allocator,
+                ) (pb.DecodingError || std.Io.Reader.Error || std.mem.Allocator.Error)!@This() {
+                    return pb.decode(@This(), reader, allocator);
+                }
+
+                pub fn deinit(self: *@This(), allocator: std.mem.Allocator) void {
+                    return pb.deinit(allocator, self);
+                }
+
+                pub fn dupe(self: @This(), allocator: std.mem.Allocator) std.mem.Allocator.Error!@This() {
+                    return pb.dupe(@This(), self, allocator);
+                }
+
+                pub fn jsonDecode(
+                    input: []const u8,
+                    options: std.json.ParseOptions,
+                    allocator: std.mem.Allocator,
+                ) !std.json.Parsed(@This()) {
+                    return pb.json.decode(@This(), input, options, allocator);
+                }
+
+                pub fn jsonEncode(
+                    self: @This(),
+                    options: std.json.Stringify.Options,
+                    allocator: std.mem.Allocator,
+                ) ![]const u8 {
+                    return pb.json.encode(self, options, allocator);
+                }
+
+                // This method is used by std.json
+                // internally for deserialization. DO NOT RENAME!
+                pub fn jsonParse(
+                    allocator: std.mem.Allocator,
+                    source: anytype,
+                    options: std.json.ParseOptions,
+                ) !@This() {
+                    return pb.json.parse(@This(), allocator, source, options);
+                }
+
+                // This method is used by std.json
+                // internally for serialization. DO NOT RENAME!
+                pub fn jsonStringify(self: *const @This(), jws: anytype) !void {
+                    return pb.json.stringify(@This(), self, jws);
+                }
             };
 
             pub fn encode(

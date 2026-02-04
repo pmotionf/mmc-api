@@ -253,16 +253,13 @@ message Request {
       mmc.Control control = 1;
       // Disabling the carrier's collision avoidance system (CAS).
       bool disable_cas = 2;
-      oneof target {
-        // Move carrier to the center of the axis.
-        uint32 axis = 3;
+      optional Target target = 3;
+
+      message Target {
         // Move carrier to relative location to the zero-point of the line,
         // which is set by default at the center of the line's first axis after
         // calibration, but can also be set with the `SetZero` command.
-        float location = 4;
-        // Move carrier to relative distance to current carrier position.
-        // Negative distance moves the carrier backwards.
-        float distance = 5;
+        float location = 1;
       }
     }
   }
