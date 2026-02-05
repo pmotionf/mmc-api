@@ -253,14 +253,12 @@ message Request {
       mmc.Control control = 1;
       // Disabling the carrier's collision avoidance system (CAS).
       bool disable_cas = 2;
-      optional Target target = 3;
-
-      message Target {
-        // Move carrier to relative location to the zero-point of the line,
-        // which is set by default at the center of the line's first axis after
-        // calibration, but can also be set with the `SetZero` command.
-        float location = 1;
-      }
+      // Move carrier to relative location to the zero-point of the line,
+      // which is set by default at the center of the line's first axis after
+      // calibration, but can also be set with the `SetZero` command.
+      // Pass NaN to pull carrier without motor control, allowing carrier
+      // to be pulled with external force.
+      float target = 3;
     }
   }
 
