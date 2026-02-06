@@ -917,28 +917,12 @@ pub const Request = struct {
         pub const Transition = struct {
             control: mmc.Control = @enumFromInt(0),
             disable_cas: bool = false,
-            target: ?target_union = null,
-
-            pub const _target_case = enum {
-                axis,
-                location,
-                distance,
-            };
-            pub const target_union = union(_target_case) {
-                axis: u32,
-                location: f32,
-                distance: f32,
-                pub const _desc_table = .{
-                    .axis = fd(3, .{ .scalar = .uint32 }),
-                    .location = fd(4, .{ .scalar = .float }),
-                    .distance = fd(5, .{ .scalar = .float }),
-                };
-            };
+            target: f32 = 0,
 
             pub const _desc_table = .{
                 .control = fd(1, .@"enum"),
                 .disable_cas = fd(2, .{ .scalar = .bool }),
-                .target = fd(null, .{ .oneof = target_union }),
+                .target = fd(3, .{ .scalar = .float }),
             };
 
             pub fn encode(
