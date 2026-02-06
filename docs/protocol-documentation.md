@@ -60,20 +60,21 @@
     - [Response](#mmc-info-Response)
     - [Response.Command](#mmc-info-Response-Command)
     - [Response.Commands](#mmc-info-Response-Commands)
+    - [Response.Line](#mmc-info-Response-Line)
+    - [Response.Line.Axis](#mmc-info-Response-Line-Axis)
+    - [Response.Line.Axis.Error](#mmc-info-Response-Line-Axis-Error)
+    - [Response.Line.Axis.State](#mmc-info-Response-Line-Axis-State)
+    - [Response.Line.Carrier](#mmc-info-Response-Line-Carrier)
+    - [Response.Line.Carrier.State](#mmc-info-Response-Line-Carrier-State)
+    - [Response.Line.Driver](#mmc-info-Response-Line-Driver)
+    - [Response.Line.Driver.Error](#mmc-info-Response-Line-Driver-Error)
+    - [Response.Line.Driver.State](#mmc-info-Response-Line-Driver-State)
     - [Response.Track](#mmc-info-Response-Track)
-    - [Response.Track.Axis](#mmc-info-Response-Track-Axis)
-    - [Response.Track.Axis.Error](#mmc-info-Response-Track-Axis-Error)
-    - [Response.Track.Axis.State](#mmc-info-Response-Track-Axis-State)
-    - [Response.Track.Carrier](#mmc-info-Response-Track-Carrier)
-    - [Response.Track.Carrier.State](#mmc-info-Response-Track-Carrier-State)
-    - [Response.Track.Driver](#mmc-info-Response-Track-Driver)
-    - [Response.Track.Driver.Error](#mmc-info-Response-Track-Driver-Error)
-    - [Response.Track.Driver.State](#mmc-info-Response-Track-Driver-State)
   
     - [Request.Error](#mmc-info-Request-Error)
     - [Response.Command.Error](#mmc-info-Response-Command-Error)
     - [Response.Command.Status](#mmc-info-Response-Command-Status)
-    - [Response.Track.Carrier.State.State](#mmc-info-Response-Track-Carrier-State-State)
+    - [Response.Line.Carrier.State.State](#mmc-info-Response-Line-Carrier-State-State)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -412,9 +413,7 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | ----- | ---- | ----- | ----------- |
 | control | [mmc.Control](#mmc-Control) |  | Control method for moving carrier. |
 | disable_cas | [bool](#bool) |  | Disabling the carrier&#39;s collision avoidance system (CAS). |
-| axis | [uint32](#uint32) |  | Move carrier to the center of the axis. |
-| location | [float](#float) |  | Move carrier to relative location to the zero-point of the line, which is set by default at the center of the line&#39;s first axis after calibration, but can also be set with the `SetZero` command. |
-| distance | [float](#float) |  | Move carrier to relative distance to current carrier position. Negative distance moves the carrier backwards. |
+| target | [float](#float) |  | Move carrier to relative location to the zero-point of the line, which is set by default at the center of the line&#39;s first axis after calibration, but can also be set with the `SetZero` command. Pass NaN to pull carrier without motor control, allowing carrier to be pulled with external force. |
 
 
 
@@ -887,7 +886,7 @@ Expected response: `mmc.Response.body.info.body.track`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| line | [uint32](#uint32) |  | Line ID. Select line from which information will be retrieved. |
+| lines | [uint32](#uint32) | repeated | Line ID(s). Select line(s) from which information will be retrieved. |
 | info_driver_state | [bool](#bool) |  | Retrieve driver state information. |
 | info_driver_errors | [bool](#bool) |  | Retrieve driver error information. |
 | info_axis_state | [bool](#bool) |  | Retrieve axis state information. |
@@ -966,39 +965,39 @@ List of IDs. At least one ID must be provided.
 
 
 
-<a name="mmc-info-Response-Track"></a>
+<a name="mmc-info-Response-Line"></a>
 
-### Response.Track
+### Response.Line
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| line | [uint32](#uint32) |  | Line ID. |
-| driver_state | [Response.Track.Driver.State](#mmc-info-Response-Track-Driver-State) | repeated | Driver state information list. Empty if request flag was disabled. |
-| driver_errors | [Response.Track.Driver.Error](#mmc-info-Response-Track-Driver-Error) | repeated | Driver error information list. Empty if request flag was disabled. |
-| axis_state | [Response.Track.Axis.State](#mmc-info-Response-Track-Axis-State) | repeated | Axis state information list. Empty if request flag was disabled. |
-| axis_errors | [Response.Track.Axis.Error](#mmc-info-Response-Track-Axis-Error) | repeated | Axis error information list. Empty if request flag was disabled. |
-| carrier_state | [Response.Track.Carrier.State](#mmc-info-Response-Track-Carrier-State) | repeated | Carrier state information list. Empty if request flag was disabled. |
+| id | [uint32](#uint32) |  | Line ID. |
+| driver_state | [Response.Line.Driver.State](#mmc-info-Response-Line-Driver-State) | repeated | Driver state information list. Empty if request flag was disabled. |
+| driver_errors | [Response.Line.Driver.Error](#mmc-info-Response-Line-Driver-Error) | repeated | Driver error information list. Empty if request flag was disabled. |
+| axis_state | [Response.Line.Axis.State](#mmc-info-Response-Line-Axis-State) | repeated | Axis state information list. Empty if request flag was disabled. |
+| axis_errors | [Response.Line.Axis.Error](#mmc-info-Response-Line-Axis-Error) | repeated | Axis error information list. Empty if request flag was disabled. |
+| carrier_state | [Response.Line.Carrier.State](#mmc-info-Response-Line-Carrier-State) | repeated | Carrier state information list. Empty if request flag was disabled. |
 
 
 
 
 
 
-<a name="mmc-info-Response-Track-Axis"></a>
+<a name="mmc-info-Response-Line-Axis"></a>
 
-### Response.Track.Axis
-
-
+### Response.Line.Axis
 
 
 
 
 
-<a name="mmc-info-Response-Track-Axis-Error"></a>
 
-### Response.Track.Axis.Error
+
+<a name="mmc-info-Response-Line-Axis-Error"></a>
+
+### Response.Line.Axis.Error
 
 
 
@@ -1012,9 +1011,9 @@ List of IDs. At least one ID must be provided.
 
 
 
-<a name="mmc-info-Response-Track-Axis-State"></a>
+<a name="mmc-info-Response-Line-Axis-State"></a>
 
-### Response.Track.Axis.State
+### Response.Line.Axis.State
 
 
 
@@ -1033,19 +1032,19 @@ List of IDs. At least one ID must be provided.
 
 
 
-<a name="mmc-info-Response-Track-Carrier"></a>
+<a name="mmc-info-Response-Line-Carrier"></a>
 
-### Response.Track.Carrier
-
-
+### Response.Line.Carrier
 
 
 
 
 
-<a name="mmc-info-Response-Track-Carrier-State"></a>
 
-### Response.Track.Carrier.State
+
+<a name="mmc-info-Response-Line-Carrier-State"></a>
+
+### Response.Line.Carrier.State
 
 
 
@@ -1057,26 +1056,26 @@ List of IDs. At least one ID must be provided.
 | axis_auxiliary | [uint32](#uint32) | optional | Carrier&#39;s auxiliary axis ID, if carrier is on top of two axes. |
 | cas_disabled | [bool](#bool) |  | Collision avoidance system (CAS) disabled. |
 | cas_triggered | [bool](#bool) |  | Collision avoidance system (CAS) triggered. Carrier will automatically resume movement when path is clear. |
-| state | [Response.Track.Carrier.State.State](#mmc-info-Response-Track-Carrier-State-State) |  | Carrier state. |
+| state | [Response.Line.Carrier.State.State](#mmc-info-Response-Line-Carrier-State-State) |  | Carrier state. |
 
 
 
 
 
 
-<a name="mmc-info-Response-Track-Driver"></a>
+<a name="mmc-info-Response-Line-Driver"></a>
 
-### Response.Track.Driver
-
-
+### Response.Line.Driver
 
 
 
 
 
-<a name="mmc-info-Response-Track-Driver-Error"></a>
 
-### Response.Track.Driver.Error
+
+<a name="mmc-info-Response-Line-Driver-Error"></a>
+
+### Response.Line.Driver.Error
 
 
 
@@ -1095,9 +1094,9 @@ List of IDs. At least one ID must be provided.
 
 
 
-<a name="mmc-info-Response-Track-Driver-State"></a>
+<a name="mmc-info-Response-Line-Driver-State"></a>
 
-### Response.Track.Driver.State
+### Response.Line.Driver.State
 
 
 
@@ -1109,6 +1108,21 @@ List of IDs. At least one ID must be provided.
 | motor_disabled | [bool](#bool) |  | Driver motor release activated. All driver motors are inactive. |
 | stopped | [bool](#bool) |  | Driver emergency stop activated. |
 | paused | [bool](#bool) |  | Driver pause activated. |
+
+
+
+
+
+
+<a name="mmc-info-Response-Track"></a>
+
+### Response.Track
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| lines | [Response.Line](#mmc-info-Response-Line) | repeated |  |
 
 
 
@@ -1166,9 +1180,9 @@ List of IDs. At least one ID must be provided.
 
 
 
-<a name="mmc-info-Response-Track-Carrier-State-State"></a>
+<a name="mmc-info-Response-Line-Carrier-State-State"></a>
 
-### Response.Track.Carrier.State.State
+### Response.Line.Carrier.State.State
 
 
 | Name | Number | Description |
