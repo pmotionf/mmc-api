@@ -157,9 +157,6 @@ message Response {
       // Attempted to assign a new carrier with an ID that is already used by
       // other carrier on the same line
       COMMAND_ERROR_CONFLICTING_CARRIER_ID = 9;
-      //
-      COMMAND_ERROR_INVALID_COMMAND = 10;
-      
     }
   }
 
