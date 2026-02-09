@@ -83,6 +83,8 @@ message Request {
     // Request is missing a required parameter. Ensure that at least one of the
     // information flag is selected when requesting track information.
     INFO_REQUEST_ERROR_MISSING_PARAMETER = 4;
+    // Attempted to remove or cancel a non-existing command.
+    INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 5;
   }
 }
 
@@ -155,6 +157,9 @@ message Response {
       // Attempted to assign a new carrier with an ID that is already used by
       // other carrier on the same line
       COMMAND_ERROR_CONFLICTING_CARRIER_ID = 9;
+      //
+      COMMAND_ERROR_INVALID_COMMAND = 10;
+      
     }
   }
 

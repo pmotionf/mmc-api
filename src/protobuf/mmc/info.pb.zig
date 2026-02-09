@@ -33,6 +33,7 @@ pub const Request = struct {
         INFO_REQUEST_ERROR_INVALID_AXIS = 2,
         INFO_REQUEST_ERROR_INVALID_DRIVER = 3,
         INFO_REQUEST_ERROR_MISSING_PARAMETER = 4,
+        INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 5,
         _,
     };
 
@@ -488,6 +489,7 @@ pub const Response = struct {
             COMMAND_ERROR_DRIVER_STOPPED = 7,
             COMMAND_ERROR_INVALID_CARRIER_TARGET = 8,
             COMMAND_ERROR_CONFLICTING_CARRIER_ID = 9,
+            COMMAND_ERROR_INVALID_COMMAND = 10,
             _,
         };
 
