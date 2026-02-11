@@ -374,6 +374,8 @@ message Request {
     // Attempted to assign a new carrier with an ID that is already used by
     // other carrier on the same line
     COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID = 16;
+    // Command index is out of bounds for the configured command status buffer.
+    COMMAND_REQUEST_ERROR_INVALID_COMMAND = 17;
   }
 }
 

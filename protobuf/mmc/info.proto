@@ -85,6 +85,8 @@ message Request {
     INFO_REQUEST_ERROR_MISSING_PARAMETER = 4;
     // Attempted to request information from a non-existing command.
     INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 5;
+    // Command index is out of bounds for the configured command status buffer.
+    INFO_REQUEST_ERROR_INVALID_COMMAND = 6;
   }
 }
 
