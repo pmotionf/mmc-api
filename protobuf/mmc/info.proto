@@ -83,6 +83,8 @@ message Request {
     // Request is missing a required parameter. Ensure that at least one of the
     // information flag is selected when requesting track information.
     INFO_REQUEST_ERROR_MISSING_PARAMETER = 4;
+    // Attempted to request information from a non-existing command.
+    INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 5;
   }
 }
 
