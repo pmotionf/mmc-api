@@ -33,6 +33,7 @@ pub const Request = struct {
         INFO_REQUEST_ERROR_INVALID_AXIS = 2,
         INFO_REQUEST_ERROR_INVALID_DRIVER = 3,
         INFO_REQUEST_ERROR_MISSING_PARAMETER = 4,
+        INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 5,
         _,
     };
 
