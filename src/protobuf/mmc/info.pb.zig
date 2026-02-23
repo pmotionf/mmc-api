@@ -35,6 +35,7 @@ pub const Request = struct {
         INFO_REQUEST_ERROR_MISSING_PARAMETER = 4,
         INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 5,
         INFO_REQUEST_ERROR_INVALID_COMMAND = 6,
+        INFO_REQUEST_ERROR_INVALID_CARRIER = 7,
         _,
     };
 
