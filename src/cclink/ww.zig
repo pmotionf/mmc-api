@@ -15,8 +15,9 @@ pub const Ww = packed struct(u256) {
         isolate_link_next_axis: bool = false,
         _46: u1 = 0,
         velocity: u10 = 0,
-        /// Whether velocity should be interpreted in centimeters (false) or
-        /// in 100-micrometers (true).
+        /// Determines how the velocity value is interpreted:
+        /// - `false`: `velocity = 1` corresponds to 100 mm/s
+        /// - `true`:  `velocity = 1` corresponds to 0.1 mm/s
         low_velocity: bool = false,
         _59: u5 = 0,
         acceleration: u16 = 0,

@@ -33,6 +33,9 @@ pub const Request = struct {
         INFO_REQUEST_ERROR_INVALID_AXIS = 2,
         INFO_REQUEST_ERROR_INVALID_DRIVER = 3,
         INFO_REQUEST_ERROR_MISSING_PARAMETER = 4,
+        INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 5,
+        INFO_REQUEST_ERROR_INVALID_COMMAND = 6,
+        INFO_REQUEST_ERROR_INVALID_CARRIER = 7,
         _,
     };
 
@@ -100,7 +103,7 @@ pub const Request = struct {
     };
 
     pub const Track = struct {
-        line: u32 = 0,
+        lines: std.ArrayListUnmanaged(u32) = .empty,
         info_driver_state: bool = false,
         info_driver_errors: bool = false,
         info_axis_state: bool = false,
@@ -125,7 +128,7 @@ pub const Request = struct {
         };
 
         pub const _desc_table = .{
-            .line = fd(1, .{ .scalar = .uint32 }),
+            .lines = fd(1, .{ .packed_repeated = .{ .scalar = .uint32 } }),
             .info_driver_state = fd(2, .{ .scalar = .bool }),
             .info_driver_errors = fd(3, .{ .scalar = .bool }),
             .info_axis_state = fd(4, .{ .scalar = .bool }),
@@ -332,6 +335,69 @@ pub const Response = struct {
         .body = fd(null, .{ .oneof = body_union }),
     };
 
+    pub const Track = struct {
+        lines: std.ArrayListUnmanaged(Response.Line) = .empty,
+
+        pub const _desc_table = .{
+            .lines = fd(1, .{ .repeated = .submessage }),
+        };
+
+        pub fn encode(
+            self: @This(),
+            writer: *std.Io.Writer,
+            allocator: std.mem.Allocator,
+        ) (std.Io.Writer.Error || std.mem.Allocator.Error)!void {
+            return pb.encode(writer, allocator, self);
+        }
+
+        pub fn decode(
+            reader: *std.Io.Reader,
+            allocator: std.mem.Allocator,
+        ) (pb.DecodingError || std.Io.Reader.Error || std.mem.Allocator.Error)!@This() {
+            return pb.decode(@This(), reader, allocator);
+        }
+
+        pub fn deinit(self: *@This(), allocator: std.mem.Allocator) void {
+            return pb.deinit(allocator, self);
+        }
+
+        pub fn dupe(self: @This(), allocator: std.mem.Allocator) std.mem.Allocator.Error!@This() {
+            return pb.dupe(@This(), self, allocator);
+        }
+
+        pub fn jsonDecode(
+            input: []const u8,
+            options: std.json.ParseOptions,
+            allocator: std.mem.Allocator,
+        ) !std.json.Parsed(@This()) {
+            return pb.json.decode(@This(), input, options, allocator);
+        }
+
+        pub fn jsonEncode(
+            self: @This(),
+            options: std.json.Stringify.Options,
+            allocator: std.mem.Allocator,
+        ) ![]const u8 {
+            return pb.json.encode(self, options, allocator);
+        }
+
+        // This method is used by std.json
+        // internally for deserialization. DO NOT RENAME!
+        pub fn jsonParse(
+            allocator: std.mem.Allocator,
+            source: anytype,
+            options: std.json.ParseOptions,
+        ) !@This() {
+            return pb.json.parse(@This(), allocator, source, options);
+        }
+
+        // This method is used by std.json
+        // internally for serialization. DO NOT RENAME!
+        pub fn jsonStringify(self: *const @This(), jws: anytype) !void {
+            return pb.json.stringify(@This(), self, jws);
+        }
+    };
+
     pub const Commands = struct {
         items: std.ArrayListUnmanaged(Response.Command) = .empty,
 
@@ -484,16 +550,16 @@ pub const Response = struct {
         }
     };
 
-    pub const Track = struct {
-        line: u32 = 0,
-        driver_state: std.ArrayListUnmanaged(Response.Track.Driver.State) = .empty,
-        driver_errors: std.ArrayListUnmanaged(Response.Track.Driver.Error) = .empty,
-        axis_state: std.ArrayListUnmanaged(Response.Track.Axis.State) = .empty,
-        axis_errors: std.ArrayListUnmanaged(Response.Track.Axis.Error) = .empty,
-        carrier_state: std.ArrayListUnmanaged(Response.Track.Carrier.State) = .empty,
+    pub const Line = struct {
+        id: u32 = 0,
+        driver_state: std.ArrayListUnmanaged(Response.Line.Driver.State) = .empty,
+        driver_errors: std.ArrayListUnmanaged(Response.Line.Driver.Error) = .empty,
+        axis_state: std.ArrayListUnmanaged(Response.Line.Axis.State) = .empty,
+        axis_errors: std.ArrayListUnmanaged(Response.Line.Axis.Error) = .empty,
+        carrier_state: std.ArrayListUnmanaged(Response.Line.Carrier.State) = .empty,
 
         pub const _desc_table = .{
-            .line = fd(1, .{ .scalar = .uint32 }),
+            .id = fd(1, .{ .scalar = .uint32 }),
             .driver_state = fd(2, .{ .repeated = .submessage }),
             .driver_errors = fd(3, .{ .repeated = .submessage }),
             .axis_state = fd(4, .{ .repeated = .submessage }),
@@ -917,7 +983,7 @@ pub const Response = struct {
                 axis_auxiliary: ?u32 = null,
                 cas_disabled: bool = false,
                 cas_triggered: bool = false,
-                state: Response.Track.Carrier.State.State = @enumFromInt(0),
+                state: Response.Line.Carrier.State.State = @enumFromInt(0),
 
                 pub const _desc_table = .{
                     .id = fd(1, .{ .scalar = .uint32 }),
@@ -938,9 +1004,7 @@ pub const Response = struct {
                     CARRIER_STATE_INITIALIZING = 5,
                     CARRIER_STATE_INITIALIZE_COMPLETED = 6,
                     CARRIER_STATE_PUSHING = 7,
-                    CARRIER_STATE_PUSH_COMPLETED = 8,
                     CARRIER_STATE_PULLING = 9,
-                    CARRIER_STATE_PULL_COMPLETED = 10,
                     CARRIER_STATE_OVERCURRENT = 11,
                     _,
                 };

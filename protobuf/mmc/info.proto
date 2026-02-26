@@ -15,7 +15,9 @@ message Request {
   // ID is provided, then request for status of all commands from the server.
   //
   // Expected response: `mmc.Response.body.info.body.commands`
-  message Command { optional uint32 id = 1; }
+  message Command {
+    optional uint32 id = 1;
+  }
 
   // Request track state information from server. One or more of the `info_`
   // flags must be enabled to select the kind of track information desired.
@@ -24,8 +26,8 @@ message Request {
   //
   // Expected response: `mmc.Response.body.info.body.track`
   message Track {
-    // Line ID. Select line from which information will be retrieved.
-    uint32 line = 1;
+    // Line ID(s). Select line(s) from which information will be retrieved.
+    repeated uint32 lines = 1;
 
     // Retrieve driver state information.
     bool info_driver_state = 2;
@@ -62,7 +64,9 @@ message Request {
     }
 
     // List of IDs. At least one ID must be provided.
-    message Ids { repeated uint32 ids = 1; }
+    message Ids {
+      repeated uint32 ids = 1;
+    }
   }
 
   enum Error {
@@ -79,6 +83,12 @@ message Request {
     // Request is missing a required parameter. Ensure that at least one of the
     // information flag is selected when requesting track information.
     INFO_REQUEST_ERROR_MISSING_PARAMETER = 4;
+    // Attempted to request information from a non-existing command.
+    INFO_REQUEST_ERROR_COMMAND_NOT_FOUND = 5;
+    // Command index is out of bounds for the configured command status buffer.
+    INFO_REQUEST_ERROR_INVALID_COMMAND = 6;
+    // Attempted to send a command to carrier outside of range.
+    INFO_REQUEST_ERROR_INVALID_CARRIER = 7;
   }
 }
 
@@ -94,7 +104,13 @@ message Response {
     Request.Error request_error = 3;
   }
 
-  message Commands { repeated Command items = 1; }
+  message Track {
+    repeated Line lines = 1;
+  }
+
+  message Commands {
+    repeated Command items = 1;
+  }
 
   message Command {
     // Command ID. Valid IDs begin from 1, and may be reused after command
@@ -127,7 +143,7 @@ message Response {
       COMMAND_ERROR_INVALID_SYSTEM_STATE = 1;
       // Deprecated. Check `COMMAND_REQUEST_ERROR_INVALID_CARRIER` on
       // `Command.Request.Error`.
-      COMMAND_ERROR_INVALID_CARRIER_ID = 2 [ deprecated = true ];
+      COMMAND_ERROR_INVALID_CARRIER_ID = 2 [deprecated = true];
       // Driver connection failed while command progressing.
       COMMAND_ERROR_DRIVER_DISCONNECTED = 3;
       // Unexpected command execution error. This is likely an implementation
@@ -148,9 +164,9 @@ message Response {
     }
   }
 
-  message Track {
+  message Line {
     // Line ID.
-    uint32 line = 1;
+    uint32 id = 1;
     // Driver state information list. Empty if request flag was disabled.
     repeated Driver.State driver_state = 2;
     // Driver error information list. Empty if request flag was disabled.
@@ -244,6 +260,10 @@ message Response {
         State state = 7;
 
         enum State {
+          reserved 8, 10;
+          reserved "CARRIER_STATE_PUSH_COMPLETED";
+          reserved "CARRIER_STATE_PULL_COMPLETED";
+
           CARRIER_STATE_NONE = 0;
           // Carrier is currently operating for line calibration.
           CARRIER_STATE_CALIBRATING = 1;
@@ -262,15 +282,9 @@ message Response {
           CARRIER_STATE_INITIALIZE_COMPLETED = 6;
           // Carrier is being pushed by axis. Used to eject carrier from line.
           CARRIER_STATE_PUSHING = 7;
-          // Carrier push completed by axis. This state is not observed when
-          // carrier is ejected from line.
-          CARRIER_STATE_PUSH_COMPLETED = 8;
           // Carrier is being pulled by axis. Must not be used until pull is
           // completed.
           CARRIER_STATE_PULLING = 9;
-          // Carrier pull completed by axis. May now be used for normal
-          // operation.
-          CARRIER_STATE_PULL_COMPLETED = 10;
           // Overcurrent detected in carrier axis motor. Carrier movement has
           // been canceled.
           CARRIER_STATE_OVERCURRENT = 11;
