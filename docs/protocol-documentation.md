@@ -650,6 +650,7 @@ Response description to the command API.
 | COMMAND_REQUEST_ERROR_OUT_OF_MEMORY | 14 | Server unable to receive new command caused by out of memory. Try `Command.Request.remove_command` to free the memory. |
 | COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED | 15 | Attempted to run more than 8 auto initialize instance. |
 | COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID | 16 | Attempted to assign a new carrier with an ID that is already used by other carrier on the same line |
+| COMMAND_REQUEST_ERROR_INVALID_COMMAND | 17 | Command index is out of bounds for the configured command status buffer. |
 
 
  
@@ -720,7 +721,6 @@ Response description to the core API.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | server | [Response.Server](#mmc-core-Response-Server) |  | Server process information. |
-| api_version | [Response.SemanticVersion](#mmc-core-Response-SemanticVersion) |  | Server&#39;s API version. |
 | track_config | [Response.TrackConfig](#mmc-core-Response-TrackConfig) |  | Track configuration. |
 | request_error | [Request.Error](#mmc-core-Request-Error) |  | Error response if the core request could not be handled. |
 
@@ -756,6 +756,7 @@ Server version and name.
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Server name. |
 | version | [Response.SemanticVersion](#mmc-core-Response-SemanticVersion) |  | Server implementation version. |
+| api | [Response.SemanticVersion](#mmc-core-Response-SemanticVersion) |  |  |
 
 
 
@@ -819,7 +820,6 @@ Server version and name.
 | Name | Number | Description |
 | ---- | ------ | ----------- |
 | CORE_REQUEST_KIND_UNSPECIFIED | 0 | This request kind is unused, and should never be sent. It is reserved as the default request kind according to protobuf specification. |
-| CORE_REQUEST_KIND_API_VERSION | 1 | Request server&#39;s API version. Use to check if API version matches client API compatibility. |
 | CORE_REQUEST_KIND_SERVER_INFO | 2 | Request server process information. This includes the configured server name and server implementation version. |
 | CORE_REQUEST_KIND_TRACK_CONFIG | 3 | Request the configured track information of the server. |
 
@@ -1143,6 +1143,9 @@ List of IDs. At least one ID must be provided.
 | INFO_REQUEST_ERROR_INVALID_AXIS | 2 | Invalid axis ID provided. Ensure that axis ID exists in line. |
 | INFO_REQUEST_ERROR_INVALID_DRIVER | 3 | Invalid driver ID provided. Ensure that driver ID exists in line. |
 | INFO_REQUEST_ERROR_MISSING_PARAMETER | 4 | Request is missing a required parameter. Ensure that at least one of the information flag is selected when requesting track information. |
+| INFO_REQUEST_ERROR_COMMAND_NOT_FOUND | 5 | Attempted to request information from a non-existing command. |
+| INFO_REQUEST_ERROR_INVALID_COMMAND | 6 | Command index is out of bounds for the configured command status buffer. |
+| INFO_REQUEST_ERROR_INVALID_CARRIER | 7 | Attempted to send a command to carrier outside of range. |
 
 
 

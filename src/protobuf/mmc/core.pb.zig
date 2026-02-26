@@ -14,7 +14,6 @@ pub const Request = struct {
 
     pub const Kind = enum(i32) {
         CORE_REQUEST_KIND_UNSPECIFIED = 0,
-        CORE_REQUEST_KIND_API_VERSION = 1,
         CORE_REQUEST_KIND_SERVER_INFO = 2,
         CORE_REQUEST_KIND_TRACK_CONFIG = 3,
         _,
@@ -87,18 +86,15 @@ pub const Response = struct {
 
     pub const _body_case = enum {
         server,
-        api_version,
         track_config,
         request_error,
     };
     pub const body_union = union(_body_case) {
         server: Response.Server,
-        api_version: Response.SemanticVersion,
         track_config: Response.TrackConfig,
         request_error: Request.Error,
         pub const _desc_table = .{
             .server = fd(1, .submessage),
-            .api_version = fd(2, .submessage),
             .track_config = fd(3, .submessage),
             .request_error = fd(4, .@"enum"),
         };
@@ -314,10 +310,12 @@ pub const Response = struct {
     pub const Server = struct {
         name: []const u8 = &.{},
         version: ?Response.SemanticVersion = null,
+        api: ?Response.SemanticVersion = null,
 
         pub const _desc_table = .{
             .name = fd(1, .{ .scalar = .string }),
             .version = fd(2, .submessage),
+            .api = fd(3, .submessage),
         };
 
         pub fn encode(
