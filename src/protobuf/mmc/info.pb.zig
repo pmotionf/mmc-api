@@ -1004,8 +1004,8 @@ pub const Response = struct {
                     CARRIER_STATE_INITIALIZING = 5,
                     CARRIER_STATE_INITIALIZE_COMPLETED = 6,
                     CARRIER_STATE_PUSHING = 7,
-                    CARRIER_STATE_PULLING = 8,
-                    CARRIER_STATE_OVERCURRENT = 9,
+                    CARRIER_STATE_PULLING = 9,
+                    CARRIER_STATE_OVERCURRENT = 11,
                     _,
                 };
 
