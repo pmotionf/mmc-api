@@ -5,12 +5,11 @@ message Request {
   Kind kind = 1;
 
   enum Kind {
+    reserved 1;
+    reserved "CORE_REQUEST_KIND_API_VERSION";
     // This request kind is unused, and should never be sent. It is reserved
     // as the default request kind according to protobuf specification.
     CORE_REQUEST_KIND_UNSPECIFIED = 0;
-    // Request server's API version. Use to check if API version matches
-    // client API compatibility.
-    CORE_REQUEST_KIND_API_VERSION = 1;
     // Request server process information. This includes the configured server
     // name and server implementation version.
     CORE_REQUEST_KIND_SERVER_INFO = 2;
@@ -29,11 +28,11 @@ message Request {
 
 // Response description to the core API.
 message Response {
+  reserved 2;
+  reserved "api_version";
   oneof body {
     // Server process information.
     Server server = 1;
-    // Server's API version.
-    SemanticVersion api_version = 2;
     // Track configuration.
     TrackConfig track_config = 3;
     // Error response if the core request could not be handled.
@@ -73,5 +72,6 @@ message Response {
     string name = 1;
     // Server implementation version.
     SemanticVersion version = 2;
+    SemanticVersion api = 3;
   }
 }
