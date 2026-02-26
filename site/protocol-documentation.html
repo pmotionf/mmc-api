@@ -3056,6 +3056,11 @@ then all pending carrier pushes on the line will be stopped.</p>
 <td>16</td>
 <td>Attempted to assign a new carrier with an ID that is already used by other carrier on the same line</td>
 </tr>
+<tr>
+<td>COMMAND_REQUEST_ERROR_INVALID_COMMAND</td>
+<td>17</td>
+<td>Command index is out of bounds for the configured command status buffer.</td>
+</tr>
 </tbody>
 </table>
 <p><a name="mmc_control-proto"></a></p>
@@ -3135,12 +3140,6 @@ then all pending carrier pushes on the line will be stopped.</p>
 <td>Server process information.</td>
 </tr>
 <tr>
-<td>api_version</td>
-<td><a href="#mmc-core-Response-SemanticVersion">Response.SemanticVersion</a></td>
-<td></td>
-<td>Server&#39;s API version.</td>
-</tr>
-<tr>
 <td>track_config</td>
 <td><a href="#mmc-core-Response-TrackConfig">Response.TrackConfig</a></td>
 <td></td>
@@ -3210,6 +3209,12 @@ then all pending carrier pushes on the line will be stopped.</p>
 <td><a href="#mmc-core-Response-SemanticVersion">Response.SemanticVersion</a></td>
 <td></td>
 <td>Server implementation version.</td>
+</tr>
+<tr>
+<td>api</td>
+<td><a href="#mmc-core-Response-SemanticVersion">Response.SemanticVersion</a></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -3321,11 +3326,6 @@ then all pending carrier pushes on the line will be stopped.</p>
 <td>CORE_REQUEST_KIND_UNSPECIFIED</td>
 <td>0</td>
 <td>This request kind is unused, and should never be sent. It is reserved as the default request kind according to protobuf specification.</td>
-</tr>
-<tr>
-<td>CORE_REQUEST_KIND_API_VERSION</td>
-<td>1</td>
-<td>Request server&#39;s API version. Use to check if API version matches client API compatibility.</td>
 </tr>
 <tr>
 <td>CORE_REQUEST_KIND_SERVER_INFO</td>
@@ -3925,6 +3925,21 @@ from the track.</p>
 <td>INFO_REQUEST_ERROR_MISSING_PARAMETER</td>
 <td>4</td>
 <td>Request is missing a required parameter. Ensure that at least one of the information flag is selected when requesting track information.</td>
+</tr>
+<tr>
+<td>INFO_REQUEST_ERROR_COMMAND_NOT_FOUND</td>
+<td>5</td>
+<td>Attempted to request information from a non-existing command.</td>
+</tr>
+<tr>
+<td>INFO_REQUEST_ERROR_INVALID_COMMAND</td>
+<td>6</td>
+<td>Command index is out of bounds for the configured command status buffer.</td>
+</tr>
+<tr>
+<td>INFO_REQUEST_ERROR_INVALID_CARRIER</td>
+<td>7</td>
+<td>Attempted to send a command to carrier outside of range.</td>
 </tr>
 </tbody>
 </table>
