@@ -336,6 +336,9 @@ message Request {
   }
 
   enum Error {
+    reserved 13;
+    reserved "COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED";
+
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
     // Attempted to use line ID outside of the configured lines.
     COMMAND_REQUEST_ERROR_INVALID_LINE = 1;
