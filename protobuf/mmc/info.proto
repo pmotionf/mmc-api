@@ -278,18 +278,12 @@ message Response {
           CARRIER_STATE_INITIALIZE_COMPLETED = 6;
           // Carrier is being pushed by axis. Used to eject carrier from line.
           CARRIER_STATE_PUSHING = 7;
-          // Carrier push completed by axis. This state is not observed when
-          // carrier is ejected from line.
-          CARRIER_STATE_PUSH_COMPLETED = 8;
           // Carrier is being pulled by axis. Must not be used until pull is
           // completed.
-          CARRIER_STATE_PULLING = 9;
-          // Carrier pull completed by axis. May now be used for normal
-          // operation.
-          CARRIER_STATE_PULL_COMPLETED = 10;
+          CARRIER_STATE_PULLING = 8;
           // Overcurrent detected in carrier axis motor. Carrier movement has
           // been canceled.
-          CARRIER_STATE_OVERCURRENT = 11;
+          CARRIER_STATE_OVERCURRENT = 9;
         }
       }
     }
