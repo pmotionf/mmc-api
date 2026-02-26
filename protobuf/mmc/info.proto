@@ -260,6 +260,10 @@ message Response {
         State state = 7;
 
         enum State {
+          reserved 8, 10;
+          reserved "CARRIER_STATE_PUSH_COMPLETED";
+          reserved "CARRIER_STATE_PULL_COMPLETED";
+
           CARRIER_STATE_NONE = 0;
           // Carrier is currently operating for line calibration.
           CARRIER_STATE_CALIBRATING = 1;
@@ -278,15 +282,9 @@ message Response {
           CARRIER_STATE_INITIALIZE_COMPLETED = 6;
           // Carrier is being pushed by axis. Used to eject carrier from line.
           CARRIER_STATE_PUSHING = 7;
-          // Carrier push completed by axis. This state is not observed when
-          // carrier is ejected from line.
-          CARRIER_STATE_PUSH_COMPLETED = 8;
           // Carrier is being pulled by axis. Must not be used until pull is
           // completed.
           CARRIER_STATE_PULLING = 9;
-          // Carrier pull completed by axis. May now be used for normal
-          // operation.
-          CARRIER_STATE_PULL_COMPLETED = 10;
           // Overcurrent detected in carrier axis motor. Carrier movement has
           // been canceled.
           CARRIER_STATE_OVERCURRENT = 11;
