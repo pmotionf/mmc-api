@@ -363,9 +363,6 @@ message Request {
     COMMAND_REQUEST_ERROR_COMMAND_NOT_FOUND = 11;
     // Attempted to send command to uninitialized carrier.
     COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND = 12;
-    // Deprecated. Check `COMMAND_ERROR_DRIVER_DISCONNECTED` on
-    // `Info.Response.Command.Error`.
-    COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED = 13 [deprecated = true];
     // Server unable to receive new command caused by out of memory.
     // Try `Command.Request.remove_command` to free the memory.
     COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 14;
