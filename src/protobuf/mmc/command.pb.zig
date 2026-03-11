@@ -615,8 +615,8 @@ pub const Request = struct {
 
             pub const _desc_table = .{
                 .line = fd(1, .{ .scalar = .uint32 }),
-                .velocity = fd(2, .{ .scalar = .float }),
-                .acceleration = fd(3, .{ .scalar = .float }),
+                .velocity = fd(5, .{ .scalar = .float }),
+                .acceleration = fd(6, .{ .scalar = .float }),
             };
 
             pub fn encode(
@@ -759,8 +759,8 @@ pub const Request = struct {
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
             .carrier = fd(2, .{ .scalar = .uint32 }),
-            .velocity = fd(3, .{ .scalar = .float }),
-            .acceleration = fd(4, .{ .scalar = .float }),
+            .velocity = fd(11, .{ .scalar = .float }),
+            .acceleration = fd(12, .{ .scalar = .float }),
             .control = fd(8, .@"enum"),
             .disable_cas = fd(9, .{ .scalar = .bool }),
             .target = fd(null, .{ .oneof = target_union }),
@@ -834,8 +834,8 @@ pub const Request = struct {
             .line = fd(1, .{ .scalar = .uint32 }),
             .axis = fd(2, .{ .scalar = .uint32 }),
             .direction = fd(3, .@"enum"),
-            .velocity = fd(4, .{ .scalar = .float }),
-            .acceleration = fd(5, .{ .scalar = .float }),
+            .velocity = fd(8, .{ .scalar = .float }),
+            .acceleration = fd(9, .{ .scalar = .float }),
             .carrier = fd(6, .{ .scalar = .uint32 }),
         };
 
@@ -909,8 +909,8 @@ pub const Request = struct {
             .axis = fd(2, .{ .scalar = .uint32 }),
             .carrier = fd(3, .{ .scalar = .uint32 }),
             .direction = fd(4, .@"enum"),
-            .velocity = fd(5, .{ .scalar = .float }),
-            .acceleration = fd(6, .{ .scalar = .float }),
+            .velocity = fd(9, .{ .scalar = .float }),
+            .acceleration = fd(10, .{ .scalar = .float }),
             .transition = fd(7, .submessage),
         };
 
@@ -922,7 +922,7 @@ pub const Request = struct {
             pub const _desc_table = .{
                 .control = fd(1, .@"enum"),
                 .disable_cas = fd(2, .{ .scalar = .bool }),
-                .target = fd(3, .{ .scalar = .float }),
+                .target = fd(6, .{ .scalar = .float }),
             };
 
             pub fn encode(
