@@ -128,7 +128,7 @@ pub const Request = struct {
         };
 
         pub const _desc_table = .{
-            .lines = fd(1, .{ .packed_repeated = .{ .scalar = .uint32 } }),
+            .lines = fd(7, .{ .packed_repeated = .{ .scalar = .uint32 } }),
             .info_driver_state = fd(2, .{ .scalar = .bool }),
             .info_driver_errors = fd(3, .{ .scalar = .bool }),
             .info_axis_state = fd(4, .{ .scalar = .bool }),

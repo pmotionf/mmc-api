@@ -26,8 +26,10 @@ message Request {
   //
   // Expected response: `mmc.Response.body.info.body.track`
   message Track {
+    reserved 1;
+    reserved "line";
     // Line ID(s). Select line(s) from which information will be retrieved.
-    repeated uint32 lines = 1;
+    repeated uint32 lines = 7;
 
     // Retrieve driver state information.
     bool info_driver_state = 2;

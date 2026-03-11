@@ -158,6 +158,8 @@ message Request {
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message AutoInitialize {
     message Line {
+      reserved 4;
+      reserved "velocity_mode";
       // Line ID.
       uint32 line = 1;
 
@@ -175,6 +177,8 @@ message Request {
   //
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Move {
+    reserved "velocity_mode";
+    reserved 10;
     // Line ID.
     uint32 line = 1;
     // Carrier ID.
@@ -207,6 +211,8 @@ message Request {
   //
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Push {
+    reserved "velocity_mode";
+    reserved 7;
     // Line ID.
     uint32 line = 1;
     // Axis ID.
@@ -228,6 +234,8 @@ message Request {
   //
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
   message Pull {
+    reserved "velocity_mode";
+    reserved 8;
     // Line ID.
     uint32 line = 1;
     // Axis ID.
@@ -249,6 +257,8 @@ message Request {
     optional Transition transition = 7;
 
     message Transition {
+      reserved "axis", "location", "distance";
+      reserved 3 to 5;
       // Control method for moving carrier.
       mmc.Control control = 1;
       // Disabling the carrier's collision avoidance system (CAS).
@@ -258,7 +268,7 @@ message Request {
       // calibration, but can also be set with the `SetZero` command.
       // Pass NaN to pull carrier without motor control, allowing carrier
       // to be pulled with external force.
-      float target = 3;
+      float target = 6;
     }
   }
 
