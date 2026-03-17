@@ -5,7 +5,7 @@ This page covers how to use MMC-API to operate on LMS connected to PMF's MMC sys
 The MMC API consists of three categories, **where requests from each category receive responses from that same category**. Please refer to the [protocol documentation](protocol-documentation.md) page for the expected response for each request.
 
 ### MMC Core
-Use MMC core messages to retrieve server information and track configuration. PMF recommend client to verify both client and server use the same **minor SemVer version** by requesting server's API version; mismatched versions may cause system errors. Clients must fetch the **track configuration** prior to operating the PMF MMC system to ensure all messages passed to the server contain valid parameters. Refer to the [MMC core documentation](protocol-documentation.md#mmccoreproto) for a comprehensive list of message types and expected responses.
+Use MMC core messages to retrieve server information and track configuration. PMF recommends that clients verify compatibility with the server API version before operation. Starting from version 2.0.0, breaking changes may occur between major versions, therefore clients must ensure they are compatible with the server's API version. Mismatched versions may result in invalid requests or undefined behavior. Clients must fetch the **track configuration** prior to operating the PMF MMC system to ensure all messages passed to the server contain valid parameters. Refer to the [MMC core documentation](protocol-documentation.md#mmccoreproto) for a comprehensive list of message types and expected responses.
 
 ### MMC Command
 Use MMC command messages to operate the PMF MMC system. Client must use the following rules when using sending MMC command message.
