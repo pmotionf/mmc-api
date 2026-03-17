@@ -75,7 +75,7 @@ This section demonstrates how to construct and encode a request for transmission
     
     # Create a request message
     request = mmc.Request()
-    request.core.kind = mmc.mmc_dot_core__pb2.Request.CORE_REQUEST_KIND_API_VERSION
+    request.core.kind = mmc.mmc_dot_core__pb2.Request.CORE_REQUEST_KIND_SERVER_INFO
     
     # Snipped: Send and receive the message
     
@@ -93,10 +93,10 @@ This section demonstrates how to construct and encode a request for transmission
                 "Error: ",
                 mmc.mmc_dot_core__pb2.Request.Error.Name(msg.core.request_error),
             )
-        elif msg.core.WhichOneof("body") == "api_version":
-          version = msg.core.api_version
-          print(
-              f"Server API Version: {version.major}.{version.minor}.{version.patch}"
+        elif msg.core.WhichOneof("body") == "server":
+            api = msg.core.server.api
+            print(
+                f"Server API Version: {api.major}.{api.minor}.{api.patch}"
           )
         else:
             print("Invalid Response")
