@@ -16,8 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to retrieve all track information without specifying a Line ID
 
 ### Changed
-- **BREAKING:** Unit change for `velocity` and `acceleration` (`dm/s` to `m/s`)
-- **BREAKING:** Type change for `velocity` and `acceleration` (`dm/s^2` to `m/s`)
+- **BREAKING:** Unit change for `velocity` and `acceleration` (`dm/s` to `m/s` and `dm/s^2` to `m/s^2`)
+- **BREAKING:** Type change for `velocity` and `acceleration` (`uint32` to `float`)
 - **BREAKING:** Error enum definitions updated 
 - **BREAKING:** Updates to messages related to track and command handling.
 - **BREAKING:** Pull command target behavior 
