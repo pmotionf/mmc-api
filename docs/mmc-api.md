@@ -185,7 +185,7 @@ This section demonstrates how to construct and encode a request for transmission
 !!! warning
     Each cluster requires at least one free axis to successfully perform the auto-initialization. Any cluster lacking a free axis will be ignored, and all carriers within that cluster will remain uninitialized upon command completion.
 !!! tip
-    [`velocity_mode`](protocol-documentation.md#requestvelocitymode) field define the representation of value provided by `velocity` field. Ignore `acceleration` and `velocity` field to use default value. Default value:
+    Ignore `acceleration` and `velocity` field to use default value. Default value:
     
     - Velocity: 0.6 m/s
     - Acceleration: 6 m/s²
@@ -206,7 +206,6 @@ This section demonstrates how to construct and encode a request for transmission
             .line = 1,
             .acceleration = 60,
             .velocity = 6,
-            .velocity_mode = .VELOCITY_MODE_NORMAL,
         });
       
         // Define second line
@@ -214,7 +213,6 @@ This section demonstrates how to construct and encode a request for transmission
             .line = 2,
             .acceleration = 60,
             .velocity = 6,
-            .velocity_mode = .VELOCITY_MODE_NORMAL,
         });
       
         // Create a request
@@ -241,14 +239,12 @@ This section demonstrates how to construct and encode a request for transmission
         line1.line = 1
         line1.velocity = 6
         line1.acceleration = 60
-        line1.velocity_mode = Command.VelocityMode.VELOCITY_MODE_NORMAL
       
         # Define second line
         line2 = Command.AutoInitialize.Line()
         line2.line = 2
         line2.velocity = 6
         line2.acceleration = 60
-        line2.velocity_mode = Command.VelocityMode.VELOCITY_MODE_NORMAL
     
         # Create a request
         request = mmc.Request()
@@ -316,7 +312,6 @@ This section demonstrates how to construct and encode a request for transmission
                             .target = .{.axis = 3},
                             .control = .CONTROL_POSITION,
                             .disable_cas = false,
-                            .velocity_mode = .VELOCITY_MODE_NORMAL,
                         },
                     },
                 },
@@ -340,7 +335,6 @@ This section demonstrates how to construct and encode a request for transmission
         # 2 for CONTROL_VELOCITY.
         request.command.move.control = 1
         request.command.move.disable_cas = False
-        request.command.move.velocity_mode = Command.VelocityMode.VELOCITY_MODE_NORMAL
         ```
 
 #### [Push](protocol-documentation.md#requestpush)
@@ -373,7 +367,6 @@ This section demonstrates how to construct and encode a request for transmission
                             .direction = .DIRECTION_BACKWARD,
                             .velocity = 10,
                             .acceleration = line.acceleration,
-                            .velocity_mode = .VELOCITY_MODE_NORMAL,
                         },
                     },
                 },
@@ -392,7 +385,6 @@ This section demonstrates how to construct and encode a request for transmission
         request.command.push.direction = Command.Direction.DIRECTION_BACKWARD
         request.command.push.velocity = 10
         request.command.push.acceleration = 60
-        request.command.push.velocity_mode = Command.VelocityMode.VELOCITY_MODE_NORMAL
     
         ```
     
@@ -428,7 +420,6 @@ This section demonstrates how to construct and encode a request for transmission
                                 .disable_cas = false,
                                 .target = .{.axis = 3},
                             },
-                            .velocity_mode = .VELOCITY_MODE_NORMAL,
                         },
                     },
                 },
@@ -451,7 +442,6 @@ This section demonstrates how to construct and encode a request for transmission
         request.command.pull.transition.control = 1
         request.command.pull.transition.disable_cas = False
         request.command.pull.transition.axis = 3
-        request.command.pull.velocity_mode = Command.VelocityMode.VELOCITY_MODE_NORMAL
 
     
         ```
