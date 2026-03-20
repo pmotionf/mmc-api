@@ -394,7 +394,7 @@ This section demonstrates how to construct and encode a request for transmission
 !!! info
     Initialize an incoming carrier located outside the current line. This command puts the specified axis into **pulling state**. This initialization procedure has the following behavior:
 
-    - **Center Alignment**: Omit the `transition` field to initialize the carrier on the center of the pulling axis
+    - **Center Alignment**: Omit the `transition` field to initialize the carrier at the center of the pulling axis
     - **Smooth Transition**: Provide a `transition` field to automatically move to the specified destination as soon as the carrier is recognized.
     - **Manual Mode (External Force)**: Omit the `transition`, `velocity`, and `acceleration` fields to initializes the carrier in the NONE state (not controlled by the motor), allowing it to be moved manually or by external systems.
 
