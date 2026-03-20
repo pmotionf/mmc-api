@@ -210,8 +210,8 @@ remains stored in a limited history buffer, and should be cleared with
 | release | [Request.Release](#mmc-command-Request-Release) |  | Release the motor control of a carrier. |
 | clear_errors | [Request.ClearErrors](#mmc-command-Request-ClearErrors) |  | Clear all errors within the specified driver range. |
 | remove_command | [Request.RemoveCommand](#mmc-command-Request-RemoveCommand) |  | Cancel a running command or remove its status history. |
-| stop | [Request.Stop](#mmc-command-Request-Stop) |  | Activate emergency stop for all drivers in line(s). Emergency stop will cause all carriers to deccelerate to rest, then reset all carriers&#39; movement commands. |
-| pause | [Request.Pause](#mmc-command-Request-Pause) |  | Activate pause for all drivers in line(s). Pause will cause all carriers to deccelerate to rest. On resume, the carriers will continue their previously assigned movement commands. |
+| stop | [Request.Stop](#mmc-command-Request-Stop) |  | Activate emergency stop for all drivers in line(s). Emergency stop will cause all carriers to decelerate to rest, then reset all carriers&#39; movement commands. |
+| pause | [Request.Pause](#mmc-command-Request-Pause) |  | Activate pause for all drivers in line(s). Pause will cause all carriers to decelerate to rest. On resume, the carriers will continue their previously assigned movement commands. |
 | resume | [Request.Resume](#mmc-command-Request-Resume) |  | Deactivate emergency stop and pause for all drivers in line(s). |
 | set_carrier_id | [Request.SetCarrierId](#mmc-command-Request-SetCarrierId) |  | Change an existing carrier ID to a new unique carrier ID. |
 
@@ -257,7 +257,7 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 <a name="mmc-command-Request-Calibrate"></a>
 
 ### Request.Calibrate
-Calibrate a line by positioning an unitiliazed carrier on the first axis
+Calibrate a line by positioning an uninitialized carrier on the first axis
 of the line.
 
 Expected response: `mmc.Response.body.command.body.id` (uint32).
@@ -276,8 +276,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 
 ### Request.ClearErrors
 Clear all error information on the driver. If a target is specified,
-clear error information of drivers which is located on the target. If not,
-clear error information on every driver of the specified line ID.
+clear error information of drivers included in that target. If not,
+clear error information on all drivers of the specified line ID.
 
 Expected response: `mmc.Response.body.command.body.id` (uint32).
 
@@ -298,8 +298,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 
 ### Request.Deinitialize
 Clear carrier information located on the axis. If a target is specified,
-clear information of carriers which is located on the target. If not,
-clear all carrier information of the specified line ID
+clear information of carriers included in that target. If not,
+clear all carrier information of the specified line ID.
 
 Expected response: `mmc.Response.body.command.body.id` (uint32).
 
@@ -446,8 +446,9 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 
 ### Request.Release
 Release the control imposed by the motor to the carrier. If a target is
-specified, the motor which is located on the target release the control.
+specified, all motors included in that target release control.
 Otherwise, all carriers on the provided line will be released from control.
+
 Expected response: `mmc.Response.body.command.body.id` (uint32).
 
 
@@ -645,10 +646,10 @@ Response description to the command API.
 | COMMAND_REQUEST_ERROR_INVALID_CARRIER | 9 | Attempted to send a command to carrier outside of 1-2048. |
 | COMMAND_REQUEST_ERROR_MISSING_PARAMETER | 10 | A command missing the required parameter. |
 | COMMAND_REQUEST_ERROR_COMMAND_NOT_FOUND | 11 | Attempted to remove or cancel a non-existing command. |
-| COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND | 12 | Attempted to send command to uninitialized carrier. |
+| COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND | 12 | Attempted to send command to an uninitialized carrier. |
 | COMMAND_REQUEST_ERROR_OUT_OF_MEMORY | 14 | Server unable to receive new command caused by out of memory. Try `Command.Request.remove_command` to free the memory. |
 | COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED | 15 | Attempted to run more than 8 auto initialize instance. |
-| COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID | 16 | Attempted to assign a new carrier with an ID that is already used by other carrier on the same line |
+| COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID | 16 | Attempted to assign a carrier ID that is already used by another carrier on the same line. |
 | COMMAND_REQUEST_ERROR_INVALID_COMMAND | 17 | Command index is out of bounds for the configured command status buffer. |
 
 
@@ -1163,7 +1164,7 @@ List of IDs. At least one ID must be provided.
 | COMMAND_ERROR_CARRIER_NOT_FOUND | 5 | Target carrier is removed while command progressing. |
 | COMMAND_ERROR_CARRIER_ALREADY_INITIALIZED | 6 | Attempted to initialize an initialized carrier. |
 | COMMAND_ERROR_DRIVER_STOPPED | 7 | Target driver is stopped while command progressing. Consider resume the driver before sending further command. |
-| COMMAND_ERROR_INVALID_CARRIER_TARGET | 8 | Carrier targetting a location outside of the configured track. |
+| COMMAND_ERROR_INVALID_CARRIER_TARGET | 8 | Carrier targeting a location outside of the configured track. |
 | COMMAND_ERROR_CONFLICTING_CARRIER_ID | 9 | Attempted to assign a new carrier with an ID that is already used by other carrier on the same line |
 
 
