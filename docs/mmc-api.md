@@ -2,32 +2,33 @@
 This page covers how to use MMC-API to operate on LMS connected to PMF's MMC system.
 
 ## MMC-API Structure
-The MMC API consists of three categories, **where requests from each category receive responses from that same category**. Please refer to the [protocol documentation](protocol-documentation.md) page for the expected response for each request.
+The MMC API consists of three categories: **core, command, and info**. Each category contains corresponding **requests and responses**. Please refer to the [protocol documentation](protocol-documentation.md) page for the expected response for each request.
 
 ### MMC Core
 Use MMC core messages to retrieve server information and track configuration. PMF recommends that clients verify compatibility with the server API version before operation. Starting from version 2.0.0, breaking changes may occur between major versions, therefore clients must ensure they are compatible with the server's API version. Mismatched versions may result in invalid requests or undefined behavior. Clients must fetch the **track configuration** prior to operating the PMF MMC system to ensure all messages passed to the server contain valid parameters. Refer to the [MMC core documentation](protocol-documentation.md#mmccoreproto) for a comprehensive list of message types and expected responses.
 
 ### MMC Command
-Use MMC command messages to operate the PMF MMC system. Client must use the following rules when using sending MMC command message.
+Use MMC command messages to operate the PMF MMC system. Clients must use the following rules when sending MMC command messages.
 
-- **Command ID**: Each command will return a command ID as a response. Client must use the ID to monitor the command's state.
-- **Cleanup**: Client must invoke `remove_command` once the command state becomes `COMPLETED`. **Failure to do so will block the queue and prevent the server from accepting further commands**.
+- **Command ID**: Each command returns a command ID in the response. Clients must use this ID to monitor the command's state.
+- **Cleanup**: Clients must invoke `remove_command` once the command state becomes `COMPLETED`. **Failure to do so will block the queue and prevent the server from accepting further commands**.
 - **Queueing**: Each driver executes only one command at a time. Commands sent to a busy driver will be queued in the order of arrival.
 
-Monitor command status via the command info request defined in the MMC Info section. List of commands are available on [MMC command documentation](protocol-documentation.md#mmccommandproto).
+Monitor command status via the command info request defined in the MMC Info section. A list of commands are available on [MMC command documentation](protocol-documentation.md#mmccommandproto).
+
 ### MMC Info
-Use MMC info messages to monitor the real-time state of the track and command status. The client can specify which track information to request by enabling the relevant flags within the track info message definition. The API also allows filtering track info based on driver range, axis range, or specific carrier IDs. Refer to the [MMC info documentation](protocol-documentation.md#mmcinfoproto) for the complete message definitions for requesting track and command states.
+Use MMC info messages to monitor the real-time state of the track and command status. The client can specify which track information to request by enabling the relevant flags within the track info message definition. The API also allows filtering track info based on driver range, axis range, or specific carrier IDs. Refer to the [MMC info documentation](protocol-documentation.md#mmcinfoproto) for the complete message definitions used to request track and command states.
 
 ## Create Request
 This section demonstrates how to construct and encode a request for transmission. The first example illustrates how to decode and validate a response before use. Subsequent examples will omit the response processing logic to focus on request creation and key considerations for specific commands.
 !!! info
-    Client must exclusively use the [mmc.Request](protocol-documentation.md#request) message type to send requests to the server. Server always returns an [mmc.Response](protocol-documentation.md#response) message to be decoded on client side. Other message sent to server will return `mmc.Response.request_error`, showing the message is invalid.
+    Client must exclusively use the [mmc.Request](protocol-documentation.md#request) message type to send requests to the server. The server always returns an [mmc.Response](protocol-documentation.md#response) message to be decoded on client side. Any other message sent to server will return `mmc.Response.request_error`, showing the message is invalid.
 
 ### Requesting Core Information
 !!! info
-    Core request message contains only one enum field. The following example demonstrates how to **request API version** used by server. Other core requests are implemented in the same manner.
+    A core request message contains only one enum field. The following example demonstrates how to **request the API version** used by the server. Other core requests are implemented in the same manner.
 !!! warning
-    Sending core request with kind `CORE_REQUEST_KIND_API_VERSION` will always return `mmc.Response.core.request_error`.
+    Sending a core request with kind `CORE_REQUEST_KIND_SERVER_INFO` will always return `mmc.Response.core.request_error`.
 
 === "zig"
     !!! tip
@@ -120,16 +121,16 @@ This section demonstrates how to construct and encode a request for transmission
       
 #### [Initialize Carrier](protocol-documentation.md#requestinitialize)
 !!! info
-    A carrier must be initialized before any actions can be performed. The `initialize` command is one of many available **methods** for initializing carriers. This command is sent to the axis specified in `axis` parameter.
+    A carrier must be initialized before any actions can be performed. The `initialize` command is one of many available **methods** for initializing carriers. This command is sent to the axis specified by the `axis` parameter.
 
     * **Single Axis Placement:** If the uninitialized carrier is located on top of only one axis, the `link_axis` field must be ignored.
-    * **Multi-Axis Placement:** If a carrier is placed on top of two axes, the axis not specified in the `axis` parameter must be identified as a `link_axis`, specifying its direction relative to the specified axis.
+    * **Multi-Axis Placement:** If a carrier is placed on top of two axes, the axis not specified in the `axis` parameter must be given as a `link_axis`, and specified as a direction relative to the provided axis.
 
 !!! warning "Unique Carrier ID Requirement"
     The client must ensure the `carrier_id` is unique across the entire line. If the ID is already in use by another initialized carrier on the same line, the server will return `CONFLICTING_CARRIER_ID`.
 
 !!! example
-    The following request initializes an **uninitialized carrier** with **ID 1** on the first line in the **forward direction**. This carrier is placed on top of **axis 1 and axis 2**.
+    The following request initializes an **uninitialized carrier** with **ID 1** on the first line in the **forward direction**. This carrier's position is on top of **axis 1 and axis 2**.
     === "zig"
     
         ``` zig
@@ -181,11 +182,11 @@ This section demonstrates how to construct and encode a request for transmission
   
 #### [Auto Initialize Carriers](protocol-documentation.md#requestautoinitialize)
 !!! info
-    Auto initialize all carriers on the specified lines simultaneously. This process operates on carrier clusters, where a cluster is defined as a group of unitialized carriers located on adjacent axis.
+    Auto initialize all carriers on the specified lines simultaneously. This process operates on carrier clusters, where a cluster is defined as a group of uninitialized carriers located on adjacent axis.
 !!! warning
     Each cluster requires at least one free axis to successfully perform the auto-initialization. Any cluster lacking a free axis will be ignored, and all carriers within that cluster will remain uninitialized upon command completion.
 !!! tip
-    Ignore `acceleration` and `velocity` field to use default value. Default value:
+    Ignore the `acceleration` and `velocity` fields to use the default values. The default value are:
     
     - Velocity: 0.6 m/s
     - Acceleration: 6 m/s²
@@ -253,7 +254,7 @@ This section demonstrates how to construct and encode a request for transmission
         ```
 #### [Deinitialize Carriers](protocol-documentation.md#requestdeinitialize)
 !!! info
-    Deinitialize will release the motor control on the specified carriers and remove carrier states from MMC system. Deinitialize all carriers on a line without specifying any target. If target is specified, deinitialize carriers based on the provided target. 
+    Deinitialize will release motor control on the specified carriers and remove carrier states from MMC system. Deinitialize all carriers on a line by not specifying a target. If a target is specified, carriers are deinitialized based on that target:
     
     - **Carrier** target deinitializes carrier with the specified ID.
     - **Driver** target deinitializes carriers on the specified driver range.
@@ -292,7 +293,7 @@ This section demonstrates how to construct and encode a request for transmission
 !!! tip
     Track the carrier state until it reaches `MOVE_COMPLETED` before sending further commands to the specified carrier to avoid unwanted behavior. The command state `COMPLETED` only indicates that the command was successfully received and is being processed by the MMC system.
 !!! warning
-    The `target` field must be specified by user, and only the last `target` value will be serialized to server. See [Oneof](https://protobuf.dev/programming-guides/proto3/#oneof) for complete description on `Oneof` protobuf type.
+    The `target` field must be specified by the user, and only the last `target` value will be serialized to the server. See [Oneof](https://protobuf.dev/programming-guides/proto3/#oneof) for complete a description on `Oneof` protobuf type.
 !!! example
     Move initialized carrier 1 to axis 3 on the second line.
     === "zig"
@@ -341,7 +342,7 @@ This section demonstrates how to construct and encode a request for transmission
 !!! info
     Forcefully moves an initialized carrier on the specified axis by one carrier length. Use this movement to cross a line boundary, which deinitializes the carrier from the current line upon completion. 
 
-    If `carrier` field is provided in the push command, the axis enters a **pushing state**. In this state, the axis remains busy and waits for the specified carrier to arrive; once it arrives, the axis automatically pushes the carrier.
+    If the `carrier` field is provided in the push command, the axis enters a **pushing state**. In this state, the axis remains busy and waits for the specified carrier to arrive; once it arrives, the axis automatically pushes the carrier.
   
     !!! warning
         When pushing the carrier to a different line, the receiving axis on the destination line must be in a **pulling state**.
@@ -351,7 +352,7 @@ This section demonstrates how to construct and encode a request for transmission
 !!! example
     Push carrier on axis 1 of line 2 backward to line 1. 
     !!! warning
-        Destination axis on line 1 must be in **pulling state**.
+        The destination axis on line 1 must be in **pulling state**.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -391,14 +392,14 @@ This section demonstrates how to construct and encode a request for transmission
 
 #### [Pull](protocol-documentation.md#requestpull)
 !!! info
-    Initialize an incoming carrier outside the line. This command makes the specified axis into **pulling state**. This initialization procedure has the following behavior:
+    Initialize an incoming carrier located outside the current line. This command puts the specified axis into **pulling state**. This initialization procedure has the following behavior:
 
-    - **Center Alignment**: Omit the `transition` field to initialize the carrier to the center axis
+    - **Center Alignment**: Omit the `transition` field to initialize the carrier on the center of the pulling axis
     - **Smooth Transition**: Provide a `transition` field to automatically move to the specified destination as soon as the carrier is recognized.
-    - **Manual Mode (External Force)**: Omit the `transition`, `velocity`, and `acceleration` fields to initializes the carrier in the NONE state (no controlled by motor), allowing it to be moved manually or by external systems.
+    - **Manual Mode (External Force)**: Omit the `transition`, `velocity`, and `acceleration` fields to initializes the carrier in the NONE state (not controlled by the motor), allowing it to be moved manually or by external systems.
 
 !!! example
-    Set axis 6 of line 1 to pulling state, in which the pulled carrier will move to axis 3.
+    Set axis 6 of line 1 to pulling state, and move the pulled carrier to axis 3.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -448,9 +449,9 @@ This section demonstrates how to construct and encode a request for transmission
 
 #### [Release Carrier](protocol-documentation.md#requestrelease)
 !!! info
-    Put the initialized carrier into `NONE` state, allowing it to be moved manually or by external systems.
+    Put the initialized carrier into the `NONE` state, allowing it to be moved manually or by external systems.
 !!! example
-    Release control on carrier 1 in line 1.
+    Release control of carrier 1 on line 1.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -481,9 +482,9 @@ This section demonstrates how to construct and encode a request for transmission
 
 #### [Calibrate Line](protocol-documentation.md#requestcalibrate)
 !!! info
-    Calibrate drivers' configuration on a line. A unitialized must be located on the center of first axis on the specified line.
+    To calibrate the drivers' configuration on a line, an uninitialized carrier must be located at the center of the first axis
 !!! example
-    Calibrate drivers' configuration on the first line.
+    Calibrate the drivers' configuration on the first line.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -510,10 +511,10 @@ This section demonstrates how to construct and encode a request for transmission
 
 #### [Stop Push](protocol-documentation.md#requeststoppush)
 !!! tip
-    To reset all pushing state on every axis, ignore `axes` field.
+    To reset pushing state on all axis, ignore the `axes` field.
   
 !!! example
-    Reset pushing state on axis 1 to 4 of the first line. 
+    Reset the pushing state on axes 1 to 4 of the first line. 
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -548,10 +549,10 @@ This section demonstrates how to construct and encode a request for transmission
 
 #### [Stop Pull](protocol-documentation.md#requeststoppull)
 !!! tip
-    To reset all pulling state on every axis, ignore `axes` field.
+    To reset the pulling state on all axes, omit the `axes` field.
   
 !!! example
-    Reset pulling state on axis 1 to 4 of the first line. 
+    Reset the pulling state on axes 1 to 4 of the first line. 
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -586,9 +587,9 @@ This section demonstrates how to construct and encode a request for transmission
 
 #### [Set Carrier ID](protocol-documentation.md#requestsetcarrierid)
 !!! warning
-    Carrier ID on each carrier must be unique across a line.
+    The carrier ID of each carrier must be unique within a line.
 !!! example
-    Change carrier ID of carrier 1 to 4 on the first line.
+    Change the carrier ID of carrier 1 to 4 on the first line.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -621,9 +622,9 @@ This section demonstrates how to construct and encode a request for transmission
 
 #### [Set Zero](protocol-documentation.md#requestsetzero)
 !!! example
-    Set zero point of the first line.
+    Set the zero point of the first line.
     !!! warning
-        Initialized carrier must be located on the first axis of the first line.
+        An initialized carrier must be located on the first axis of the first line.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -649,9 +650,9 @@ This section demonstrates how to construct and encode a request for transmission
         ```
 #### [Clear Errors](protocol-documentation.md#requestclearerrors)
 !!! warning
-    Always clear errors whenever an error is detected on axis or driver. Failing to clear error result to unwanted behavior.
+    Always clear errors whenever an error is detected on an axis or driver. Failing to clear errors may result in unwanted behavior.
 !!! tip
-    Ignore `axes` field to clear errors on all drivers and axes on the line.
+    Ignore the `axes` field to clear errors on all drivers and axes on the line.
 !!! example
     Clear all errors on the first line.
     === "zig"
@@ -679,9 +680,9 @@ This section demonstrates how to construct and encode a request for transmission
         ```
 #### [Emergency Stop](protocol-documentation.md#requeststop)
 !!! tip
-    Pass empty list to stop operation on all lines.
+    Pass an empty list to stop operations on all lines.
 !!! example
-    Stop operation on all lines.
+    Stop operations on all lines.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -707,9 +708,9 @@ This section demonstrates how to construct and encode a request for transmission
         ```
 #### [Pause Execution](protocol-documentation.md#requestpause)
 !!! tip
-    Pass empty list to pause operation on all lines.
+    Pass empty list to pause operations on all lines.
 !!! example
-    Pause operation on all lines.
+    Pause operations on all lines.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -735,9 +736,9 @@ This section demonstrates how to construct and encode a request for transmission
         ```
 #### [Resume Execution](protocol-documentation.md#requestresume)
 !!! tip
-    Pass empty list to resume operation on all lines.
+    Pass an empty list to resume operation on all lines.
 !!! example
-    Resume operation on all lines.
+    Resume operations on all lines.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -763,11 +764,11 @@ This section demonstrates how to construct and encode a request for transmission
         ```
 #### [Remove Command](protocol-documentation.md#requestremovecommand)
 !!! warning
-    Failure to remove command will block the queue and prevent the server from accepting further commands.
+    Failure to remove a command will block the queue and prevent the server from accepting further commands.
 !!! tip
-    Always check command status after sending any command message. ([Request Command State](#request-command-state))
+    Always check the command status after sending a command message. ([Request Command State](#request-command-state))
 !!! example
-    Remove command with ID 1 from server.
+    Remove the command with ID 1 from the server.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -796,7 +797,7 @@ This section demonstrates how to construct and encode a request for transmission
 ### Info Request
 #### [Request Command State](protocol-documentation.md#requestcommand)
 !!! example
-    Wait command state until `COMPLETED` or `FAILED` and remove the command.
+    Wait till the command state becomes `COMPLETED` or `FAILED`, then remove the command.
     === "zig"
         ``` zig
         const api = @import("mmc-api");
@@ -901,7 +902,7 @@ This section demonstrates how to construct and encode a request for transmission
 
 #### [Request Track State](protocol-documentation.md#requesttrack)
 !!! tip
-    Certain commands require the client to monitor carrier status to ensure movements is completed.
+    Certain commands require the client to monitor carrier status to ensure movement is completed.
     
     * **Move**: Wait until the carrier state is `MOVE_COMPLETED` before sending a new command to that carrier.
     * **Calibrate**: Wait until the carrier state is `CALIBRATE_COMPLETED` to ensure the driver configuration is valid.
@@ -909,12 +910,12 @@ This section demonstrates how to construct and encode a request for transmission
     * **Pull**: If the `transition` field is omitted, wait for `PULL_COMPLETED`; otherwise, wait for `MOVE_COMPLETED`.
 
 !!! warning
-    Monitor driver, axis, and carrier `error` flags to prevent damage to the motor or driver board. Pay close attention to `inverter_overheat` on the driver and `overcurrent` flags on the axis; immediately deinitialize any carrier on the affected axis and drivers if these are detected. The `overvoltage` and `undervoltage` flags indicate that the system voltage supply may have a problem; please consult with our engineers to resolve the issue.
+    Monitor the `error` flags of driver, axis and carriers to prevent damage to the motor or driver board. Pay close attention to `inverter_overheat` on the driver and `overcurrent` flags on the axis; immediately deinitialize any carrier on the affected axes and drivers if these are detected. The `overvoltage` and `undervoltage` flags indicate that the system voltage supply may have a problem; please consult with our engineers to resolve the issue.
 
 !!! example "Request carrier state"
     !!! tip
-        * Omit `filter` field when sending track info message to retrieve all toggled flags information.
-        * Set all flags on track info message to retrieve every message in one request.
+        * Omit the `filter` field when sending track info message to retrieve all toggled flags information.
+        * Set all flags in the track info message to retrieve every message in one request.
     === "zig"
         ```zig
         const api = @import("mmc-api");
