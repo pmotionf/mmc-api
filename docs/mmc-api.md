@@ -41,7 +41,7 @@ This section demonstrates how to construct and encode a request for transmission
     // flush the writer..
     const request: api.protobuf.mmc.Request = .{
         .body = .{
-            .core = .{ .kind = .CORE_REQUEST_KIND_API_VERSION },
+            .core = .{ .kind = .CORE_REQUEST_KIND_SERVER_INFO },
         },
     };
     try request.encode(&writer.interface, allocator);
@@ -55,12 +55,12 @@ This section demonstrates how to construct and encode a request for transmission
     switch (decoded.body orelse std.log.err("Invalid Response",.{})) {
         .core => |core_resp| switch (core_resp.body orelse
             std.log.err("Invalid Response",.{})) {
-            .api_version => |api_version| std.log.info(
-                "Server API version: {}.{}.{}",
-                .{api_version.major, api_version.minor, api_version.patch,}
-            ),
-            .request_error => |req_err| std.log.err("{t}",.{req_err}),
-            else => std.log.err("Invalid Response",.{}),
+            .server => |server| std.log.info(
+                  "Server API version: {}.{}.{}",
+                  .{server.api.major, server.api.minor, server.api.patch,}
+              ),
+              .request_error => |req_err| std.log.err("{t}",.{req_err}),
+              else => std.log.err("Invalid Response",.{}),
         },
         .request_error => |req_err| std.log.err("{t}",.{req_err}),
         else => std.log.err("Invalid Response",.{}),
