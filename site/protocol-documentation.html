@@ -223,6 +223,33 @@
   
   
     <li class="md-nav__item">
+      <a href="changelog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="mmc-api.html" class="md-nav__link">
         
   
@@ -2207,13 +2234,13 @@ remains stored in a limited history buffer, and should be cleared with
 <td>stop</td>
 <td><a href="#mmc-command-Request-Stop">Request.Stop</a></td>
 <td></td>
-<td>Activate emergency stop for all drivers in line(s). Emergency stop will cause all carriers to deccelerate to rest, then reset all carriers&#39; movement commands.</td>
+<td>Activate emergency stop for all drivers in line(s). Emergency stop will cause all carriers to decelerate to rest, then reset all carriers&#39; movement commands.</td>
 </tr>
 <tr>
 <td>pause</td>
 <td><a href="#mmc-command-Request-Pause">Request.Pause</a></td>
 <td></td>
-<td>Activate pause for all drivers in line(s). Pause will cause all carriers to deccelerate to rest. On resume, the carriers will continue their previously assigned movement commands.</td>
+<td>Activate pause for all drivers in line(s). Pause will cause all carriers to decelerate to rest. On resume, the carriers will continue their previously assigned movement commands.</td>
 </tr>
 <tr>
 <td>resume</td>
@@ -2285,7 +2312,7 @@ remains stored in a limited history buffer, and should be cleared with
 </table>
 <p><a name="mmc-command-Request-Calibrate"></a></p>
 <h3 id="requestcalibrate">Request.Calibrate</h3>
-<p>Calibrate a line by positioning an unitiliazed carrier on the first axis
+<p>Calibrate a line by positioning an uninitialized carrier on the first axis
 of the line.</p>
 <p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 <table>
@@ -2309,8 +2336,8 @@ of the line.</p>
 <p><a name="mmc-command-Request-ClearErrors"></a></p>
 <h3 id="requestclearerrors">Request.ClearErrors</h3>
 <p>Clear all error information on the driver. If a target is specified,
-clear error information of drivers which is located on the target. If not,
-clear error information on every driver of the specified line ID.</p>
+clear error information of drivers included in that target. If not,
+clear error information on all drivers of the specified line ID.</p>
 <p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 <table>
 <thead>
@@ -2351,8 +2378,8 @@ clear error information on every driver of the specified line ID.</p>
 <p><a name="mmc-command-Request-Deinitialize"></a></p>
 <h3 id="requestdeinitialize">Request.Deinitialize</h3>
 <p>Clear carrier information located on the axis. If a target is specified,
-clear information of carriers which is located on the target. If not,
-clear all carrier information of the specified line ID</p>
+clear information of carriers included in that target. If not,
+clear all carrier information of the specified line ID.</p>
 <p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 <table>
 <thead>
@@ -2674,9 +2701,9 @@ continued once the resume command is given.</p>
 <p><a name="mmc-command-Request-Release"></a></p>
 <h3 id="requestrelease">Request.Release</h3>
 <p>Release the control imposed by the motor to the carrier. If a target is
-specified, the motor which is located on the target release the control.
-Otherwise, all carriers on the provided line will be released from control.
-Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+specified, all motors included in that target release control.
+Otherwise, all carriers on the provided line will be released from control.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
 <table>
 <thead>
 <tr>
@@ -3034,7 +3061,7 @@ then all pending carrier pushes on the line will be stopped.</p>
 <tr>
 <td>COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND</td>
 <td>12</td>
-<td>Attempted to send command to uninitialized carrier.</td>
+<td>Attempted to send command to an uninitialized carrier.</td>
 </tr>
 <tr>
 <td>COMMAND_REQUEST_ERROR_OUT_OF_MEMORY</td>
@@ -3049,7 +3076,7 @@ then all pending carrier pushes on the line will be stopped.</p>
 <tr>
 <td>COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID</td>
 <td>16</td>
-<td>Attempted to assign a new carrier with an ID that is already used by other carrier on the same line</td>
+<td>Attempted to assign a carrier ID that is already used by another carrier on the same line.</td>
 </tr>
 <tr>
 <td>COMMAND_REQUEST_ERROR_INVALID_COMMAND</td>
@@ -3992,7 +4019,7 @@ from the track.</p>
 <tr>
 <td>COMMAND_ERROR_INVALID_CARRIER_TARGET</td>
 <td>8</td>
-<td>Carrier targetting a location outside of the configured track.</td>
+<td>Carrier targeting a location outside of the configured track.</td>
 </tr>
 <tr>
 <td>COMMAND_ERROR_CONFLICTING_CARRIER_ID</td>

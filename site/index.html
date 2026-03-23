@@ -10,7 +10,7 @@
       
       
       
-        <link rel="next" href="mmc-api.html">
+        <link rel="next" href="changelog.html">
       
       
         
@@ -348,6 +348,33 @@
   
   
     <li class="md-nav__item">
+      <a href="changelog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="mmc-api.html" class="md-nav__link">
         
   
@@ -520,7 +547,7 @@
 <p>PMF provides the Motion Motor Control (MMC) system for controlling Linear Motor Systems (LMS) with ease and high precision.</p>
 <h2 id="getting-started">Getting started</h2>
 <h3 id="mmc-server">MMC Server</h3>
-<p>The MMC Server acts as an endpoint for multiple clients to interface with the LMS. The server must run on a PC connected to the first driver of the LMS. Contact our engineers to obtain the MMC Server files and organize them as follows:
+<p>The MMC Server acts as an endpoint that allows multiple clients to interface with the LMS. The server must run on a PC connected to the first driver of the LMS. Contact our engineers to obtain the MMC Server files and organize them as follows:
 <div class="no-copy highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mmc-server
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├─ config.json5
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├─ mmc.exe
@@ -539,7 +566,7 @@ Protobuf. For complete integration instructions, see the <a href="mmc-api.html">
 <h3 id="system-hierarchy">System Hierarchy</h3>
 <p>The following terms apply to the PMF MMC system:</p>
 <ul>
-<li><code>Sensor</code>: A hall sensor installed next to a motor to determine the accurate location of a carrier on a line.</li>
+<li><code>Sensor</code>: A hall sensor installed next to a motor to determine the precise location of a carrier on a line.</li>
 <li><code>Axis</code>: A functional unit consisting of one motor and the two adjacent hall sensors.</li>
 <li><code>Driver</code>: A physical board responsible for controlling one or more axes. The number of axes per driver is defined in the <code>config.json5</code> file. A single driver can control up to <strong>3 axes</strong>.</li>
 <li><code>Line</code>: A unit consisting of one or more drivers. Driver, axis, and carrier states are determined on a per-line basis.</li>
@@ -563,12 +590,12 @@ Protobuf. For complete integration instructions, see the <a href="mmc-api.html">
 <tr>
 <td style="text-align: left;"><strong>Line</strong></td>
 <td style="text-align: center;">256</td>
-<td style="text-align: left;">Maximum lines supported per track.</td>
+<td style="text-align: left;">Maximum number of lines supported per track.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Driver</strong></td>
 <td style="text-align: center;">256</td>
-<td style="text-align: left;">Maximum drivers per line.</td>
+<td style="text-align: left;">Maximum number of drivers per line.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Axis</strong></td>
@@ -578,7 +605,7 @@ Protobuf. For complete integration instructions, see the <a href="mmc-api.html">
 <tr>
 <td style="text-align: left;"><strong>Carrier</strong></td>
 <td style="text-align: center;">768</td>
-<td style="text-align: left;">Maximum number of moveable magnet per line.</td>
+<td style="text-align: left;">Maximum number of moveable magnets per line.</td>
 </tr>
 </tbody>
 </table>
