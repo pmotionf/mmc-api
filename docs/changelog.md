@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed: API version handling merged into server message structure
 
 - Removed: Unused protobuf enum values
-- Removed: Documentation component `stabledocs`
+- Removed: Documentation component `sabledocs`
 
 - Fixed: Documentation build issues
 
