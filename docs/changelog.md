@@ -28,5 +28,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.1] - 2026-01-21 
 - Changelog starting point
 
-[2.0.0]: https://github.com/pmotionf/mmc-api/compare/protobuf-api-1.2.0...protobuf-api-2.0.0
+[2.0.0]: https://github.com/pmotionf/mmc-api/releases/tag/protobuf-api-2.0.0
 [1.2.1]: https://github.com/pmotionf/mmc-api/releases/tag/protobuf-api-1.2.0
