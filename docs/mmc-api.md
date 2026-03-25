@@ -367,7 +367,7 @@ This section demonstrates how to construct and encode a request for transmission
                             .axis = 1,
                             .direction = .DIRECTION_BACKWARD,
                             .velocity = 1000,
-                            .acceleration = line.acceleration,
+                            .acceleration = 6000,
                         },
                     },
                 },
