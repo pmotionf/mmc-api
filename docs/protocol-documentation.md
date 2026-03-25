@@ -285,8 +285,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| drivers | [Range](#Range) |  | Driver ID range. |
-| axes | [Range](#Range) |  | Axis ID range. |
+| drivers | [Range](#-Range) |  | Driver ID range. |
+| axes | [Range](#-Range) |  | Axis ID range. |
 | carrier | [uint32](#uint32) |  | Carrier ID. |
 
 
@@ -307,8 +307,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| axes | [Range](#Range) |  | Axis ID range. |
-| drivers | [Range](#Range) |  | Driver ID range. |
+| axes | [Range](#-Range) |  | Axis ID range. |
+| drivers | [Range](#-Range) |  | Driver ID range. |
 | carrier | [uint32](#uint32) |  | Carrier ID. |
 
 
@@ -456,8 +456,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
 | carrier | [uint32](#uint32) |  | Carrier ID. |
-| axes | [Range](#Range) |  | Axis ID range. |
-| drivers | [Range](#Range) |  | Driver ID range. |
+| axes | [Range](#-Range) |  | Axis ID range. |
+| drivers | [Range](#-Range) |  | Driver ID range. |
 
 
 
@@ -569,7 +569,7 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| axes | [Range](#Range) | optional | Axis ID range. |
+| axes | [Range](#-Range) | optional | Axis ID range. |
 
 
 
@@ -588,7 +588,7 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| axes | [Range](#Range) | optional | Axis ID range. |
+| axes | [Range](#-Range) | optional | Axis ID range. |
 
 
 
@@ -892,8 +892,8 @@ Expected response: `mmc.Response.body.info.body.track`
 | info_axis_state | [bool](#bool) |  | Retrieve axis state information. |
 | info_axis_errors | [bool](#bool) |  | Retrieve axis errors information. |
 | info_carrier_state | [bool](#bool) |  | Retrieve carrier state information. |
-| drivers | [Range](#Range) |  | Retrieve information from driver ID range. Driver information flags will include drivers within this range. Axis information flags will include every axis belonging to the drivers in this range. Carrier information flags will include every carrier currently controlled by one of the drivers in this range. |
-| axes | [Range](#Range) |  | Retrieve information from axis ID range. Driver information flags will include drivers that contain one of the axes within this range. Axis information flags will include axes within this range. Carrier information flags will include every carrier currently controlled by one of the axes in this range. |
+| drivers | [Range](#-Range) |  | Retrieve information from driver ID range. Driver information flags will include drivers within this range. Axis information flags will include every axis belonging to the drivers in this range. Carrier information flags will include every carrier currently controlled by one of the drivers in this range. |
+| axes | [Range](#-Range) |  | Retrieve information from axis ID range. Driver information flags will include drivers that contain one of the axes within this range. Axis information flags will include axes within this range. Carrier information flags will include every carrier currently controlled by one of the axes in this range. |
 | carriers | [Request.Track.Ids](#mmc-info-Request-Track-Ids) |  | Retrieve information from carrier IDs. Driver information flags will include drivers that control one of the carriers within this list. Axis information flags will include axes that control one of the carriers within this list. Carrier information flags will include carriers within this list. |
 
 
@@ -1229,4 +1229,3 @@ List of IDs. At least one ID must be provided.
 | <a name="bool" /> bool |  | bool | boolean | boolean | bool | bool | boolean | TrueClass/FalseClass |
 | <a name="string" /> string | A string must always contain UTF-8 encoded or 7-bit ASCII text. | string | String | str/unicode | string | string | string | String (UTF-8) |
 | <a name="bytes" /> bytes | May contain any arbitrary sequence of bytes. | string | ByteString | str | []byte | ByteString | string | String (ASCII-8BIT) |
-

@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.0] - 2026-03-16
 
 - Added: API documentation
+- Added: New error codes  
+Review client code handling these enums:
+```
+mmc.command.Request.Error.COMMAND_REQUEST_ERROR_INVALID_COMMAND
+mmc.info.Request.Error.INFO_REQUEST_ERROR_COMMAND_NOT_FOUND
+mmc.info.Request.Error.INFO_REQUEST_ERROR_INVALID_COMMAND
+mmc.info.Request.Error.INFO_REQUEST_ERROR_INVALID_CARRIER
+```
+
 - Added: Carrier validation
 - Changed: **BREAKING** Ability to retrieve all track information without specifying a Line ID  
 Removed:
@@ -32,7 +41,7 @@ mmc.info.Response.Line.id
 ```
 
 - Changed: **BREAKING:** `velocity` and `acceleration` behaviour  
-Changed unit from `dm/s` to `mm/s` and `dm/s^2` to `mm/s^2`, respectively. Additionally, changed type from `uint32` to `float`:
+Changed unit from `dm/s` to `mm/s` and `dm/s^2` to `mm/s^2` respectively. Additionally changed type from `uint32` to `float`.
 ```
 mmc_client.Line.velocity
 mmc_client.Line.acceleration
@@ -45,7 +54,7 @@ Push.acceleration
 Pull.velocity
 Pull.acceleration
 ```
-Removed velocity mode enum and related fields:  
+Removed velocity mode enum and related fields  
 ```
 mmc.command.Request.VelocityMode
 mmc.command.Request.AutoInitialize.Line.velocity_mode
@@ -67,6 +76,11 @@ If you were using these carrier states, they have been removed:
 ```
 mmc.info.Response.Command.Carrier.State.CARRIER_STATE_PUSH_COMPLETED
 mmc.info.Response.Command.Carrier.State.CARRIER_STATE_PULL_COMPLETED
+```
+Use instead:
+```
+  mmc.info.Response.Command.Carrier.State.CARRIER_STATE_MOVE_COMPLETED
+```
 ```
 The following error enums were added:
 ```
