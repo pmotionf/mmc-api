@@ -439,8 +439,12 @@
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
 <h2 id="200-2026-03-16"><a href="https://github.com/pmotionf/mmc-api/releases/tag/protobuf-api-2.0.0">2.0.0</a> - 2026-03-16</h2>
 <ul>
-<li>Added: API documentation</li>
-<li>Added: Carrier validation</li>
+<li>
+<p>Added: API documentation</p>
+</li>
+<li>
+<p>Added: Carrier validation</p>
+</li>
 <li>
 <p>Changed: <strong>BREAKING</strong> Ability to retrieve all track information without specifying a Line ID<br />
 Removed:
@@ -463,7 +467,7 @@ Use instead:
 </li>
 <li>
 <p>Changed: <strong>BREAKING:</strong> <code>velocity</code> and <code>acceleration</code> behaviour<br />
-Changed unit from <code>dm/s</code> to <code>mm/s</code> and <code>dm/s^2</code> to <code>mm/s^2</code>, respectively. Additionally, changed type from <code>uint32</code> to <code>float</code>:
+Changed unit from <code>dm/s</code> to <code>mm/s</code> and <code>dm/s^2</code> to <code>mm/s^2</code> respectively. Additionally changed type from <code>uint32</code> to <code>float</code>.
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mmc_client.Line.velocity
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mmc_client.Line.acceleration
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>AutoInitialize.Line.velocity
@@ -475,7 +479,7 @@ Changed unit from <code>dm/s</code> to <code>mm/s</code> and <code>dm/s^2</code>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>Pull.velocity
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>Pull.acceleration
 </code></pre></div>
-Removed velocity mode enum and related fields:<br />
+Removed velocity mode enum and related fields<br />
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mmc.command.Request.VelocityMode
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>mmc.command.Request.AutoInitialize.Line.velocity_mode
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>mmc.command.Request.Move.velocity_mode

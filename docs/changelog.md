@@ -8,14 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.0] - 2026-03-16
 
 - Added: API documentation
-- Added: New error codes  
-Review client code handling these enums:
-```
-mmc.command.Request.Error.COMMAND_REQUEST_ERROR_INVALID_COMMAND
-mmc.info.Request.Error.INFO_REQUEST_ERROR_COMMAND_NOT_FOUND
-mmc.info.Request.Error.INFO_REQUEST_ERROR_INVALID_COMMAND
-mmc.info.Request.Error.INFO_REQUEST_ERROR_INVALID_CARRIER
-```
 
 - Added: Carrier validation
 - Changed: **BREAKING** Ability to retrieve all track information without specifying a Line ID  
