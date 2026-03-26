@@ -79,8 +79,7 @@ mmc.info.Response.Command.Carrier.State.CARRIER_STATE_PULL_COMPLETED
 ```
 Use instead:
 ```
-  mmc.info.Response.Command.Carrier.State.CARRIER_STATE_MOVE_COMPLETED
-```
+mmc.info.Response.Command.Carrier.State.CARRIER_STATE_MOVE_COMPLETED
 ```
 The following error enums were added:
 ```
