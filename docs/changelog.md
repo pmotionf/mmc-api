@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.0] - 2026-03-16
 
-- Added: API documentation
+### Added
+- API documentation
+- Carrier validation
 
-- Added: Carrier validation
-- Changed: **BREAKING** Ability to retrieve all track information without specifying a Line ID  
+### Changed
+- **BREAKING:** Ability to retrieve all track information without specifying a Line ID  
 Removed:
 ```
 mmc.info.Request.Track.line
@@ -20,7 +22,7 @@ Use instead:
 mmc.info.Request.Track.lines
 ```
 
-- Changed: **BREAKING:** Track info response structure updated  
+- **BREAKING:** Track info response structure updated  
 Removed:
 ```
 mmc.info.Response.Track.line 
@@ -32,7 +34,7 @@ mmc.info.Response.Track.lines
 mmc.info.Response.Line.id
 ```
 
-- Changed: **BREAKING:** `velocity` and `acceleration` behaviour  
+- **BREAKING:** `velocity` and `acceleration` behaviour  
 Changed unit from `dm/s` to `mm/s` and `dm/s^2` to `mm/s^2` respectively. Additionally changed type from `uint32` to `float`.
 ```
 mmc_client.Line.velocity
@@ -46,16 +48,8 @@ Push.acceleration
 Pull.velocity
 Pull.acceleration
 ```
-Removed velocity mode enum and related fields  
-```
-mmc.command.Request.VelocityMode
-mmc.command.Request.AutoInitialize.Line.velocity_mode
-mmc.command.Request.Move.velocity_mode
-mmc.command.Request.Push.velocity_mode
-mmc.command.Request.Pull.velocity_mode
-```
 
-- Changed: **BREAKING:** Error and state enum definitions updated  
+- **BREAKING:** Error and state enum definitions updated  
 If you were using these error enums, they have been removed:
 ```
 mmc.command.Request.Error.COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED
@@ -81,7 +75,7 @@ mmc.info.Request.Error.INFO_REQUEST_ERROR_INVALID_COMMAND
 mmc.info.Request.Error.INFO_REQUEST_ERROR_INVALID_CARRIER
 ```
 
-- Changed: **BREAKING:** Pull command target behavior  
+- **BREAKING:** Pull command target behavior  
 Removed:
 ```
 mmc.command.Request.Pull.Transition.axis
@@ -95,8 +89,8 @@ mmc.command.Request.Pull.Transition.target
 The behavior of `target` is equivalent to the previous `location` field.  
 Additional change: Pass `NaN` to pull without motor-controlled transition.
 
-- Changed: Release pipeline and artifacts updated
-- Changed: API version handling merged into server message structure  
+- Release pipeline and artifacts updated
+- API version handling merged into server message structure  
 Removed:
 ```
 mmc.core.Request.Kind.CORE_REQUEST_KIND_API_VERSION
@@ -108,8 +102,20 @@ mmc.core.Request.Kind.CORE_REQUEST_KIND_SERVER_INFO
 mmc.core.Response.Server.api
 ```
 
-- Removed: Documentation component `sabledocs`
+### Removed
 
+- `VelocityMode` enum and related fields  
+```
+mmc.command.Request.VelocityMode
+mmc.command.Request.AutoInitialize.Line.velocity_mode
+mmc.command.Request.Move.velocity_mode
+mmc.command.Request.Push.velocity_mode
+mmc.command.Request.Pull.velocity_mode
+```
+
+- Documentation component `sabledocs`
+
+### Fixed
 
 - Fixed: Documentation build issues
 
