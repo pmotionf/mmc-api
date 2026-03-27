@@ -3,7 +3,7 @@ PMF provides the Motion Motor Control (MMC) system for controlling Linear Motor 
 
 ## Getting started
 ### MMC Server
-The MMC Server acts as an endpoint for multiple clients to interface with the LMS. The server must run on a PC connected to the first driver of the LMS. Contact our engineers to obtain the MMC Server files and organize them as follows:
+The MMC Server acts as an endpoint that allows multiple clients to interface with the LMS. The server must run on a PC connected to the first driver of the LMS. Contact our engineers to obtain the MMC Server files and organize them as follows:
 ``` { .md .no-copy}
 mmc-server
 ├─ config.json5
@@ -27,7 +27,7 @@ This section defines the terminology used throughout the PMF MMC documentation.
 ### System Hierarchy
 The following terms apply to the PMF MMC system:
 
-- `Sensor`: A hall sensor installed next to a motor to determine the accurate location of a carrier on a line.
+- `Sensor`: A hall sensor installed next to a motor to determine the precise location of a carrier on a line.
 - `Axis`: A functional unit consisting of one motor and the two adjacent hall sensors.
 - `Driver`: A physical board responsible for controlling one or more axes. The number of axes per driver is defined in the `config.json5` file. A single driver can control up to **3 axes**.
 - `Line`: A unit consisting of one or more drivers. Driver, axis, and carrier states are determined on a per-line basis.
@@ -40,7 +40,7 @@ The following terms apply to the PMF MMC system:
 
 | Entity | Max ID | Calculation / Notes |
 | :--- | :---: | :--- |
-| **Line** | 256 | Maximum lines supported per track. |
-| **Driver** | 256 | Maximum drivers per line. |
+| **Line** | 256 | Maximum number of lines supported per track. |
+| **Driver** | 256 | Maximum number of drivers per line. |
 | **Axis** | 768 | Based on 256 drivers × 3 axes per driver. |
-| **Carrier** | 768 | Maximum number of moveable magnet per line. |
+| **Carrier** | 768 | Maximum number of moveable magnets per line. |

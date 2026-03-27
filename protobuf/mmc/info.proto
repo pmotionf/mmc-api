@@ -158,7 +158,7 @@ message Response {
       // Target driver is stopped while command progressing. Consider resume
       // the driver before sending further command.
       COMMAND_ERROR_DRIVER_STOPPED = 7;
-      // Carrier targetting a location outside of the configured track.
+      // Carrier targeting a location outside of the configured track.
       COMMAND_ERROR_INVALID_CARRIER_TARGET = 8;
       // Attempted to assign a new carrier with an ID that is already used by
       // other carrier on the same line
