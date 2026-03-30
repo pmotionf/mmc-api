@@ -789,10 +789,10 @@ Server version and name.
 | id | [uint32](#uint32) |  | Line ID. Numeric ID, starting from 1, that is unique to each line in the track. This ID is used to address the line in other requests. |
 | name | [string](#string) |  | Configured line name. This name is otherwise unused by the API, and is provided to the client for end-user convenience. |
 | axes | [uint32](#uint32) |  | Total number of axes in the line. |
-| axis_length | [float](#float) |  | Length of each axis in the line, in meters. |
-| carrier_length | [float](#float) |  | Carrier dimension parallel to carrier movement, in meters. |
+| axis_length | [float](#float) |  | Length of each axis in the line, in millimeters. |
+| carrier_length | [float](#float) |  | Carrier dimension parallel to carrier movement, in millimeters. |
 | drivers | [uint32](#uint32) |  | Total number of drivers in the line. |
-| carrier_width | [float](#float) |  | Carrier dimension perpendicular to carrier movement, in meters. |
+| carrier_width | [float](#float) |  | Carrier dimension perpendicular to carrier movement, in millimeters. |
 
 
 
