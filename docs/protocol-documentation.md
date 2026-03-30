@@ -790,8 +790,9 @@ Server version and name.
 | name | [string](#string) |  | Configured line name. This name is otherwise unused by the API, and is provided to the client for end-user convenience. |
 | axes | [uint32](#uint32) |  | Total number of axes in the line. |
 | axis_length | [float](#float) |  | Length of each axis in the line, in meters. |
-| carrier_length | [float](#float) |  | Carrier magnet length, in meters. |
+| carrier_length | [float](#float) |  | Carrier dimension parallel to carrier movement, in meters. |
 | drivers | [uint32](#uint32) |  | Total number of drivers in the line. |
+| carrier_width | [float](#float) |  | Carrier dimension perpendicular to carrier movement, in meters. |
 
 
 

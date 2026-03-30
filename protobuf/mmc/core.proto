@@ -51,10 +51,12 @@ message Response {
       uint32 axes = 3;
       // Length of each axis in the line, in meters.
       float axis_length = 4;
-      // Carrier magnet length, in meters.
+      // Carrier dimension parallel to carrier movement, in meters.
       float carrier_length = 5;
       // Total number of drivers in the line.
       uint32 drivers = 6;
+      // Carrier dimension perpendicular to carrier movement, in meters.
+      float carrier_width = 7;
     }
     // All configured lines in track.
     repeated Line lines = 1;
