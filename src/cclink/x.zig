@@ -6,46 +6,151 @@ const Direction = cclink.Direction;
 /// Registers written through CC-Link's "DevX" device. Used as a "read"
 /// register bank.
 pub const X = packed struct(u64) {
-    cc_link_enabled: bool = false,
-    command_ready: bool = false,
-    emergency_stop_enabled: bool = false,
-    paused: bool = false,
-    motor_active: packed struct(u3) {
+    cc_link_enabled: bool = false, //X00
+    service_enabled: bool = false, //X01
+    ready_for_command: bool = false, //X02
+    servo_active: packed struct(u2) { //X03-X05
         axis1: bool = false,
         axis2: bool = false,
         axis3: bool = false,
 
-        pub fn axis(self: @This(), a: u2) bool {
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
             return switch (a) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                3 => {
-                    std.log.err(
-                        "Invalid axis index 3 for `motor_active`",
-                        .{},
-                    );
-                    unreachable;
-                },
+                _ => error.InvalidAxis,
             };
         }
     } = .{},
-    calibrating: bool = false,
+    servo_enabled: bool = false, //X06
+    emergency_stop_enabled: bool = false, //X07
+    paused: bool = false, //X08
+    axis_slider_info_cleared: bool = false, //X09
+    command_received: bool = false, //X0A
+    axis_enabled: packed struct(u3) { //X0B,X0C,X0D
+        axis1: bool = false,
+        axis2: bool = false,
+        axis3: bool = false,
+
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
+            return switch (a) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                _ => error.InvalidAxis,
+            };
+        }
+    } = .{},
+    in_position: packed struct(u3) { //X0E,X0F,X10
+        axis1: bool = false,
+        axis2: bool = false,
+        axis3: bool = false,
+
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
+            return switch (a) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                _ => error.InvalidAxis,
+            };
+        }
+    } = .{},
+    entered_front: packed struct(u3) { //X11,X12,X13
+        axis1: bool = false,
+        axis2: bool = false,
+        axis3: bool = false,
+
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
+            return switch (a) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                _ => error.InvalidAxis,
+            };
+        }
+    } = .{},
+    entered_back: packed struct(u3) { //X14,X15,X16
+        axis1: bool = false,
+        axis2: bool = false,
+        axis3: bool = false,
+
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
+            return switch (a) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                _ => error.InvalidAxis,
+            };
+        }
+    } = .{},
+    transmission_stopped: packed struct(u2) { //X17,X18
+        from_prev: bool = false,
+        from_next: bool = false,
+
+        pub fn from(self: @This(), dir: Direction) bool {
+            return switch (dir) {
+                .backward => self.from_prev,
+                .forward => self.from_next,
+            };
+        }
+    } = .{},
+    errors_cleared: bool = false, //X19
+    communication_error: packed struct(u2) { //X1A,X1B
+        from_prev: bool = false,
+        from_next: bool = false,
+
+        pub fn from(self: @This(), dir: Direction) bool {
+            return switch (dir) {
+                .backward => self.from_prev,
+                .forward => self.from_next,
+            };
+        }
+    } = .{},
+    inverter_overheat_detected: bool = false, //X1C
+    overcurrent_detected: packed struct(u3) { //X1D,X1E,X1F
+        axis1: bool = false,
+        axis2: bool = false,
+        axis3: bool = false,
+
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
+            return switch (a) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                _ => error.InvalidAxis,
+            };
+        }
+    } = .{},
+    control_failure: packed struct(u3) { //X20,X21,X22
+        axis1: bool = false,
+        axis2: bool = false,
+        axis3: bool = false,
+
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
+            return switch (a) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                _ => error.InvalidAxis,
+            };
+        }
+    } = .{},
     hall_alarm: packed struct(u6) {
-        axis1: packed struct(u2) {
+        axis1: packed struct(u2) { //X23,X24
             back: bool = false,
             front: bool = false,
         } = .{},
-        axis2: packed struct(u2) {
+        axis2: packed struct(u2) { //X25,X26
             back: bool = false,
             front: bool = false,
         } = .{},
-        axis3: packed struct(u2) {
+        axis3: packed struct(u2) { //X27,X28
             back: bool = false,
             front: bool = false,
         } = .{},
 
-        pub fn axis(self: @This(), a: u2) packed struct(u2) {
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!packed struct(u2) {
             back: bool,
             front: bool,
         } {
@@ -62,98 +167,89 @@ pub const X = packed struct(u64) {
                     .back = self.axis3.back,
                     .front = self.axis3.front,
                 },
-                3 => {
-                    std.log.err("Invalid axis index 3 for `hall_alarm`", .{});
-                    unreachable;
-                },
+                _ => error.InvalidAxis,
             };
         }
     } = .{},
-    _0xE: u2 = 0,
-    errors_cleared: bool = false,
-    vdc_undervoltage_detected: bool = false,
-    vdc_overvoltage_detected: bool = false,
-    communication_error: packed struct(u2) {
-        from_prev: bool = false,
-        from_next: bool = false,
-
-        pub fn to(self: @This(), dir: Direction) bool {
-            return switch (dir) {
-                .backward => self.to_prev,
-                .forward => self.to_next,
-            };
-        }
-    } = .{},
-    inverter_overheat_detected: bool = false,
-    overcurrent_detected: packed struct(u3) {
+    self_pause: packed struct(u3) { //X29,X2A,X2B
         axis1: bool = false,
         axis2: bool = false,
         axis3: bool = false,
 
-        pub fn axis(self: @This(), a: u2) bool {
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
             return switch (a) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                3 => {
-                    std.log.err(
-                        "Invalid axis index 3 for `overcurrent_detected`",
-                        .{},
-                    );
-                    unreachable;
-                },
+                _ => error.InvalidAxis,
             };
         }
     } = .{},
-    control_loop_max_time_exceeded: bool = false,
-    _0x1A: u6 = 0,
-    wait_pull_carrier: packed struct(u3) {
+    pulling_slider: packed struct(u3) { //X2C,X2D,X2E
         axis1: bool = false,
         axis2: bool = false,
         axis3: bool = false,
 
-        pub fn axis(self: @This(), a: u2) bool {
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
             return switch (a) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                3 => {
-                    std.log.err(
-                        "Invalid axis index 3 for `wait_pull_carrier`",
-                        .{},
-                    );
-                    unreachable;
-                },
+                _ => error.InvalidAxis,
             };
         }
     } = .{},
-    wait_push_carrier: packed struct(u3) {
+    _x2f: u1 = 0, //X2F
+    hall_alarm_abnormal: packed struct(u6) {
+        axis1: packed struct(u2) { //X30,X31
+            back: bool = false,
+            front: bool = false,
+        } = .{},
+        axis2: packed struct(u2) { //X32,X33
+            back: bool = false,
+            front: bool = false,
+        } = .{},
+        axis3: packed struct(u2) { //X34,X35
+            back: bool = false,
+            front: bool = false,
+        } = .{},
+
+        pub fn axis(
+            self: @This(),
+            a: u2,
+        ) error{InvalidAxis}!packed struct(u2) { back: bool, front: bool } {
+            return switch (a) {
+                0 => .{
+                    .back = self.axis1.back,
+                    .front = self.axis1.front,
+                },
+                1 => .{
+                    .back = self.axis2.back,
+                    .front = self.axis2.front,
+                },
+                2 => .{
+                    .back = self.axis3.back,
+                    .front = self.axis3.front,
+                },
+                _ => error.InvalidAxis,
+            };
+        }
+    } = .{},
+    lockup: packed struct(u3) { //X36,X37,X38
         axis1: bool = false,
         axis2: bool = false,
         axis3: bool = false,
 
-        pub fn axis(self: @This(), a: u2) bool {
+        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
             return switch (a) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                3 => {
-                    std.log.err(
-                        "Invalid axis index 3 for `wait_push_carrier`",
-                        .{},
-                    );
-                    unreachable;
-                },
+                _ => error.InvalidAxis,
             };
         }
     } = .{},
-    _0x26: u10 = 0,
-    _0x30: u8 = 0,
-    initial_data_processing_request: bool = false,
-    initial_data_setting_complete: bool = false,
-    error_status: bool = false,
-    remote_ready: bool = false,
-    _60: u4 = 0,
+    _57: u7 = 0, //X39,X3A,X3B,X3C,X3D,X3E,X3F
 
     pub fn format(x: X, writer: anytype) !void {
         _ = try cclink.nestedWrite("X", x, 0, writer);

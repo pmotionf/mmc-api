@@ -14,6 +14,11 @@ pub const Direction = enum(u1) {
     }
 };
 
+pub const Distance = packed struct(u32) {
+    mm: i16 = 0,
+    um: i16 = 0,
+};
+
 pub fn nestedWrite(
     name: []const u8,
     val: anytype,
