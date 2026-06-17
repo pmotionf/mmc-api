@@ -9,7 +9,7 @@ pub const X = packed struct(u64) {
     cc_link_enabled: bool = false, //X00
     service_enabled: bool = false, //X01
     ready_for_command: bool = false, //X02
-    servo_active: packed struct(u2) { //X03-X05
+    servo_active: packed struct(u3) { //X03-X05
         axis1: bool = false,
         axis2: bool = false,
         axis3: bool = false,

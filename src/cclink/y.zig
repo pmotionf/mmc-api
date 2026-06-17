@@ -370,7 +370,7 @@ pub const Y = packed struct(u64) {
             }
         }
     } = .{},
-    _38: u25 = 0,
+    _38: u26 = 0,
 
     pub fn format(y: Y, writer: anytype) !void {
         _ = try cclink.nestedWrite("Y", y, 0, writer);
