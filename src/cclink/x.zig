@@ -20,7 +20,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -40,7 +40,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -55,7 +55,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -70,7 +70,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -85,7 +85,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -124,7 +124,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -139,7 +139,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -175,7 +175,7 @@ pub const X = packed struct(u64) {
                     .back = self.axis3.back,
                     .front = self.axis3.front,
                 },
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -190,7 +190,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -205,7 +205,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -242,7 +242,7 @@ pub const X = packed struct(u64) {
                     .back = self.axis3.back,
                     .front = self.axis3.front,
                 },
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -257,7 +257,7 @@ pub const X = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},

@@ -52,7 +52,7 @@ pub const Y = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
 
@@ -65,7 +65,7 @@ pub const Y = packed struct(u64) {
                 0 => self.axis1 = true,
                 1 => self.axis2 = true,
                 2 => self.axis3 = true,
-                _ => return error.InvalidAxis,
+                else => unreachable,
             }
         }
 
@@ -78,7 +78,7 @@ pub const Y = packed struct(u64) {
                 0 => self.axis1 = false,
                 1 => self.axis2 = false,
                 2 => self.axis3 = false,
-                _ => return error.InvalidAxis,
+                else => unreachable,
             }
         }
     } = .{},
@@ -144,7 +144,7 @@ pub const Y = packed struct(u64) {
                     .backward = self.axis3.backward,
                     .forward = self.axis3.forward,
                 },
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
 
@@ -185,7 +185,7 @@ pub const Y = packed struct(u64) {
                         self.axis3.backward = true;
                     },
                 },
-                _ => return error.InvalidAxis,
+                else => unreachable,
             }
         }
 
@@ -220,7 +220,7 @@ pub const Y = packed struct(u64) {
                         self.axis3.backward = false;
                     },
                 },
-                _ => return error.InvalidAxis,
+                else => unreachable,
             }
         }
     } = .{},
@@ -259,7 +259,7 @@ pub const Y = packed struct(u64) {
                     .backward = self.axis3.backward,
                     .forward = self.axis3.forward,
                 },
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
 
@@ -300,7 +300,7 @@ pub const Y = packed struct(u64) {
                         self.axis3.backward = true;
                     },
                 },
-                _ => return error.InvalidAxis,
+                else => unreachable,
             }
         }
 
@@ -335,7 +335,7 @@ pub const Y = packed struct(u64) {
                         self.axis3.backward = false;
                     },
                 },
-                _ => return error.InvalidAxis,
+                else => unreachable,
             }
         }
     } = .{},
@@ -352,7 +352,7 @@ pub const Y = packed struct(u64) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
 
@@ -364,7 +364,7 @@ pub const Y = packed struct(u64) {
                 0 => self.axis1 = true,
                 1 => self.axis2 = true,
                 2 => self.axis3 = true,
-                _ => return error.InvalidAxis,
+                else => unreachable,
             }
         }
 
@@ -377,7 +377,7 @@ pub const Y = packed struct(u64) {
                 0 => self.axis1 = false,
                 1 => self.axis2 = false,
                 2 => self.axis3 = false,
-                _ => return error.InvalidAxis,
+                else => unreachable,
             }
         }
     } = .{},

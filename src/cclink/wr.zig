@@ -17,7 +17,7 @@ pub const Wr = packed struct(u256) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -32,7 +32,7 @@ pub const Wr = packed struct(u256) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -47,7 +47,7 @@ pub const Wr = packed struct(u256) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
@@ -62,7 +62,7 @@ pub const Wr = packed struct(u256) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                _ => error.InvalidAxis,
+                else => unreachable,
             };
         }
     } = .{},
