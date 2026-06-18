@@ -46,8 +46,9 @@ pub const Y = packed struct(u64) {
         axis2: bool = false,
         axis3: bool = false,
 
-        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
-            return switch (a) {
+        pub fn axis(self: @This(), local_axis: u2) bool {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
@@ -58,7 +59,8 @@ pub const Y = packed struct(u64) {
         pub fn setAxis(
             self: *align(8:16:8) @This(),
             local_axis: u2,
-        ) error{InvalidAxis}!void {
+        ) void {
+            std.debug.assert(local_axis <= 2);
             switch (local_axis) {
                 0 => self.axis1 = true,
                 1 => self.axis2 = true,
@@ -70,7 +72,8 @@ pub const Y = packed struct(u64) {
         pub fn resetAxis(
             self: *align(8:16:8) @This(),
             local_axis: u2,
-        ) error{InvalidAxis}!void {
+        ) void {
+            std.debug.assert(local_axis <= 2);
             switch (local_axis) {
                 0 => self.axis1 = false,
                 1 => self.axis2 = false,
@@ -123,11 +126,12 @@ pub const Y = packed struct(u64) {
             forward: bool = false,
         } = .{},
 
-        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!packed struct(u2) {
+        pub fn axis(self: @This(), local_axis: u2) packed struct(u2) {
             backward: bool,
             forward: bool,
         } {
-            return switch (a) {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => .{
                     .backward = self.axis1.backward,
                     .forward = self.axis1.forward,
@@ -152,10 +156,11 @@ pub const Y = packed struct(u64) {
 
         pub fn setAxis(
             self: *align(8:21:8) @This(),
-            a: u2,
+            local_axis: u2,
             side: ChainSide,
-        ) error{InvalidAxis}!void {
-            switch (a) {
+        ) void {
+            std.debug.assert(local_axis <= 2);
+            switch (local_axis) {
                 0 => switch (side) {
                     .Forward => self.axis1.forward = true,
                     .Backward => self.axis1.backward = true,
@@ -186,10 +191,11 @@ pub const Y = packed struct(u64) {
 
         pub fn resetAxis(
             self: *align(8:21:8) @This(),
-            a: u2,
+            local_axis: u2,
             side: ChainSide,
-        ) error{InvalidAxis}!void {
-            switch (a) {
+        ) void {
+            std.debug.assert(local_axis <= 2);
+            switch (local_axis) {
                 0 => switch (side) {
                     .Forward => self.axis1.forward = false,
                     .Backward => self.axis1.backward = false,
@@ -234,12 +240,13 @@ pub const Y = packed struct(u64) {
 
         pub fn axis(
             self: @This(),
-            a: u2,
-        ) error{InvalidAxis}!packed struct(u2) {
+            local_axis: u2,
+        ) packed struct(u2) {
             backward: bool,
             forward: bool,
         } {
-            return switch (a) {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => .{
                     .backward = self.axis1.backward,
                     .forward = self.axis1.forward,
@@ -264,10 +271,11 @@ pub const Y = packed struct(u64) {
 
         pub fn setAxis(
             self: *align(8:27:8) @This(),
-            a: u2,
+            local_axis: u2,
             side: ChainSide,
-        ) error{InvalidAxis}!void {
-            switch (a) {
+        ) void {
+            std.debug.assert(local_axis <= 2);
+            switch (local_axis) {
                 0 => switch (side) {
                     .Forward => self.axis1.forward = true,
                     .Backward => self.axis1.backward = true,
@@ -298,10 +306,11 @@ pub const Y = packed struct(u64) {
 
         pub fn resetAxis(
             self: *align(8:27:8) @This(),
-            a: u2,
+            local_axis: u2,
             side: ChainSide,
-        ) error{InvalidAxis}!void {
-            switch (a) {
+        ) void {
+            std.debug.assert(local_axis <= 2);
+            switch (local_axis) {
                 0 => switch (side) {
                     .Forward => self.axis1.forward = false,
                     .Backward => self.axis1.backward = false,
@@ -337,8 +346,9 @@ pub const Y = packed struct(u64) {
         axis2: bool = false,
         axis3: bool = false,
 
-        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!bool {
-            return switch (a) {
+        pub fn axis(self: @This(), local_axis: u2) bool {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
@@ -349,7 +359,7 @@ pub const Y = packed struct(u64) {
         pub fn setAxis(
             self: *align(8:35:8) @This(),
             local_axis: u2,
-        ) error{InvalidAxis}!void {
+        ) void {
             switch (local_axis) {
                 0 => self.axis1 = true,
                 1 => self.axis2 = true,
@@ -361,7 +371,8 @@ pub const Y = packed struct(u64) {
         pub fn resetAxis(
             self: *align(8:35:8) @This(),
             local_axis: u2,
-        ) error{InvalidAxis}!void {
+        ) void {
+            std.debug.assert(local_axis <= 2);
             switch (local_axis) {
                 0 => self.axis1 = false,
                 1 => self.axis2 = false,

@@ -11,8 +11,9 @@ pub const Wr = packed struct(u256) {
         axis2: u16 = 0,
         axis3: u16 = 0,
 
-        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!u16 {
-            return switch (a) {
+        pub fn axis(self: @This(), local_axis: u2) u16 {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
@@ -25,8 +26,9 @@ pub const Wr = packed struct(u256) {
         axis2: Distance = .{},
         axis3: Distance = .{},
 
-        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!Distance {
-            return switch (a) {
+        pub fn axis(self: @This(), local_axis: u2) Distance {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
@@ -39,8 +41,9 @@ pub const Wr = packed struct(u256) {
         axis2: SliderStateCode = .None,
         axis3: SliderStateCode = .None,
 
-        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!SliderStateCode {
-            return switch (a) {
+        pub fn axis(self: @This(), local_axis: u2) SliderStateCode {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
@@ -53,8 +56,9 @@ pub const Wr = packed struct(u256) {
         axis2: i16 = 0,
         axis3: i16 = 0,
 
-        pub fn axis(self: @This(), a: u2) error{InvalidAxis}!i16 {
-            return switch (a) {
+        pub fn axis(self: @This(), local_axis: u2) i16 {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
