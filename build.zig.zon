@@ -8,10 +8,6 @@
             .url = "https://github.com/Arwalk/zig-protobuf/archive/7673d62.tar.gz",
             .hash = "protobuf-3.0.0-0e82auyUKACQqyLICPhWm6kJoAru5DNP-idAJMP1W94r",
         },
-        .mdfunc = .{
-            .url = "https://github.com/pmotionf/mdfunc.zig/archive/6d70ce0.tar.gz",
-            .hash = "mdfunc-0.0.5-k9D_qBiuAADEPbD9zlxCm_bwaA41w9vCZuVH-ENIdkFe",
-        },
     },
     .paths = .{""},
 }
