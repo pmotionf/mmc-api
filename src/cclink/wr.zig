@@ -1,115 +1,159 @@
 const std = @import("std");
 const cclink = @import("../cclink.zig");
 
+const Distance = cclink.Distance;
 /// Registers written through CC-Link's "DevWr" device. Used as a "read"
 /// register bank.
 pub const Wr = packed struct(u256) {
-    command_response: CommandResponseCode = .none,
-    _16: u48 = 0,
-    carrier: packed struct(u192) {
-        axis1: Carrier = .{},
-        axis2: Carrier = .{},
-        axis3: Carrier = .{},
+    command_response: CommandResponseCode = .NoError,
+    slider_number: packed struct(u48) {
+        axis1: u16 = 0,
+        axis2: u16 = 0,
+        axis3: u16 = 0,
 
-        pub fn axis(self: @This(), a: u2) Carrier {
-            return switch (a) {
+        pub fn axis(self: @This(), local_axis: u2) u16 {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
                 0 => self.axis1,
                 1 => self.axis2,
                 2 => self.axis3,
-                3 => {
-                    std.log.err(
-                        "Invalid axis index 3 for `carrier`",
-                        .{},
-                    );
-                    unreachable;
-                },
+                else => unreachable,
+            };
+        }
+    } = .{},
+    slider_location: packed struct(u96) {
+        axis1: Distance = .{},
+        axis2: Distance = .{},
+        axis3: Distance = .{},
+
+        pub fn axis(self: @This(), local_axis: u2) Distance {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                else => unreachable,
+            };
+        }
+    } = .{},
+    slider_state: packed struct(u48) {
+        axis1: SliderStateCode = .None,
+        axis2: SliderStateCode = .None,
+        axis3: SliderStateCode = .None,
+
+        pub fn axis(self: @This(), local_axis: u2) SliderStateCode {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                else => unreachable,
+            };
+        }
+    } = .{},
+    pitch_count: packed struct(u48) {
+        axis1: i16 = 0,
+        axis2: i16 = 0,
+        axis3: i16 = 0,
+
+        pub fn axis(self: @This(), local_axis: u2) i16 {
+            std.debug.assert(local_axis <= 2);
+            return switch (local_axis) {
+                0 => self.axis1,
+                1 => self.axis2,
+                2 => self.axis3,
+                else => unreachable,
             };
         }
     } = .{},
 
-    pub const Carrier = packed struct(u64) {
-        location: f32 = 0.0,
-        id: u10 = 0,
-        _42: u6 = 0,
-        arrived: bool = false,
-        auxiliary: bool = false,
-        enabled: bool = false,
-        /// Whether carrier is currently in quasi-enabled state. Quasi-enabled
-        /// state occurs when carrier is first entering a module, before it
-        /// has entered module enough to start servo control.
-        quasi: bool = false,
-        cas: packed struct {
-            /// Whether carrier's CAS (collision avoidance system) is enabled.
-            enabled: bool = false,
-            /// Whether carrier's CAS (collision avoidance system) is triggered.
-            triggered: bool = false,
-        } = .{},
-        initialized: bool = false,
-        _55: u1 = 0,
-        state: State = .none,
-        _60: u4 = 0,
-
-        pub const State = enum(u4) {
-            none = 0x0,
-
-            warmup_progressing,
-            warmup_completed,
-
-            move,
-            auxiliary,
-
-            forward_calibration_progressing,
-            forward_calibration_completed,
-            backward_calibration_progressing,
-            backward_calibration_completed,
-
-            forward_isolation_progressing,
-            forward_isolation_completed,
-            backward_isolation_progressing,
-            backward_isolation_completed,
-
-            pull,
-            push,
-
-            overcurrent,
-        };
-    };
-
-    pub const CommandResponseCode = enum(u16) {
-        none = 0,
-        success = 1,
-        invalid_cmd,
-        invalid_axis_id,
-        invalid_carrier_id,
-        conflicting_carrier_id,
-        invalid_carrier_target,
-        invalid_carrier_control,
-        invalid_carrier_vel,
-        invalid_carrier_acc,
-        carrier_not_found,
-        carrier_already_initialized,
-        invalid_parameters,
-        invalid_system_state,
-        _,
+    pub const CommandResponseCode = enum(i16) {
+        NoError = 0,
+        InvalidCommand = 1,
+        SliderNotFound = 2,
+        HomingFailed = 3,
+        InvalidParameter = 4,
+        InvalidSystemState = 5,
+        SliderAlreadyExists = 6,
+        InvalidAxis = 7,
 
         pub fn throwError(code: CommandResponseCode) !void {
             return switch (code) {
-                .none, .success => {},
-                .invalid_cmd => return error.InvalidCommand,
-                .invalid_axis_id => return error.InvalidAxis,
-                .invalid_carrier_id => return error.InvalidCarrierId,
-                .invalid_carrier_target => return error.InvalidCarrierTarget,
-                .invalid_carrier_control => return error.InvalidCarrierControl,
-                .invalid_carrier_vel => return error.InvalidCarrierVelocity,
-                .invalid_carrier_acc => return error.InvalidCarrierAcceleration,
-                .carrier_not_found => return error.CarrierNotFound,
-                .carrier_already_initialized => return error.CarrierAlreadyInitialized,
-                .invalid_parameters => return error.InvalidParameters,
-                .invalid_system_state => return error.InvalidSystemState,
-                .conflicting_carrier_id => return error.ConflictingCarrierId,
-                _ => return error.Unexpected,
+                .NoError => {},
+                .InvalidCommand => error.InvalidCommand,
+                .SliderNotFound => error.SliderNotFound,
+                .HomingFailed => error.HomingFailed,
+                .InvalidParameter => error.InvalidParameter,
+                .InvalidSystemState => error.InvalidSystemState,
+                .SliderAlreadyExists => error.SliderAlreadyExists,
+                .InvalidAxis => error.InvalidAxis,
             };
         }
+    };
+
+    pub const SliderStateCode = enum(u16) {
+        None = 0,
+        WarmupProgressing = 1,
+        WarmupCompleted = 2,
+        WarmupFault = 3,
+        CurrentBiasProgressing = 4,
+        CurrentBiasCompleted = 5,
+        HomeForward = 6,
+        HomeBackward = 7,
+        RampForwardProgressing = 8,
+        RampForwardCompleted = 9,
+        RampForwardFault = 10,
+        RampBackwardProgressing = 11,
+        RampBackwardCompleted = 12,
+        RampBackwardFault = 13,
+        CurrentStepProgressing = 20,
+        CurrentStepCompleted = 21,
+        CurrentStepFault = 22,
+        SpeedStepProgressing = 23,
+        SpeedStepCompleted = 24,
+        SpeedStepFault = 25,
+        PosStepProgressing = 26,
+        PosStepCompleted = 27,
+        PosStepFault = 28,
+        PosMoveProgressing = 29,
+        PosMoveCompleted = 30,
+        PosMoveFault = 31,
+        ForwardCalibrationProgressing = 32,
+        ForwardCalibrationCompleted = 33,
+        BackwardIsolationProgressing = 34,
+        BackwardIsolationCompleted = 35,
+        ForwardRecoveryProgressing = 36,
+        ForwardRecoveryCompleted = 37,
+        BackwardRecoveryProgressing = 38,
+        BackwardRecoveryCompleted = 39,
+        SpdMoveProgressing = 40,
+        SpdMoveCompleted = 41,
+        SpdMoveFault = 42,
+        NextAxisAuxiliary = 43,
+        // Note: Next Axis Completed will show even when the next axis is
+        // progressing, if the slider is paused for collision avoidance on the
+        // next axis.
+        NextAxisCompleted = 44,
+        PrevAxisAuxiliary = 45,
+        // Note: Prev Axis Completed will show even when the prev axis is
+        // progressing, if the slider is paused for collision avoidance on the
+        // prev axis.
+        PrevAxisCompleted = 46,
+        ForwardIsolationProgressing = 47,
+        ForwardIsolationCompleted = 48,
+        Overcurrent = 50,
+        CommunicationError = 51,
+        PullForwardProgressing = 52,
+        PullForwardCompleted = 53,
+        PullForwardFault = 54,
+        PullBackwardProgressing = 55,
+        PullBackwardCompleted = 56,
+        PullBackwardFault = 57,
+        BackwardCalibrationProgressing = 58,
+        BackwardCalibrationCompleted = 59,
+        BackwardCalibrationFault = 60,
+        ForwardCalibrationFault = 61,
+        _,
     };
 
     pub fn format(wr: Wr, writer: anytype) !void {

@@ -14,6 +14,26 @@ pub const Direction = enum(u1) {
     }
 };
 
+pub const Distance = packed struct(u32) {
+    mm: i16 = 0,
+    um: i16 = 0,
+
+    /// Cast distance value to millimeter floating point
+    pub fn toFloat(self: @This()) f32 {
+        return @as(f32, @floatFromInt(self.mm)) * 1 +
+            @as(f32, @floatFromInt(self.um)) * 0.001;
+    }
+
+    /// Cast millimiter unit value to Distance type
+    pub fn fromFloat(f: f32) @This() {
+        const mm: f32 = @trunc(f);
+        return .{
+            .mm = @intFromFloat(mm),
+            .um = @intFromFloat((f - mm) * 1000.0),
+        };
+    }
+};
+
 pub fn nestedWrite(
     name: []const u8,
     val: anytype,

@@ -1,61 +1,45 @@
 const std = @import("std");
 const cclink = @import("../cclink.zig");
 
+const Distance = cclink.Distance;
+
 /// Registers written through CC-Link's "DevWw" device. Used as a "write"
 /// register bank.
 pub const Ww = packed struct(u256) {
-    command: Command = .none,
-    axis: u16 = 0,
-    carrier: packed struct(u80) {
-        target: f32 = 0.0,
-        id: u10 = 0,
-        control_kind: ControlKind = .none,
-        disable_cas: bool = false,
-        isolate_link_prev_axis: bool = false,
-        isolate_link_next_axis: bool = false,
-        _46: u1 = 0,
-        velocity: u10 = 0,
-        /// Determines how the velocity value is interpreted:
-        /// - `false`: `velocity = 1` corresponds to 100 mm/s
-        /// - `true`:  `velocity = 1` corresponds to 0.1 mm/s
-        low_velocity: bool = false,
-        _59: u5 = 0,
-        acceleration: u16 = 0,
-    } = .{},
+    command_code: CommandCode = .None,
+    command_slider_number: u16 = 0,
+    target_axis_number: u16 = 0,
+    location_distance: Distance = .{},
+    speed_percentage: u16 = 0,
+    acceleration_percentage: u16 = 0,
     _112: u144 = 0,
 
-    pub const ControlKind = enum(u2) {
-        none = 0,
-        velocity = 1,
-        position = 2,
-    };
-
-    pub const Command = enum(i16) {
-        none = 0x0,
-
-        /// Find and set zero offset of axis's hall sensor angles.
-        set_sensors_zero = 0x1,
-        /// Set zero point of line at current carrier position.
-        set_line_zero = 0x2,
-
-        initialize_fwd = 0x3,
-        initialize_bwd = 0x4,
-
-        /// Set initialized carrier's ID at axis.
-        set_id_axis = 0x6,
-
-        /// Release carrier control.
-        release = 0x7,
-        /// Deinitialize carrier, releasing control and erasing stored info.
-        deinitialize = 0x8,
-
-        /// Absolute location movement.
-        move_abs = 0x10,
-        /// Relative distance movement.
-        move_rel = 0x11,
-
-        push = 0x20,
-        pull = 0x21,
+    pub const CommandCode = enum(u16) {
+        None = 0,
+        Home = 17,
+        // "By Position" commands calculate slider movement by constant hall
+        // sensor position feedback, and is much more precise in destination.
+        MoveSliderToAxisByPosition = 18,
+        MoveSliderToLocationByPosition = 19,
+        MoveSliderDistanceByPosition = 20,
+        // "By Speed" commands calculate slider movement by constant hall
+        // sensor speed feedback. It should mostly not be used, as the
+        // destination position becomes far too imprecise. However, it is
+        // meant to maintain a certain speed while the slider is traveling, and
+        // to avoid the requirement of having a known system position.
+        MoveSliderToAxisBySpeed = 21,
+        MoveSliderToLocationBySpeed = 22,
+        MoveSliderDistanceBySpeed = 23,
+        IsolateForward = 24,
+        IsolateBackward = 25,
+        Calibration = 26,
+        RecoverSystemSliders = 27,
+        RecoverSliderAtAxis = 28,
+        PushAxisSliderForward = 30,
+        PushAxisSliderBackward = 31,
+        PullAxisSliderForward = 32,
+        PullAxisSliderBackward = 33,
+        _,
     };
 
     pub fn format(ww: Ww, writer: anytype) !void {
@@ -65,15 +49,6 @@ pub const Ww = packed struct(u256) {
 
 test "Ww" {
     try std.testing.expectEqual(32, @sizeOf(Ww));
-    try std.testing.expectEqual(
-        32,
-        @bitSizeOf(
-            @FieldType(
-                @FieldType(Ww, "carrier"),
-                "target",
-            ),
-        ),
-    );
 }
 
 test {
