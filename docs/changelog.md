@@ -75,11 +75,9 @@ Removed:
 ```
 mmc.command.Request.set_zero
 mmc.command.Request.stop_push
-mmc.command.Request.set_carrier_id
 ```
-The zero-point is set after using the `calibrate` command. 
+The zero-point is set after using the `calibrate` command.  
 Push only works now when there is a carrier on the pushing axis. 
-To change a carrier ID, use `deinitialize` and `initialize` with a new ID.
 
 
 - **BREAKING:** Removed support for CAS  

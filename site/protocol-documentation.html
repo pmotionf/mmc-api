@@ -614,6 +614,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#requestsetcarrierid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.SetCarrierId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#requeststop" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1399,6 +1410,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#requestsetcarrierid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request.SetCarrierId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#requeststop" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1930,6 +1952,7 @@
 <li><a href="#mmc-command-Request-Release">Request.Release</a></li>
 <li><a href="#mmc-command-Request-RemoveCommand">Request.RemoveCommand</a></li>
 <li><a href="#mmc-command-Request-Resume">Request.Resume</a></li>
+<li><a href="#mmc-command-Request-SetCarrierId">Request.SetCarrierId</a></li>
 <li><a href="#mmc-command-Request-Stop">Request.Stop</a></li>
 <li><a href="#mmc-command-Request-StopPull">Request.StopPull</a></li>
 <li>
@@ -2235,6 +2258,12 @@ remains stored in a limited history buffer, and should be cleared with
 <td><a href="#mmc-command-Request-Resume">Request.Resume</a></td>
 <td></td>
 <td>Deactivate emergency stop and pause for all drivers in line(s).</td>
+</tr>
+<tr>
+<td>set_carrier_id</td>
+<td><a href="#mmc-command-Request-SetCarrierId">Request.SetCarrierId</a></td>
+<td></td>
+<td>Change an existing carrier ID to a new unique carrier ID.</td>
 </tr>
 <tr>
 <td>group</td>
@@ -2763,6 +2792,41 @@ or emergency stopped, this command will succeed without any effect.</p>
 <td><a href="#uint32">uint32</a></td>
 <td>repeated</td>
 <td>Line ID. If provided, resume operations only to those specified lines.</td>
+</tr>
+</tbody>
+</table>
+<p><a name="mmc-command-Request-SetCarrierId"></a></p>
+<h3 id="requestsetcarrierid">Request.SetCarrierId</h3>
+<p>Change the carrier ID of an existing initialized carrier. If the new
+carrier ID already exists on the line, returns INVALID_CARRIER.</p>
+<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Label</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>line</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Line ID.</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>Target existing initialized carrier ID.</td>
+</tr>
+<tr>
+<td>new_carrier</td>
+<td><a href="#uint32">uint32</a></td>
+<td></td>
+<td>New desired carrier ID (unique in line).</td>
 </tr>
 </tbody>
 </table>

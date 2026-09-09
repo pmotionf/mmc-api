@@ -11,8 +11,8 @@ import "range.proto";
 // remains stored in a limited history buffer, and should be cleared with
 // `remove_command` after completion.
 message Request {
-    reserved 2, 10, 17;
-    reserved "set_zero", "stop_push", "set_carrier_id";
+    reserved 2, 10;
+    reserved "set_zero", "stop_push";
   oneof body {
     // Calibrate a line. This command only needs to be run once after hardware
     // setup; calibrated values will remain stored in drivers even after a
@@ -51,6 +51,8 @@ message Request {
     Pause pause = 15;
     // Deactivate emergency stop and pause for all drivers in line(s).
     Resume resume = 16;
+    // Change an existing carrier ID to a new unique carrier ID.
+    SetCarrierId set_carrier_id = 17;
     // Send multiple moves and push commands at once. The order of execution
     // depends on the order of the move in the buffer. Group move command
     // removes the delay of commands sent to different driver caused by
@@ -286,6 +288,19 @@ message Request {
   message Resume {
     // Line ID. If provided, resume operations only to those specified lines.
     repeated uint32 lines = 1;
+  }
+
+  // Change the carrier ID of an existing initialized carrier. If the new
+  // carrier ID already exists on the line, returns INVALID_CARRIER.
+  //
+  // Expected response: `mmc.Response.body.command.body.id` (uint32).
+  message SetCarrierId {
+    // Line ID.
+    uint32 line = 1;
+    // Target existing initialized carrier ID.
+    uint32 carrier = 2;
+    // New desired carrier ID (unique in line).
+    uint32 new_carrier = 3;
   }
 
   enum Direction {

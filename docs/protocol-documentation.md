@@ -29,6 +29,7 @@
     - [Request.Release](#mmc-command-Request-Release)
     - [Request.RemoveCommand](#mmc-command-Request-RemoveCommand)
     - [Request.Resume](#mmc-command-Request-Resume)
+    - [Request.SetCarrierId](#mmc-command-Request-SetCarrierId)
     - [Request.Stop](#mmc-command-Request-Stop)
     - [Request.StopPull](#mmc-command-Request-StopPull)
     - [Response](#mmc-command-Response)
@@ -211,6 +212,7 @@ remains stored in a limited history buffer, and should be cleared with
 | stop | [Request.Stop](#mmc-command-Request-Stop) |  | Activate emergency stop for all drivers in line(s). Emergency stop will cause all carriers to decelerate to rest, then reset all carriers&#39; movement commands. |
 | pause | [Request.Pause](#mmc-command-Request-Pause) |  | Activate pause for all drivers in line(s). Pause will cause all carriers to decelerate to rest. On resume, the carriers will continue their previously assigned movement commands. |
 | resume | [Request.Resume](#mmc-command-Request-Resume) |  | Deactivate emergency stop and pause for all drivers in line(s). |
+| set_carrier_id | [Request.SetCarrierId](#mmc-command-Request-SetCarrierId) |  | Change an existing carrier ID to a new unique carrier ID. |
 | group | [Request.Group](#mmc-command-Request-Group) |  | Send multiple moves and push commands at once. The order of execution depends on the order of the move in the buffer. Group move command removes the delay of commands sent to different driver caused by processing time of a driver to fully execute a command. Canceling this command will only cancel commands that are not being executed yet by the target driver. |
 
 
@@ -504,6 +506,26 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | lines | [uint32](#uint32) | repeated | Line ID. If provided, resume operations only to those specified lines. |
+
+
+
+
+
+
+<a name="mmc-command-Request-SetCarrierId"></a>
+
+### Request.SetCarrierId
+Change the carrier ID of an existing initialized carrier. If the new
+carrier ID already exists on the line, returns INVALID_CARRIER.
+
+Expected response: `mmc.Response.body.command.body.id` (uint32).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| line | [uint32](#uint32) |  | Line ID. |
+| carrier | [uint32](#uint32) |  | Target existing initialized carrier ID. |
+| new_carrier | [uint32](#uint32) |  | New desired carrier ID (unique in line). |
 
 
 

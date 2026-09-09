@@ -16,6 +16,7 @@ pub const Ww = packed struct(u256) {
 
     pub const CommandCode = enum(u16) {
         None = 0,
+        SetSliderId = 6,
         Home = 17,
         // "By Position" commands calculate slider movement by constant hall
         // sensor position feedback, and is much more precise in destination.
