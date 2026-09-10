@@ -775,14 +775,15 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 <h3 id="changed">Changed</h3>
 <ul>
 <li>
-<p><strong>BREAKING:</strong> Release command structure<br />
+<p><strong>BREAKING:</strong> Release command<br />
 Removed:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>mmc.command.Request.Release.target
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>mmc.command.Request.release
 </code></pre></div>
 Use instead:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mmc.command.Request.Release.drivers
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mmc.command.Request.servo_off
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mmc.command.Request.servo_on
 </code></pre></div>
-Release command releases every carrier on the selected driver.</p>
+Release control of a carrier by turning the servo off and re-enable by turning the servo on. </p>
 </li>
 <li>
 <p><strong>BREAKING:</strong> Push command structure<br />
