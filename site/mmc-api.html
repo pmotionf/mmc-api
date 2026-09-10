@@ -463,10 +463,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#release-carrier" class="md-nav__link">
+  <a href="#servooff" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Release Carrier
+        ServoOFF
       
     </span>
   </a>
@@ -812,10 +812,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#release-carrier" class="md-nav__link">
+  <a href="#servooff" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Release Carrier
+        ServoOFF
       
     </span>
   </a>
@@ -1451,14 +1451,14 @@
 </div>
 </div>
 </div>
-<h4 id="release-carrier"><a href="protocol-documentation.html#requestrelease">Release Carrier</a></h4>
+<h4 id="servooff"><a href="protocol-documentation.html#requestservooff">ServoOFF</a></h4>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>Release control of carriers on a specified driver, allowing these carriers to be moved manually or by external systems.</p>
+<p>Release control of carriers on specified axes, allowing these carriers to be moved manually or by external systems.</p>
 </div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p>Release control of carriers on driver 1, line 1.</p>
+<p>Release control of carriers on axis 1, line 1.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">zig</label><label for="__tabbed_8_2">python</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -1469,9 +1469,9 @@
 <a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="p">.</span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span>
 <a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">        </span><span class="p">.</span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span>
 <a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">            </span><span class="p">.</span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">                </span><span class="p">.</span><span class="n">release</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">                </span><span class="p">.</span><span class="n">servo_off</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span>
 <a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">                    </span><span class="p">.</span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">                    </span><span class="p">.</span><span class="n">drivers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">                    </span><span class="p">.</span><span class="n">axes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span>
 <a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">                        </span><span class="p">.</span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">                        </span><span class="p">.</span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">                    </span><span class="p">},</span>
@@ -1487,9 +1487,9 @@
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Create a request</span>
 <a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">request</span> <span class="o">=</span> <span class="n">mmc</span><span class="o">.</span><span class="n">Request</span><span class="p">()</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">request</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">release</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="mi">1</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="n">request</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">release</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mi">1</span>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="n">request</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">release</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="mi">1</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">request</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">servo_off</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="mi">1</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="n">request</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">servo_off</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mi">1</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="n">request</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">servo_off</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="mi">1</span>
 </code></pre></div>
 </div>
 </div>
