@@ -26,9 +26,10 @@
     - [Request.Pause](#mmc-command-Request-Pause)
     - [Request.Pull](#mmc-command-Request-Pull)
     - [Request.Push](#mmc-command-Request-Push)
-    - [Request.Release](#mmc-command-Request-Release)
     - [Request.RemoveCommand](#mmc-command-Request-RemoveCommand)
     - [Request.Resume](#mmc-command-Request-Resume)
+    - [Request.ServoOFF](#mmc-command-Request-ServoOFF)
+    - [Request.ServoON](#mmc-command-Request-ServoON)
     - [Request.SetCarrierId](#mmc-command-Request-SetCarrierId)
     - [Request.Stop](#mmc-command-Request-Stop)
     - [Request.StopPull](#mmc-command-Request-StopPull)
@@ -206,7 +207,8 @@ remains stored in a limited history buffer, and should be cleared with
 | pull | [Request.Pull](#mmc-command-Request-Pull) |  | Pull and initialize a new carrier into a line. |
 | push | [Request.Push](#mmc-command-Request-Push) |  | Push an initialized carrier to the specified direction. |
 | stop_pull | [Request.StopPull](#mmc-command-Request-StopPull) |  | Stop waiting to pull a new carrier at an axis. |
-| release | [Request.Release](#mmc-command-Request-Release) |  | Release the motor control of a carrier. |
+| servo_on | [Request.ServoON](#mmc-command-Request-ServoON) |  | Re-enable motor control of a carrier. |
+| servo_off | [Request.ServoOFF](#mmc-command-Request-ServoOFF) |  | Release the motor control of a carrier. |
 | clear_errors | [Request.ClearErrors](#mmc-command-Request-ClearErrors) |  | Clear all errors within the specified driver range. |
 | remove_command | [Request.RemoveCommand](#mmc-command-Request-RemoveCommand) |  | Cancel a running command or remove its status history. |
 | stop | [Request.Stop](#mmc-command-Request-Stop) |  | Activate emergency stop for all drivers in line(s). Emergency stop will cause all carriers to decelerate to rest, then reset all carriers&#39; movement commands. |
@@ -457,24 +459,6 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 
 
 
-<a name="mmc-command-Request-Release"></a>
-
-### Request.Release
-Release control of the driver&#39;s motors to all carriers on the selected driver.
-
-Expected response: `mmc.Response.body.command.body.id` (uint32).
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| line | [uint32](#uint32) |  | Line ID. |
-| drivers | [root.Range](#root-Range) | optional | Driver ID range. |
-
-
-
-
-
-
 <a name="mmc-command-Request-RemoveCommand"></a>
 
 ### Request.RemoveCommand
@@ -506,6 +490,43 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | lines | [uint32](#uint32) | repeated | Line ID. If provided, resume operations only to those specified lines. |
+
+
+
+
+
+
+<a name="mmc-command-Request-ServoOFF"></a>
+
+### Request.ServoOFF
+Release control of the driver&#39;s motor to a carrier on the selected axes.
+
+Expected response: `mmc.Response.body.command.body.id` (uint32).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| line | [uint32](#uint32) |  | Line ID. |
+| axes | [root.Range](#root-Range) | optional | Axes ID range. |
+
+
+
+
+
+
+<a name="mmc-command-Request-ServoON"></a>
+
+### Request.ServoON
+Re-enables control of the driver&#39;s motors to all carriers on the selected
+axes.
+
+Expected response: `mmc.Response.body.command.body.id` (uint32).
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| line | [uint32](#uint32) |  | Line ID. |
+| axes | [root.Range](#root-Range) | optional | Axes ID range. |
 
 
 
