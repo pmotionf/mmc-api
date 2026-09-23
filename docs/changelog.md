@@ -29,17 +29,16 @@ mmc.info.Response.Line.Register.value
 ```
 
 ### Changed
-- **BREAKING:** Release command  
+- **BREAKING:** Release command structure  
 Removed:
 ```
-mmc.command.Request.release
+mmc.command.Request.Release.target
 ```
 Use instead:
 ```
-mmc.command.Request.servo_off
-mmc.command.Request.servo_on
+mmc.command.Request.Release.drivers
 ```
-Release control of a carrier by turning the servo off and re-enable by turning the servo on. 
+Release command releases every carrier on the selected driver.
 
 - **BREAKING:** Push command structure  
 Removed: 

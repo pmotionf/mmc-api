@@ -27,8 +27,7 @@ pub const Request = struct {
         pull,
         push,
         stop_pull,
-        servo_on,
-        servo_off,
+        release,
         clear_errors,
         remove_command,
         stop,
@@ -46,8 +45,7 @@ pub const Request = struct {
         pull: Request.Pull,
         push: Request.Push,
         stop_pull: Request.StopPull,
-        servo_on: Request.ServoOn,
-        servo_off: Request.ServoOff,
+        release: Request.Release,
         clear_errors: Request.ClearErrors,
         remove_command: Request.RemoveCommand,
         stop: Request.Stop,
@@ -64,8 +62,7 @@ pub const Request = struct {
             .pull = fd(7, .submessage),
             .push = fd(8, .submessage),
             .stop_pull = fd(9, .submessage),
-            .servo_on = fd(19, .submessage),
-            .servo_off = fd(20, .submessage),
+            .release = fd(11, .submessage),
             .clear_errors = fd(12, .submessage),
             .remove_command = fd(13, .submessage),
             .stop = fd(14, .submessage),
@@ -261,92 +258,16 @@ pub const Request = struct {
         }
     };
 
-    /// Re-enables control of the driver's motors to all carriers on the selected
-    /// axes.
+    /// Release control of the driver's motors to all carriers on the selected driver.
     ///
     /// Expected response: `mmc.Response.body.command.body.id` (uint32).
-    pub const ServoOn = struct {
+    pub const Release = struct {
         line: u32 = 0,
-        axes: ?root.Range = null,
+        drivers: ?root.Range = null,
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
-            .axes = fd(2, .submessage),
-        };
-
-        /// Encodes the message to the writer
-        /// The allocator is used to generate submessages internally.
-        /// Hence, an ArenaAllocator is a preferred choice if allocations are a bottleneck.
-        pub fn encode(
-            self: @This(),
-            writer: *std.Io.Writer,
-            allocator: std.mem.Allocator,
-        ) (std.Io.Writer.Error || std.mem.Allocator.Error)!void {
-            return protobuf.encode(writer, allocator, self);
-        }
-
-        /// Decodes the message from the bytes read from the reader.
-        pub fn decode(
-            reader: *std.Io.Reader,
-            allocator: std.mem.Allocator,
-        ) (protobuf.DecodingError || std.Io.Reader.Error || std.mem.Allocator.Error)!@This() {
-            return protobuf.decode(@This(), reader, allocator);
-        }
-
-        /// Streaming pull-decoder: walks a `std.Io.Reader` one wire
-        /// field at a time without allocating. See `src/stream.zig`.
-        pub const StreamDecoder = protobuf.StreamDecoder(@This());
-
-        /// Deinitializes and frees the memory associated with the message.
-        pub fn deinit(self: *@This(), allocator: std.mem.Allocator) void {
-            return protobuf.deinit(allocator, self);
-        }
-
-        /// Duplicates the message.
-        pub fn dupe(self: @This(), allocator: std.mem.Allocator) std.mem.Allocator.Error!@This() {
-            return protobuf.dupe(@This(), self, allocator);
-        }
-
-        /// Decodes the message from the JSON string.
-        pub fn jsonDecode(
-            input: []const u8,
-            options: std.json.ParseOptions,
-            allocator: std.mem.Allocator,
-        ) !std.json.Parsed(@This()) {
-            return protobuf.json.decode(@This(), input, options, allocator);
-        }
-
-        /// Encodes the message to a JSON string.
-        pub fn jsonEncode(
-            self: @This(),
-            options: std.json.Stringify.Options,
-            pb_options: protobuf.json.Options,
-            allocator: std.mem.Allocator,
-        ) ![]const u8 {
-            return protobuf.json.encode(self, options, pb_options, allocator);
-        }
-
-        /// This method is used by std.json
-        /// internally for deserialization. DO NOT RENAME!
-        pub fn jsonParse(
-            allocator: std.mem.Allocator,
-            source: anytype,
-            options: std.json.ParseOptions,
-        ) !@This() {
-            return protobuf.json.parse(@This(), allocator, source, options);
-        }
-    };
-
-    /// Release control of the driver's motor to a carrier on the selected axes.
-    ///
-    /// Expected response: `mmc.Response.body.command.body.id` (uint32).
-    pub const ServoOff = struct {
-        line: u32 = 0,
-        axes: ?root.Range = null,
-
-        pub const _desc_table = .{
-            .line = fd(1, .{ .scalar = .uint32 }),
-            .axes = fd(2, .submessage),
+            .drivers = fd(4, .submessage),
         };
 
         /// Encodes the message to the writer

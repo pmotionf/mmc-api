@@ -11,8 +11,8 @@ import "range.proto";
 // remains stored in a limited history buffer, and should be cleared with
 // `remove_command` after completion.
 message Request {
-    reserved 2, 10, 11;
-    reserved "set_zero", "stop_push", "release";
+    reserved 2, 10;
+    reserved "set_zero", "stop_push";
   oneof body {
     // Calibrate a line. This command only needs to be run once after hardware
     // setup; calibrated values will remain stored in drivers even after a
@@ -35,10 +35,8 @@ message Request {
     Push push = 8;
     // Stop waiting to pull a new carrier at an axis.
     StopPull stop_pull = 9;
-    // Re-enable motor control of a carrier.
-    ServoOn servo_on = 19;
     // Release the motor control of a carrier.
-    ServoOff servo_off = 20;
+    Release release = 11;
     // Clear all errors within the specified driver range.
     ClearErrors clear_errors = 12;
     // Cancel a running command or remove its status history.
@@ -75,25 +73,16 @@ message Request {
       }
   }
 
-  // Re-enables control of the driver's motors to all carriers on the selected
-  // axes.
+  // Release control of the driver's motors to all carriers on the selected driver.
   //
   // Expected response: `mmc.Response.body.command.body.id` (uint32).
-  message ServoOn {
+  message Release {
+    reserved 2, 3;
+    reserved "axes", "carrier";
     // Line ID.
     uint32 line = 1;
-    // Axes ID range.
-    optional root.Range axes = 2;
-  }
-
-  // Release control of the driver's motor to a carrier on the selected axes.
-  //
-  // Expected response: `mmc.Response.body.command.body.id` (uint32).
-  message ServoOff {
-    // Line ID.
-    uint32 line = 1;
-    // Axes ID range.
-    optional root.Range axes = 2;
+    // Driver ID range.
+    optional root.Range drivers = 4;
   }
 
   // Stop pulling a carrier to the specified axis. If no axis is provided,
