@@ -11,8 +11,8 @@ import "range.proto";
 // remains stored in a limited history buffer, and should be cleared with
 // `remove_command` after completion.
 message Request {
-    reserved 2, 10, 17;
-    reserved "set_zero", "stop_push", "set_carrier_id";
+    reserved 2, 10, 17, 4;
+    reserved "set_zero", "stop_push", "set_carrier_id", "auto_initialize";
   oneof body {
     // Calibrate a line. This command only needs to be run once after hardware
     // setup; calibrated values will remain stored in drivers even after a
@@ -21,9 +21,6 @@ message Request {
     // Initialize a carrier. Carriers must be initialized before they can be
     // moved. Initialization is required after every power cycle.
     Initialize initialize = 3;
-    // Initialize all carriers of the specified line(s). If no lines are
-    // specified, initialize all carriers across all lines in the track.
-    AutoInitialize auto_initialize = 4;
     // Deinitialize a carrier. This removes all carrier information, such as
     // recognized position and carrier ID.
     Deinitialize deinitialize = 5;
@@ -139,26 +136,6 @@ message Request {
   message Calibrate {
     // Line ID.
     uint32 line = 1;
-  }
-
-  // Automatically initialize carriers on every specified lines.
-  //
-  // Expected response: `mmc.Response.body.command.body.id` (uint32).
-  message AutoInitialize {
-    message Line {
-      reserved 4;
-      reserved "velocity_mode";
-      // Line ID.
-      uint32 line = 1;
-
-      // Velocity of carrier movement. Floating point with range 0.1 - 6,000
-      // mm/s (default 600 mm/s).
-      optional float velocity = 2;
-      // Acceleration of carrier movement. Floating point with range 100 -
-      // 24,500 mm/s^2 (default 6000 mm/s^2).
-      optional float acceleration = 3;
-    }
-    repeated Line lines = 1;
   }
 
   // Move a carrier to the desired position.
@@ -294,8 +271,9 @@ message Request {
   }
 
   enum Error {
-    reserved 13;
-    reserved "COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED";
+    reserved 13, 15;
+    reserved "COMMAND_REQUEST_ERROR_CC_LINK_DISCONNECTED",
+    "COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED";
 
     COMMAND_REQUEST_ERROR_UNSPECIFIED = 0;
     // Attempted to use line ID outside of the configured lines.
@@ -327,8 +305,6 @@ message Request {
     // Server unable to receive new command caused by out of memory.
     // Try `Command.Request.remove_command` to free the memory.
     COMMAND_REQUEST_ERROR_OUT_OF_MEMORY = 14;
-    // Attempted to run more than 8 auto initialize instance.
-    COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED = 15;
     // Attempted to assign a carrier ID that is already used by
     // another carrier on the same line.
     COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID = 16;

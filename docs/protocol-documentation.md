@@ -14,8 +14,6 @@
   
 - [mmc/command.proto](#mmc_command-proto)
     - [Request](#mmc-command-Request)
-    - [Request.AutoInitialize](#mmc-command-Request-AutoInitialize)
-    - [Request.AutoInitialize.Line](#mmc-command-Request-AutoInitialize-Line)
     - [Request.Calibrate](#mmc-command-Request-Calibrate)
     - [Request.ClearErrors](#mmc-command-Request-ClearErrors)
     - [Request.CommandGroup](#mmc-command-Request-CommandGroup)
@@ -199,7 +197,6 @@ remains stored in a limited history buffer, and should be cleared with
 | ----- | ---- | ----- | ----------- |
 | calibrate | [Request.Calibrate](#mmc-command-Request-Calibrate) |  | Calibrate a line. This command only needs to be run once after hardware setup; calibrated values will remain stored in drivers even after a power cycle. |
 | initialize | [Request.Initialize](#mmc-command-Request-Initialize) |  | Initialize a carrier. Carriers must be initialized before they can be moved. Initialization is required after every power cycle. |
-| auto_initialize | [Request.AutoInitialize](#mmc-command-Request-AutoInitialize) |  | Initialize all carriers of the specified line(s). If no lines are specified, initialize all carriers across all lines in the track. |
 | deinitialize | [Request.Deinitialize](#mmc-command-Request-Deinitialize) |  | Deinitialize a carrier. This removes all carrier information, such as recognized position and carrier ID. |
 | move | [Request.Move](#mmc-command-Request-Move) |  | Move an initialized carrier to the desired position. |
 | pull | [Request.Pull](#mmc-command-Request-Pull) |  | Pull and initialize a new carrier into a line. |
@@ -212,40 +209,6 @@ remains stored in a limited history buffer, and should be cleared with
 | pause | [Request.Pause](#mmc-command-Request-Pause) |  | Activate pause for all drivers in line(s). Pause will cause all carriers to decelerate to rest. On resume, the carriers will continue their previously assigned movement commands. |
 | resume | [Request.Resume](#mmc-command-Request-Resume) |  | Deactivate emergency stop and pause for all drivers in line(s). |
 | group | [Request.Group](#mmc-command-Request-Group) |  | Send multiple moves and push commands at once. The order of execution depends on the order of the move in the buffer. Group move command removes the delay of commands sent to different driver caused by processing time of a driver to fully execute a command. Canceling this command will only cancel commands that are not being executed yet by the target driver. |
-
-
-
-
-
-
-<a name="mmc-command-Request-AutoInitialize"></a>
-
-### Request.AutoInitialize
-Automatically initialize carriers on every specified lines.
-
-Expected response: `mmc.Response.body.command.body.id` (uint32).
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| lines | [Request.AutoInitialize.Line](#mmc-command-Request-AutoInitialize-Line) | repeated |  |
-
-
-
-
-
-
-<a name="mmc-command-Request-AutoInitialize-Line"></a>
-
-### Request.AutoInitialize.Line
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| line | [uint32](#uint32) |  | Line ID. |
-| velocity | [float](#float) | optional | Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s (default 600 mm/s). |
-| acceleration | [float](#float) | optional | Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2 (default 6000 mm/s^2). |
 
 
 
@@ -599,7 +562,6 @@ Response description to the command API.
 | COMMAND_REQUEST_ERROR_COMMAND_NOT_FOUND | 11 | Attempted to remove or cancel a non-existing command. |
 | COMMAND_REQUEST_ERROR_CARRIER_NOT_FOUND | 12 | Attempted to send command to an uninitialized carrier. |
 | COMMAND_REQUEST_ERROR_OUT_OF_MEMORY | 14 | Server unable to receive new command caused by out of memory. Try `Command.Request.remove_command` to free the memory. |
-| COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED | 15 | Attempted to run more than 8 auto initialize instance. |
 | COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID | 16 | Attempted to assign a carrier ID that is already used by another carrier on the same line. |
 | COMMAND_REQUEST_ERROR_INVALID_COMMAND | 17 | Command index is out of bounds for the configured command status buffer. |
 
