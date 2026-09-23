@@ -244,8 +244,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
-| velocity | [float](#float) | optional | Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s (default 600 mm/s). |
-| acceleration | [float](#float) | optional | Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2 (default 6000 mm/s^2). |
+| velocity | [uint32](#uint32) | optional | Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s (default 600 mm/s). |
+| acceleration | [uint32](#uint32) | optional | Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2 (default 6000 mm/s^2). |
 
 
 
@@ -381,8 +381,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | ----- | ---- | ----- | ----------- |
 | line | [uint32](#uint32) |  | Line ID. |
 | carrier | [uint32](#uint32) |  | Carrier ID. |
-| velocity | [float](#float) |  | Velocity of carrier movement in percent. |
-| acceleration | [float](#float) |  | Acceleration of carrier movement in percent. |
+| velocity | [uint32](#uint32) |  | Velocity of carrier movement in percent. |
+| acceleration | [uint32](#uint32) |  | Acceleration of carrier movement in percent. |
 | axis | [uint32](#uint32) |  | Move carrier to the center of the axis. |
 | location | [float](#float) |  | Move carrier to relative location to the zero-point of the line, which is set by default at the center of the line&#39;s first axis after calibration command. |
 | distance | [float](#float) |  | Move carrier to relative distance to current carrier position. Negative distance moves the carrier backwards. |
@@ -425,8 +425,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | axis | [uint32](#uint32) |  | Axis ID. |
 | carrier | [uint32](#uint32) |  | ID for the incoming carrier. |
 | direction | [Request.Direction](#mmc-command-Request-Direction) |  | The direction from which the incoming carrier is moving. |
-| velocity | [float](#float) |  | Velocity of carrier movement in percent. |
-| acceleration | [float](#float) |  | Acceleration of carrier movement in percent. |
+| velocity | [uint32](#uint32) |  | Velocity of carrier movement in percent. |
+| acceleration | [uint32](#uint32) |  | Acceleration of carrier movement in percent. |
 | location | [float](#float) | optional | Move the Carrier to relative location to the zero-point of the Line upon detected to target Line, which is set by default at the center of the Line&#39;s first Axis after calibration command. If not specified, move the Carrier to the center of the axis. |
 
 
@@ -447,8 +447,8 @@ Expected response: `mmc.Response.body.command.body.id` (uint32).
 | line | [uint32](#uint32) |  | Line ID. |
 | axis | [uint32](#uint32) |  | Axis ID. |
 | direction | [Request.Direction](#mmc-command-Request-Direction) |  | Direction of carrier movement. |
-| velocity | [float](#float) |  | Velocity of carrier movement in percent. |
-| acceleration | [float](#float) |  | Acceleration of carrier movement in percent. |
+| velocity | [uint32](#uint32) |  | Velocity of carrier movement in percent. |
+| acceleration | [uint32](#uint32) |  | Acceleration of carrier movement in percent. |
 
 
 
