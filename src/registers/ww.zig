@@ -10,8 +10,8 @@ pub const Ww = packed struct(u256) {
     command_slider_number: u16 = 0,
     target_axis_number: u16 = 0,
     location_distance: Distance = .{},
-    speed_percentage: f16 = 0,
-    acceleration_percentage: f16 = 0,
+    speed_percentage: u16 = 0,
+    acceleration_percentage: u16 = 0,
     _07: u144 = 0,
 
     pub const CommandCode = enum(u16) {
