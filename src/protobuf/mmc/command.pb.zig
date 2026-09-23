@@ -681,13 +681,13 @@ pub const Request = struct {
 
         pub const Line = struct {
             line: u32 = 0,
-            velocity: ?f32 = null,
-            acceleration: ?f32 = null,
+            velocity: ?u32 = null,
+            acceleration: ?u32 = null,
 
             pub const _desc_table = .{
                 .line = fd(1, .{ .scalar = .uint32 }),
-                .velocity = fd(2, .{ .scalar = .float }),
-                .acceleration = fd(3, .{ .scalar = .float }),
+                .velocity = fd(2, .{ .scalar = .uint32 }),
+                .acceleration = fd(3, .{ .scalar = .uint32 }),
             };
 
             /// Encodes the message to the writer
@@ -822,8 +822,8 @@ pub const Request = struct {
     pub const Move = struct {
         line: u32 = 0,
         carrier: u32 = 0,
-        velocity: f32 = 0,
-        acceleration: f32 = 0,
+        velocity: u32 = 0,
+        acceleration: u32 = 0,
         control: mmc.Control = @enumFromInt(0),
         target: ?target_union = null,
 
@@ -846,8 +846,8 @@ pub const Request = struct {
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
             .carrier = fd(2, .{ .scalar = .uint32 }),
-            .velocity = fd(3, .{ .scalar = .float }),
-            .acceleration = fd(4, .{ .scalar = .float }),
+            .velocity = fd(3, .{ .scalar = .uint32 }),
+            .acceleration = fd(4, .{ .scalar = .uint32 }),
             .control = fd(8, .@"enum"),
             .target = fd(null, .{ .oneof = target_union }),
         };
@@ -922,15 +922,15 @@ pub const Request = struct {
         line: u32 = 0,
         axis: u32 = 0,
         direction: Request.Direction = @enumFromInt(0),
-        velocity: f32 = 0,
-        acceleration: f32 = 0,
+        velocity: u32 = 0,
+        acceleration: u32 = 0,
 
         pub const _desc_table = .{
             .line = fd(1, .{ .scalar = .uint32 }),
             .axis = fd(2, .{ .scalar = .uint32 }),
             .direction = fd(3, .@"enum"),
-            .velocity = fd(4, .{ .scalar = .float }),
-            .acceleration = fd(5, .{ .scalar = .float }),
+            .velocity = fd(4, .{ .scalar = .uint32 }),
+            .acceleration = fd(5, .{ .scalar = .uint32 }),
         };
 
         /// Encodes the message to the writer
@@ -1004,8 +1004,8 @@ pub const Request = struct {
         axis: u32 = 0,
         carrier: u32 = 0,
         direction: Request.Direction = @enumFromInt(0),
-        velocity: f32 = 0,
-        acceleration: f32 = 0,
+        velocity: u32 = 0,
+        acceleration: u32 = 0,
         location: ?f32 = null,
 
         pub const _desc_table = .{
@@ -1013,8 +1013,8 @@ pub const Request = struct {
             .axis = fd(2, .{ .scalar = .uint32 }),
             .carrier = fd(3, .{ .scalar = .uint32 }),
             .direction = fd(4, .@"enum"),
-            .velocity = fd(5, .{ .scalar = .float }),
-            .acceleration = fd(6, .{ .scalar = .float }),
+            .velocity = fd(5, .{ .scalar = .uint32 }),
+            .acceleration = fd(6, .{ .scalar = .uint32 }),
             .location = fd(9, .{ .scalar = .float }),
         };
 
