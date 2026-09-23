@@ -449,28 +449,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#requestautoinitialize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request.AutoInitialize
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#requestautoinitializeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request.AutoInitialize.Line
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#requestcalibrate" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1245,28 +1223,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#requestautoinitialize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request.AutoInitialize
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#requestautoinitializeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Request.AutoInitialize.Line
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#requestcalibrate" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1937,8 +1893,6 @@
 <p><a href="#mmc_command-proto">mmc/command.proto</a></p>
 <ul>
 <li><a href="#mmc-command-Request">Request</a></li>
-<li><a href="#mmc-command-Request-AutoInitialize">Request.AutoInitialize</a></li>
-<li><a href="#mmc-command-Request-AutoInitialize-Line">Request.AutoInitialize.Line</a></li>
 <li><a href="#mmc-command-Request-Calibrate">Request.Calibrate</a></li>
 <li><a href="#mmc-command-Request-ClearErrors">Request.ClearErrors</a></li>
 <li><a href="#mmc-command-Request-CommandGroup">Request.CommandGroup</a></li>
@@ -2188,12 +2142,6 @@ remains stored in a limited history buffer, and should be cleared with
 <td>Initialize a carrier. Carriers must be initialized before they can be moved. Initialization is required after every power cycle.</td>
 </tr>
 <tr>
-<td>auto_initialize</td>
-<td><a href="#mmc-command-Request-AutoInitialize">Request.AutoInitialize</a></td>
-<td></td>
-<td>Initialize all carriers of the specified line(s). If no lines are specified, initialize all carriers across all lines in the track.</td>
-</tr>
-<tr>
 <td>deinitialize</td>
 <td><a href="#mmc-command-Request-Deinitialize">Request.Deinitialize</a></td>
 <td></td>
@@ -2270,60 +2218,6 @@ remains stored in a limited history buffer, and should be cleared with
 <td><a href="#mmc-command-Request-Group">Request.Group</a></td>
 <td></td>
 <td>Send multiple moves and push commands at once. The order of execution depends on the order of the move in the buffer. Group move command removes the delay of commands sent to different driver caused by processing time of a driver to fully execute a command. Canceling this command will only cancel commands that are not being executed yet by the target driver.</td>
-</tr>
-</tbody>
-</table>
-<p><a name="mmc-command-Request-AutoInitialize"></a></p>
-<h3 id="requestautoinitialize">Request.AutoInitialize</h3>
-<p>Automatically initialize carriers on every specified lines.</p>
-<p>Expected response: <code>mmc.Response.body.command.body.id</code> (uint32).</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Label</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>lines</td>
-<td><a href="#mmc-command-Request-AutoInitialize-Line">Request.AutoInitialize.Line</a></td>
-<td>repeated</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><a name="mmc-command-Request-AutoInitialize-Line"></a></p>
-<h3 id="requestautoinitializeline">Request.AutoInitialize.Line</h3>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Label</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>line</td>
-<td><a href="#uint32">uint32</a></td>
-<td></td>
-<td>Line ID.</td>
-</tr>
-<tr>
-<td>velocity</td>
-<td><a href="#float">float</a></td>
-<td>optional</td>
-<td>Velocity of carrier movement. Floating point with range 0.1 - 6,000 mm/s (default 600 mm/s).</td>
-</tr>
-<tr>
-<td>acceleration</td>
-<td><a href="#float">float</a></td>
-<td>optional</td>
-<td>Acceleration of carrier movement. Floating point with range 100 - 24,500 mm/s^2 (default 6000 mm/s^2).</td>
 </tr>
 </tbody>
 </table>
@@ -3023,11 +2917,6 @@ then all pending carrier pulls on the line will be stopped.</p>
 <td>COMMAND_REQUEST_ERROR_OUT_OF_MEMORY</td>
 <td>14</td>
 <td>Server unable to receive new command caused by out of memory. Try <code>Command.Request.remove_command</code> to free the memory.</td>
-</tr>
-<tr>
-<td>COMMAND_REQUEST_ERROR_MAXIMUM_AUTO_INITIALIZE_EXCEEDED</td>
-<td>15</td>
-<td>Attempted to run more than 8 auto initialize instance.</td>
 </tr>
 <tr>
 <td>COMMAND_REQUEST_ERROR_CONFLICTING_CARRIER_ID</td>
