@@ -5,7 +5,7 @@ pub const protobuf = struct {
     pub const root = @import("protobuf/root.pb.zig");
     pub const mmc = @import("protobuf/mmc.pb.zig");
 
-    pub const version = std.SemanticVersion.parse("3.0.0") catch unreachable;
+    pub const version = std.SemanticVersion.parse("3.1.0") catch unreachable;
 };
 
 pub const registers = @import("registers.zig");
